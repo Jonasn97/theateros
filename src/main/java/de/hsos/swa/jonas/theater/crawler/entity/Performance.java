@@ -1,6 +1,8 @@
 package de.hsos.swa.jonas.theater.crawler.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Entity;
 import java.sql.Date;
@@ -9,8 +11,10 @@ import java.sql.Timestamp;
 
 @Entity
 public class Performance extends PanacheEntity {
-
-        public Timestamp timestamp;
+        @UpdateTimestamp
+        public Timestamp lastUpdateTimestamp;
+        @CreationTimestamp
+        public Timestamp createdTimestamp;
         public Date date;
         public Time time;
         public String bookingLink;
@@ -25,4 +29,11 @@ public class Performance extends PanacheEntity {
         }
 
 
+        public Performance(Time time, Date date, String bookingLink, boolean isCancelled, String performanceTypeString) {
+                this.time = time;
+                this.date = date;
+                this.bookingLink = bookingLink;
+                this.isCancelled = isCancelled;
+                this.performanceType = performanceTypeString;
+        }
 }

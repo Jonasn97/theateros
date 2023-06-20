@@ -1,0 +1,6 @@
+18:00:56 INFO  [io.quarkus]] (Quarkus Main Thread) theateros 1.0-SNAPSHOT on JVM (powered by Quarkus 2.16.7.Final) started in 2.819s. Listening on: http://localhost:8080
+18:00:56 INFO  [io.quarkus]] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+18:00:56 INFO  [io.quarkus]] (Quarkus Main Thread) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-postgresql, narayana-jta, resteasy, resteasy-jsonb, smallrye-context-propagation, smallrye-openapi, swagger-ui, vertx]
+18:00:56 INFO  [io.qu.de.de.RuntimeUpdatesProcessor]] (vert.x-worker-thread-0) Live reload total time: 4.620s 
+18:01:02 INFO  [de.hs.sw.jo.th.cr.ga.WebsiteRepository]] (executor-thread-0) Anzahl Theaterstücke: 239
+18:01:29 INFO  [de.hs.sw.jo.th.cr.ga.WebsiteRepository]] (executor-thread-0) Anzahl Theaterstücke: 239
