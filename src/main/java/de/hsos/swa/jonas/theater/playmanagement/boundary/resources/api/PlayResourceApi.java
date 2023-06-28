@@ -1,14 +1,14 @@
 package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
+import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
 import de.hsos.swa.jonas.theater.shared.*;
 import io.quarkus.logging.Log;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,10 +18,14 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/play")
-public class PlayResource {
+public class PlayResourceApi {
+    private final static long FIRSTPAGE = 0;
+    private final static String FIRSTPAGESTRING = "0";
 
     @Inject
     PlayOperations playOperations;
+    @Context
+    UriInfo uriInfo;
 
 
     @GET
@@ -32,7 +36,7 @@ public class PlayResource {
                              @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                              @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                              @QueryParam("include") String include,
-                             @DefaultValue("1")@QueryParam("page[number]") Long pageNumber,
+                             @DefaultValue(FIRSTPAGESTRING)@QueryParam("page[number]") Long pageNumber,
                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         LocalDateTime parsedStartDateTime = null;
         LocalDateTime parsedEndDateTime = null;
@@ -47,9 +51,11 @@ public class PlayResource {
             parsedEndDateTime = parsedStartDateTime;
             parsedStartDateTime = temp;
         }
+        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, parsedStartDateTime, parsedEndDateTime, include, pageNumber, pageSize);
+
         Log.info(startDateTimeFilter);
         Log.info(endDateTimeFilter);
-        Collection<Play> plays = playOperations.getPlays(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, parsedStartDateTime, parsedEndDateTime, include, pageNumber-1, pageSize);
+        Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
         ResponseWrapperDTO responseWrapperDTO = new ResponseWrapperDTO();
         if(plays.isEmpty()) {
             List<ErrorDTO> errors = new ArrayList<>();
@@ -61,28 +67,59 @@ public class PlayResource {
                 .map( play -> {
                     String id = String.valueOf(play.id);
                     String type = "play";
-                    LinkDTO linkDTO = createLink(type, id);
+                    LinksDTO linksDTO = createSelfLink(id);
                     InitialPlayDTO initialPlayDTO = InitialPlayDTO.Converter.toDTO(play);
-                    return new ResourceObjectDTO<>(id, type, initialPlayDTO, linkDTO);
+                    return new ResourceObjectDTO<>(id, type, initialPlayDTO, linksDTO);
                 })
                 .toList();
         responseWrapperDTO.data = resourceObjectDTOList;
-        responseWrapperDTO.links = new LinksDTO();
-        responseWrapperDTO.links.first = "/play?page[number]=1&page[size]="+pageSize;
-        if(pageNumber > 1)
-            responseWrapperDTO.links.prev = "/play?page[number]="+ (pageNumber-1) +"&page[size]="+pageSize;
-        else
-            responseWrapperDTO.links.prev = "";
-        if(pageNumber * pageSize < resourceObjectDTOList.size())
-            responseWrapperDTO.links.next = "/play?page[number]="+ (pageNumber+1) +"&page[size]="+pageSize;
-        else
-            responseWrapperDTO.links.next = "";
-        responseWrapperDTO.links.last = "/play?page[number]="+pageNumber+"&page[size]="+pageSize;
+        responseWrapperDTO.links = createPaginationLinks(queryParametersDTO);
         return Response.ok().entity(responseWrapperDTO).build();
     }
 
-    private LinkDTO createLink(String type, String id) {
-        return null;
+    private LinksDTO createSelfLink(String id) {
+        LinksDTO linksDTO = new LinksDTO();
+        linksDTO.self = uriInfo.getBaseUriBuilder()
+                .path(PlayResourceApi.class)
+                .path(id)
+                .build()
+                .toString();
+        return linksDTO;
+    }
+    private LinksDTO createPaginationLinks(QueryParametersDTO queryParametersDTO) {
+        Log.info("PageNumber: " + queryParametersDTO.pageNumber);
+        Log.info("PageSize: " + queryParametersDTO.pageSize);
+        Long pageNumber = queryParametersDTO.pageNumber;
+        Long pageSize = queryParametersDTO.pageSize;
+        long maxSize = playOperations.getPlaysCount(queryParametersDTO);
+        Log.info("Size: " + maxSize);
+        LinksDTO linksDTO = new LinksDTO();
+        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder()
+                .path(PlayResourceApi.class);
+        linksDTO.first = uriBuilder
+                .queryParam("page[number]", FIRSTPAGE)
+                .queryParam("page[size]", pageSize)
+                .build()
+                .toString();
+        if(pageNumber>FIRSTPAGE)
+            linksDTO.prev = uriBuilder
+                    .replaceQueryParam("page[number]", pageNumber-1)
+                    .build()
+                    .toString();
+        else
+            linksDTO.prev = "";
+        if((pageNumber+1) * pageSize < maxSize)
+            linksDTO.next = uriBuilder
+                .replaceQueryParam("page[number]", pageNumber+1)
+                .build()
+                .toString();
+        else
+            linksDTO.next = "";
+        linksDTO.last = uriBuilder
+                .replaceQueryParam("page[number]", (maxSize/pageSize))
+                .build()
+                .toString();
+        return linksDTO;
     }
 
 

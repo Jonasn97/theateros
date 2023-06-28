@@ -4,11 +4,11 @@ public class ResourceObjectDTO<T> {
     public String id;
     public String type;
     public T attributes;
-    public LinkDTO links;
+    public LinksDTO links;
 
     //relationships
 
-    public ResourceObjectDTO(String id,String type, T attributes, LinkDTO links) {
+    public ResourceObjectDTO(String id,String type, T attributes, LinksDTO links) {
         this.id = id;
         this.type = type;
         this.attributes = attributes;

@@ -1,5 +1,6 @@
 package de.hsos.swa.jonas.theater.playmanagement.control;
 
+import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.shared.Play;
 import de.hsos.swa.jonas.theater.playmanagement.entity.PlayCatalog;
 
@@ -16,5 +17,15 @@ public class PlayService implements PlayOperations{
     @Override
     public Collection<Play> getPlays(String nameFilter, ArrayList<String> statusFilter, ArrayList<String> playTypeFilter, ArrayList<String> performanceTypeFilter, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter, String include, long pageNumber, long pageSize) {
         return playCatalog.getPlays(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
+    }
+
+    @Override
+    public Collection<Play> getPlays(QueryParametersDTO queryParametersDTO) {
+        return playCatalog.getPlays(queryParametersDTO);
+    }
+
+    @Override
+    public long getPlaysCount(QueryParametersDTO queryParametersDTO) {
+        return playCatalog.getPlaysCount(queryParametersDTO);
     }
 }

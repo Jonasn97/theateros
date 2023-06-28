@@ -1,13 +1,39 @@
-18:39:02 WARN  [or.hi.en.jd.sp.SqlExceptionHelper]] (JPA Startup Thread) SQL Warning Code: 0, SQLState: 00000
-18:39:02 WARN  [or.hi.en.jd.sp.SqlExceptionHelper]] (JPA Startup Thread) constraint "uk_1uppuou77i2d4mvmo3g8qmbv6" of relation "play_performance" does not exist, skipping
-18:39:02 INFO  [io.quarkus]] (Quarkus Main Thread) theateros 1.0-SNAPSHOT on JVM (powered by Quarkus 2.16.7.Final) started in 14.454s. Listening on: http://localhost:8080
-18:39:02 INFO  [io.quarkus]] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
-18:39:02 INFO  [io.quarkus]] (Quarkus Main Thread) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-postgresql, narayana-jta, resteasy, resteasy-jsonb, smallrye-context-propagation, smallrye-openapi, swagger-ui, vertx]
-18:39:34 INFO  [de.hs.sw.jo.th.cr.ga.WebsiteRepository]] (executor-thread-0) Anzahl Theaterstücke: 238
-18:39:44 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResource]] (executor-thread-0) null
-18:39:44 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResource]] (executor-thread-0) null
-18:39:44 INFO  [de.hs.sw.jo.th.pl.ga.PlayRepository]] (executor-thread-0) nameFilter is null
-18:39:44 INFO  [de.hs.sw.jo.th.pl.ga.PlayRepository]] (executor-thread-0) startDateTimeFilter is null
-18:39:44 INFO  [de.hs.sw.jo.th.pl.ga.PlayRepository]] (executor-thread-0) endDateTimeFilter is null
-18:39:44 INFO  [de.hs.sw.jo.th.pl.ga.PlayRepository]] (executor-thread-0) include is null
-18:39:44 INFO  [de.hs.sw.jo.th.pl.ga.PlayRepository]] (executor-thread-0) pageNumber is 0
+21:12:41 INFO  [io.quarkus]] (Quarkus Main Thread) theateros 1.0-SNAPSHOT on JVM (powered by Quarkus 2.16.7.Final) started in 1.589s. Listening on: http://localhost:8080
+21:12:41 INFO  [io.quarkus]] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+21:12:41 INFO  [io.quarkus]] (Quarkus Main Thread) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-postgresql, narayana-jta, resteasy, resteasy-jsonb, smallrye-context-propagation, smallrye-openapi, swagger-ui, vertx]
+21:12:41 INFO  [io.qu.de.de.RuntimeUpdatesProcessor]] (vert.x-worker-thread-0) Live reload total time: 3.467s 
+21:12:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:12:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:12:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 1
+21:12:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 10
+21:12:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
+21:13:39 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:13:39 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:13:39 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 0
+21:13:39 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 10
+21:13:39 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
+21:14:05 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:05 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:05 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 0
+21:14:05 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 10
+21:14:05 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
+21:14:11 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:11 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:11 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 1
+21:14:11 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 10
+21:14:11 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
+21:14:17 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:17 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:17 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 7
+21:14:17 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 10
+21:14:17 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
+21:14:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:14:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 0
+21:14:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 20
+21:14:41 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
+21:15:01 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:15:01 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) null
+21:15:01 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageNumber: 3
+21:15:01 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) PageSize: 20
+21:15:01 INFO  [de.hs.sw.jo.th.pl.bo.re.ap.PlayResourceApi]] (executor-thread-0) Size: 71
