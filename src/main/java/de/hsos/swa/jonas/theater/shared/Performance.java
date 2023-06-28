@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.crawler.entity;
+package de.hsos.swa.jonas.theater.shared;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
