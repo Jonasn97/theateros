@@ -1,7 +1,7 @@
 package de.hsos.swa.jonas.theater.crawler.gateway;
 
-import de.hsos.swa.jonas.theater.crawler.entity.Performance;
-import de.hsos.swa.jonas.theater.crawler.entity.Play;
+import de.hsos.swa.jonas.theater.shared.Performance;
+import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.logging.Log;
@@ -136,7 +136,8 @@ public class WebsiteRepository implements PanacheRepositoryBase<Play, Long> {
             return new Date(DATE_FORMAT.parse(dateString).getTime());
         } catch (ParseException e) {
             Log.error("Error parsing date: " + dateString);
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return null;
     }
 }
