@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.sql.Timestamp;
@@ -82,6 +83,11 @@ public class PlayRepository implements PlayCatalog {
                     })
                     .count();
         }
+    }
+
+    @Override
+    public Optional<Play> getPlayById(long playId) {
+        return Play.findByIdOptional(playId);
     }
 
     private boolean isPerformanceWithinDateRange(Play play, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {

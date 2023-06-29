@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 @ApplicationScoped
 public class PlayService implements PlayOperations{
@@ -27,5 +28,10 @@ public class PlayService implements PlayOperations{
     @Override
     public long getPlaysCount(QueryParametersDTO queryParametersDTO) {
         return playCatalog.getPlaysCount(queryParametersDTO);
+    }
+
+    @Override
+    public Optional<Play> getPlayById(long playId) {
+        return playCatalog.getPlayById(playId);
     }
 }
