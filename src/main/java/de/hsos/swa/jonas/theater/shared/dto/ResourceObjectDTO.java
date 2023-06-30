@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.shared;
+package de.hsos.swa.jonas.theater.shared.dto;
 
 public class ResourceObjectDTO<T> {
     public String id;

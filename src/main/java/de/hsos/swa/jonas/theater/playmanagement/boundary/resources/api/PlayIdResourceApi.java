@@ -1,11 +1,11 @@
 package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
-import de.hsos.swa.jonas.theater.shared.LinksDTO;
+import de.hsos.swa.jonas.theater.shared.dto.LinksDTO;
 import de.hsos.swa.jonas.theater.shared.Play;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
-import de.hsos.swa.jonas.theater.shared.ResourceObjectDTO;
-import de.hsos.swa.jonas.theater.shared.ResponseWrapperDTO;
+import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
+import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
