@@ -31,13 +31,13 @@ public class PlayIdResourceApi {
     public Response getPlayById(@PathParam("playId") long playId,
                                 @QueryParam("include") String include){
         Optional<Play> play = playOperations.getPlayById(playId);
-        ResponseWrapperDTO responseWrapperDTO = new ResponseWrapperDTO();
+        ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(play.isPresent()){
             InitialPlayDTO initialPlayDTO = InitialPlayDTO.Converter.toDTO(play.get());
-            ResourceObjectDTO<InitialPlayDTO> resourceObjectDTO = new ResourceObjectDTO();
+            ResourceObjectDTO<InitialPlayDTO> resourceObjectDTO = new ResourceObjectDTO<>();
             resourceObjectDTO.id = String.valueOf(play.get().id);
             resourceObjectDTO.type = "play";
-            LinksDTO linksDTO = createSelfLink(resourceObjectDTO.id);
+            resourceObjectDTO.links = createSelfLink(resourceObjectDTO.id);
             resourceObjectDTO.attributes = initialPlayDTO;
             responseWrapperDTO.data=resourceObjectDTO;
             return Response.ok().entity(responseWrapperDTO).build();

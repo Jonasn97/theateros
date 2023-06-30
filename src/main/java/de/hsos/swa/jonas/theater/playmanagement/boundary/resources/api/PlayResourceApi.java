@@ -74,7 +74,7 @@ public class PlayResourceApi {
         Log.info(startDateTimeFilter);
         Log.info(endDateTimeFilter);
         Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
-        ResponseWrapperDTO responseWrapperDTO = new ResponseWrapperDTO();
+        ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(plays.isEmpty()) {
             List<ErrorDTO> errors = new ArrayList<>();
             errors.add(new ErrorDTO("404", "PLAYS:1","No plays found", "Couldn't find any plays with the given filters"));
@@ -103,7 +103,7 @@ public class PlayResourceApi {
                                      @QueryParam("include") String include,
                                      @DefaultValue(FIRSTPAGESTRING)@QueryParam("page[number]") Long pageNumber,
                                      @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
-        ResponseWrapperDTO responseWrapperDTO = new ResponseWrapperDTO();
+        ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         List<ErrorDTO> errors = new ArrayList<>();
         errors.add(new ErrorDTO("500", "PLAYS:2","Internal Server Error", "Something went wrong while processing your request"));
         responseWrapperDTO.errors = errors;
@@ -156,4 +156,3 @@ public class PlayResourceApi {
 
 
 }
-//-Xlint:unchecked
