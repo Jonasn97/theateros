@@ -56,23 +56,8 @@ public class PlayResourceApi {
                              @QueryParam("include") String include,
                              @DefaultValue(FIRSTPAGESTRING)@QueryParam("page[number]") Long pageNumber,
                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
-        LocalDateTime parsedStartDateTime = null;
-        LocalDateTime parsedEndDateTime = null;
-        if(startDateTimeFilter != null&& !startDateTimeFilter.isEmpty()){
-            parsedStartDateTime = LocalDateTime.parse(startDateTimeFilter);
-        }
-        if(endDateTimeFilter != null&& !endDateTimeFilter.isEmpty()){
-            parsedEndDateTime = LocalDateTime.parse(endDateTimeFilter);
-        }
-        if (parsedEndDateTime != null && parsedStartDateTime!= null&& parsedEndDateTime.isBefore(parsedStartDateTime)) {
-            LocalDateTime temp = parsedEndDateTime;
-            parsedEndDateTime = parsedStartDateTime;
-            parsedStartDateTime = temp;
-        }
-        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, parsedStartDateTime, parsedEndDateTime, include, pageNumber, pageSize);
+        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
 
-        Log.info(startDateTimeFilter);
-        Log.info(endDateTimeFilter);
         Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(plays.isEmpty()) {
@@ -81,7 +66,7 @@ public class PlayResourceApi {
             return Response.status(Response.Status.NOT_FOUND).entity(errors).build();
         }
 
-        List<ResourceObjectDTO<InitialPlayDTO>> resourceObjectDTOList = plays.stream()
+        responseWrapperDTO.data = plays.stream()
                 .map( play -> {
                     String id = String.valueOf(play.id);
                     String type = "play";
@@ -90,7 +75,6 @@ public class PlayResourceApi {
                     return new ResourceObjectDTO<>(id, type, initialPlayDTO, linksDTO);
                 })
                 .toList();
-        responseWrapperDTO.data = resourceObjectDTOList;
         responseWrapperDTO.links = createPaginationLinks(queryParametersDTO);
         return Response.ok().entity(responseWrapperDTO).build();
     }
