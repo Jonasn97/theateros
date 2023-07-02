@@ -5,18 +5,9 @@ import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.quarkus.logging.Log;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import java.io.IOException;
-import java.sql.Time;
-import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 

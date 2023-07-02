@@ -22,7 +22,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 //2023-07-01T10:15:30
 //2023-06-27T10:15:30
 @Produces(MediaType.APPLICATION_JSON)
