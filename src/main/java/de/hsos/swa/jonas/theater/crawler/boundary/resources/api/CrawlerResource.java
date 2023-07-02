@@ -27,8 +27,6 @@ public class CrawlerResource {
     private static final String WEBSITE_URL = "https://www.theater-osnabrueck.de/kalender/";
     @Inject
     CrawlerOperations crawlerOperations;
-    @Inject
-    WebsiteRepository websiteRepository;
 
     @POST
     public Response postPlay() {
