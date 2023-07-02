@@ -2,6 +2,10 @@ package de.hsos.swa.jonas.theater.crawler.control;
 
 import org.jsoup.nodes.Document;
 
+import java.util.Set;
+
 public interface CrawlerOperations {
-    int updateCalendar(Document update);
+    Set<String> updateCalendar(Document update);
+
+    int updatePlays(Set<String> updatedLinks);
 }

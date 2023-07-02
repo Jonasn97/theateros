@@ -13,6 +13,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @ApplicationScoped
 public class CrawlerService implements CrawlerOperations {
@@ -26,17 +29,25 @@ public class CrawlerService implements CrawlerOperations {
     @Inject
     CrawlerCatalog crawlerCatalog;
     @Override
-    public int updateCalendar(Document document) {
+    public Set<String> updateCalendar(Document document) {
         Elements playElements = document.select(PLAY_ELEMENTS_SELECTOR);
 
         Log.info("Anzahl Theaterstücke: " + playElements.size());
         int updatedElements = 0;
+        Set<String> updatedInfolinks = new HashSet<>();
         for (Element playElement : playElements) {
             CalendarElementDTO calendarElementDTO = getDataFromPlayElement(playElement);
+            updatedInfolinks.add(calendarElementDTO.infolink);
             updatedElements+= crawlerCatalog.updateDatabase(calendarElementDTO);
         }
-    return updatedElements;
+    return updatedInfolinks;
     }
+
+    @Override
+    public int updatePlays(Set<String> updatedLinks) {
+        return 0;
+    }
+
     private CalendarElementDTO getDataFromPlayElement(Element playElement) {
         //Extract basic playinfos: overline, title, infolink, sparte, location
         CalendarElementDTO calendarElementDTO = new CalendarElementDTO();

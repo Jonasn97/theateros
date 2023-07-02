@@ -38,14 +38,13 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             existingPerformance.isCancelled = calendarElementDTO.isCancelled;
             existingPerformance.performanceType = calendarElementDTO.performanceType;
             existingPerformance.persist();
-            updatedElements++;
         } else {
             Performance performance = new Performance(calendarElementDTO.time, calendarElementDTO.date, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
             play.performances.add(performance);
             play.persist();
             play.performances.forEach(p -> PanacheEntityBase.persist(p));
-            updatedElements++;
         }
+        updatedElements++;
         return updatedElements;
     }
 }
