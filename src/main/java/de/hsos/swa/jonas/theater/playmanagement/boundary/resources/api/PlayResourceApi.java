@@ -64,9 +64,9 @@ public class PlayResourceApi {
         Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(plays.isEmpty()) {
-            List<ErrorDTO> errors = new ArrayList<>();
-            errors.add(new ErrorDTO("404", "PLAYS:1","No plays found", "Couldn't find any plays with the given filters"));
-            return Response.status(Response.Status.NOT_FOUND).entity(errors).build();
+            responseWrapperDTO.errors = new ArrayList<>();
+            responseWrapperDTO.errors.add(new ErrorDTO("404", "PLAYS:1","No plays found", "Couldn't find any plays with the given filters"));
+            return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
         }
 
         responseWrapperDTO.data = plays.stream()
@@ -91,9 +91,8 @@ public class PlayResourceApi {
                                      @DefaultValue(FIRSTPAGESTRING)@QueryParam("page[number]") Long pageNumber,
                                      @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
-        List<ErrorDTO> errors = new ArrayList<>();
-        errors.add(new ErrorDTO("500", "PLAYS:2","Internal Server Error", "Something went wrong while processing your request"));
-        responseWrapperDTO.errors = errors;
+        responseWrapperDTO.errors = new ArrayList<>();
+        responseWrapperDTO.errors.add(new ErrorDTO("500", "PLAYS:2","Internal Server Error", "Something went wrong while processing your request"));
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
     private LinksDTO createSelfLink(String id) {

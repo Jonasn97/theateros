@@ -1,12 +1,97 @@
 package de.hsos.swa.jonas.theater.crawler.control;
 
 import de.hsos.swa.jonas.theater.crawler.entity.CrawlerCatalog;
+import de.hsos.swa.jonas.theater.crawler.gateway.CalendarElementDTO;
+import io.quarkus.logging.Log;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @ApplicationScoped
 public class CrawlerService implements CrawlerOperations {
-//@Inject
-//    CrawlerCatalog crawlerCatalog;
+    private static final String PLAY_ELEMENTS_SELECTOR = "div.container.mod-teaser--kalender";
+    private static final String INFO_LINK_SELECTOR = "a[href^=/veranstaltung]";
+    private static final String OVERLINE_SELECTOR = "h4";
+    private static final String TIME_REGEX = ".*Beginn: ([0-9:]+) Uhr.*";
+    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+
+    @Inject
+    CrawlerCatalog crawlerCatalog;
+    @Override
+    public int updateCalendar(Document document) {
+        Elements playElements = document.select(PLAY_ELEMENTS_SELECTOR);
+
+        Log.info("Anzahl Theaterstücke: " + playElements.size());
+        int updatedElements = 0;
+        for (Element playElement : playElements) {
+            CalendarElementDTO calendarElementDTO = getDataFromPlayElement(playElement);
+            updatedElements+= crawlerCatalog.updateDatabase(calendarElementDTO);
+        }
+    return updatedElements;
+    }
+    private CalendarElementDTO getDataFromPlayElement(Element playElement) {
+        //Extract basic playinfos: overline, title, infolink, sparte, location
+        CalendarElementDTO calendarElementDTO = new CalendarElementDTO();
+        Element overlineElement = playElement.selectFirst(OVERLINE_SELECTOR);
+        calendarElementDTO.overline = (overlineElement!=null)?overlineElement.text(): null;
+
+        calendarElementDTO.title = playElement.attr("data-sp-stueck");
+
+        Element infoLinkElement = playElement.selectFirst(INFO_LINK_SELECTOR);
+        String infolink = infoLinkElement != null ? infoLinkElement.attr("abs:href") : "";
+        calendarElementDTO.infolink = infolink.substring(0, infolink.lastIndexOf("/"));
+
+        calendarElementDTO.kind = playElement.attr("data-sp-sparte");
+
+        calendarElementDTO.location = playElement.attr("data-sp-ort");
+
+        //Extract performance infos: date, time, bookingLink, isCancelled, performanceType
+        String dateString = playElement.attr("data-sp-day");
+        Element infoElement = playElement.selectFirst(".info");
+        String timeString = (infoElement!=null)?infoElement.text().replaceAll(TIME_REGEX, "$1"): null;
+        Element bookinglinkElement = playElement.selectFirst("a.btn-primary");
+        calendarElementDTO.bookingLink = bookinglinkElement!=null? bookinglinkElement.attr("abs:href"): null;
+        boolean isCancelled = calendarElementDTO.title.contains("Abgesagt");
+        if(isCancelled)
+            calendarElementDTO.bookingLink = null;
+        Element performanceType = playElement.select("span").last();
+        calendarElementDTO.performanceType = performanceType!=null? performanceType.text(): null; //TODO make performanceTypeString to enum
+
+        calendarElementDTO.time = parseTime(timeString);
+        calendarElementDTO.date = parseDate(dateString);
+        return calendarElementDTO;
+    }
+
+    private Time parseTime(String timeString) {
+
+        if(timeString == null) return null;
+        if(timeString.matches("[0-9:]+")){
+            try {
+                return new Time(TIME_FORMAT.parse(timeString).getTime());
+            } catch (ParseException e) {
+                Log.error("Error parsing time: " + timeString);
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private Date parseDate(String dateString) {
+        if(dateString == null) return null;
+        try {
+            return new Date(DATE_FORMAT.parse(dateString).getTime());
+        } catch (ParseException e) {
+            Log.error("Error parsing date: " + dateString);
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
