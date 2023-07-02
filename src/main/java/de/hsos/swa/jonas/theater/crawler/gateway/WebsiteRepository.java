@@ -5,22 +5,12 @@ import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import org.jsoup.nodes.Document;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @ApplicationScoped
 public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<Play, Long> {
-    Document doc = null;
-    private static final String WEBSITE_URL = "https://www.theater-osnabrueck.de/kalender/";
-    private static final String PLAY_ELEMENTS_SELECTOR = "div.container.mod-teaser--kalender";
-    private static final String INFO_LINK_SELECTOR = "a[href^=/veranstaltung]";
-    private static final String OVERLINE_SELECTOR = "h4";
-    private static final String TIME_REGEX = ".*Beginn: ([0-9:]+) Uhr.*";
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
     @Transactional
