@@ -5,6 +5,8 @@ import java.sql.Time;
 
 public class CalendarElementDTO {
     public String infolink;
+    public String stid;
+    public String auid;
     public String overline;
     public String title;
     public String kind;

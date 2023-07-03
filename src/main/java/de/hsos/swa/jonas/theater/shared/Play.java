@@ -13,6 +13,8 @@ import java.util.Collection;
 @Entity
 public class Play extends PanacheEntity {
     public String infolink;
+
+    public String stid;
     public String overline;
     public String title;
     public String description;

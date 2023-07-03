@@ -17,6 +17,7 @@ public class Performance extends PanacheEntity {
         public Timestamp createdTimestamp;
         public Date date;
         public Time time;
+        public String auid;
         public String bookingLink;
 
         public boolean isCancelled;
