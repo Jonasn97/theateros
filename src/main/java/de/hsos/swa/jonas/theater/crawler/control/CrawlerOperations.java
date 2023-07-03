@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import java.util.Set;
 
 public interface CrawlerOperations {
-    Set<String> updateCalendar(Document update);
-
-    int updatePlays(Set<String> updatedLinks);
+    Set<String> updateCalendar(Document calendarDocument);
+    int updateEvent(Document eventDocument);
 }

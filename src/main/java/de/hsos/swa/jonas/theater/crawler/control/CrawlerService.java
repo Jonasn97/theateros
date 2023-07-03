@@ -29,8 +29,8 @@ public class CrawlerService implements CrawlerOperations {
     @Inject
     CrawlerCatalog crawlerCatalog;
     @Override
-    public Set<String> updateCalendar(Document document) {
-        Elements playElements = document.select(PLAY_ELEMENTS_SELECTOR);
+    public Set<String> updateCalendar(Document calendarDocument) {
+        Elements playElements = calendarDocument.select(PLAY_ELEMENTS_SELECTOR);
 
         Log.info("Anzahl Theaterstücke: " + playElements.size());
         int updatedElements = 0;
@@ -44,7 +44,38 @@ public class CrawlerService implements CrawlerOperations {
     }
 
     @Override
-    public int updatePlays(Set<String> updatedLinks) {
+    public int updateEvent(Document eventDocument) {
+
+        String beschreibungstext = eventDocument.select(".mod-content").eq(1).text();
+        if(beschreibungstext!= null && !beschreibungstext.isEmpty()) {
+            System.out.println("Beschreibungstext: " + beschreibungstext);
+        }
+
+        Elements videoDivs = eventDocument.select(".mod-video");
+        for (Element videoDiv : videoDivs) {
+            String videoLink = videoDiv.select(".content-video").attr("data-id");
+            System.out.println("Video Link: " + videoLink);
+        }
+
+        Elements spotifyLinks = eventDocument.select("a[href*=spotify]");
+        for (Element spotifyLink : spotifyLinks) {
+            String spotifyUrl = spotifyLink.attr("href");
+            System.out.println("Spotify Link: " + spotifyUrl);
+        }
+
+        Elements presseStimmenElements = eventDocument.select("h4:contains(Pressestimmen) + p");
+        for (Element presseStimmenElement : presseStimmenElements) {
+            String presseStimme = presseStimmenElement.text();
+            String herausgeber = presseStimmenElement.nextElementSibling().text();
+            System.out.println("Pressestimme: " + presseStimme);
+            System.out.println("Herausgeber: " + herausgeber);
+        }
+
+        Elements besetzungElements = eventDocument.select("h4:contains(Besetzung) + p");
+        for (Element besetzungElement : besetzungElements) {
+            String besetzung = besetzungElement.text();
+            System.out.println("Besetzung: " + besetzung);
+        }
         return 0;
     }
 
@@ -58,7 +89,16 @@ public class CrawlerService implements CrawlerOperations {
 
         Element infoLinkElement = playElement.selectFirst(INFO_LINK_SELECTOR);
         String infolink = infoLinkElement != null ? infoLinkElement.attr("abs:href") : "";
-        calendarElementDTO.infolink = infolink.substring(0, infolink.lastIndexOf("/"));
+
+        String[] infolinkParts = infolink.split("/");
+        String stid = infolinkParts[infolinkParts.length - 2];
+        String auid = infolinkParts[infolinkParts.length - 1];
+        infolink = "https://www.theater-osnabrueck.de/spielplan-detail/" + "?stid=" + stid;
+
+        //TODO auid und stid extrahieren und in die Datenbank schreiben
+        calendarElementDTO.infolink = infolink;
+        calendarElementDTO.stid = stid;
+        calendarElementDTO.auid = auid;
 
         calendarElementDTO.kind = playElement.attr("data-sp-sparte");
 
