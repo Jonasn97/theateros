@@ -5,20 +5,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.net.URL;
 
+@ApplicationScoped
 public class WebsiteDownloader {
     private static String OUTPUTFOLDER = "src/main/resources";
     private static int counter = 1;
 
-    public static void downloadWebsites(Set<String> websiteUrls) {
+    public void downloadAllWebsites(Set<String> websiteUrls) {
         for (String websiteUrl : websiteUrls) {
                 try {
                     downloadWebsite(websiteUrl, OUTPUTFOLDER);
@@ -27,7 +28,7 @@ public class WebsiteDownloader {
                 }
         }
     }
-    public static void downloadWebsite(String websiteURL, String outputFolder) throws IOException {
+    public void downloadWebsite(String websiteURL, String outputFolder) throws IOException {
         URL url = new URL(websiteURL);
         String fileName = "file" + counter++ + ".html";
                 // ...
@@ -45,7 +46,7 @@ public class WebsiteDownloader {
                     }
             }
         }
-    private static String readWebsiteContent(BufferedInputStream in) throws IOException {
+    private String readWebsiteContent(BufferedInputStream in) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int bytesRead;
@@ -54,7 +55,7 @@ public class WebsiteDownloader {
         }
         return byteArrayOutputStream.toString(StandardCharsets.UTF_8);
     }
-    private static String removeUnwantedParts(String websiteContent) {
+    private String removeUnwantedParts(String websiteContent) {
         Document document = Jsoup.parse(websiteContent);
 
         Element headerElement = document.selectFirst("header");
