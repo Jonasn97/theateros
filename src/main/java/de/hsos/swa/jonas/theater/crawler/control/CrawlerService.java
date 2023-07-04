@@ -25,6 +25,7 @@ public class CrawlerService implements CrawlerOperations {
     private static final String TIME_REGEX = ".*Beginn: ([0-9:]+) Uhr.*";
     private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+    private static String LANGUAGE_MODEL_PATH = "src/main/resources/opennlp-de-sentence_1-0_1-9-3.bin";
 
     @Inject
     CrawlerCatalog crawlerCatalog;
@@ -45,38 +46,49 @@ public class CrawlerService implements CrawlerOperations {
 
     @Override
     public int updateEvent(Document eventDocument) {
+        Elements divElements = eventDocument.select("div.container.mod.mod-content");
+        String description = detectDescription(divElements);
 
         String beschreibungstext = eventDocument.select(".mod-content").eq(1).text();
         if(beschreibungstext!= null && !beschreibungstext.isEmpty()) {
-            System.out.println("Beschreibungstext: " + beschreibungstext);
+            //Log.info("Beschreibungstext: " + beschreibungstext);
         }
 
         Elements videoDivs = eventDocument.select(".mod-video");
         for (Element videoDiv : videoDivs) {
             String videoLink = videoDiv.select(".content-video").attr("data-id");
-            System.out.println("Video Link: " + videoLink);
+            //Log.info("Video Link: " + videoLink);
         }
 
         Elements spotifyLinks = eventDocument.select("a[href*=spotify]");
         for (Element spotifyLink : spotifyLinks) {
             String spotifyUrl = spotifyLink.attr("href");
-            System.out.println("Spotify Link: " + spotifyUrl);
+            //Log.info("Spotify Link: " + spotifyUrl);
         }
 
         Elements presseStimmenElements = eventDocument.select("h4:contains(Pressestimmen) + p");
         for (Element presseStimmenElement : presseStimmenElements) {
             String presseStimme = presseStimmenElement.text();
             String herausgeber = presseStimmenElement.nextElementSibling().text();
-            System.out.println("Pressestimme: " + presseStimme);
-            System.out.println("Herausgeber: " + herausgeber);
+            //Log.info("Pressestimme: " + presseStimme);
+            //Log.info("Herausgeber: " + herausgeber);
         }
 
         Elements besetzungElements = eventDocument.select("h4:contains(Besetzung) + p");
         for (Element besetzungElement : besetzungElements) {
             String besetzung = besetzungElement.text();
-            System.out.println("Besetzung: " + besetzung);
+            //Log.info("Besetzung: " + besetzung);
         }
         return 0;
+    }
+
+    private String detectDescription(Elements divElements) {
+        for (Element divElement : divElements) {
+            if(divElement.classNames().size()==3)
+                Log.info(divElement);
+
+        }
+        return null;
     }
 
     private CalendarElementDTO getDataFromPlayElement(Element playElement) {
