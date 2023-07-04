@@ -46,7 +46,7 @@ public class CrawlerResource {
                 return Response.status(Response.Status.NO_CONTENT).entity(responseWrapperDTO).build();
             }
             websiteDownloader.downloadAllWebsites(updatedLinks);
-            //updateEvents(updatedLinks);
+            updateEvents(updatedLinks);
 
             Log.info("Updated " + updatedLinks.size() + " events on " + WEBSITE_URL);
             ResourceObjectDTO<String> updateDTO = new ResourceObjectDTO<>();
