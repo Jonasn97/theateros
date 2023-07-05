@@ -2,6 +2,7 @@ package de.hsos.swa.jonas.theater.crawler.control;
 
 import de.hsos.swa.jonas.theater.crawler.entity.CrawlerCatalog;
 import de.hsos.swa.jonas.theater.crawler.gateway.CalendarElementDTO;
+import de.hsos.swa.jonas.theater.crawler.gateway.EventElementDTO;
 import io.quarkus.logging.Log;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,12 +10,20 @@ import org.jsoup.select.Elements;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 @ApplicationScoped
@@ -46,19 +55,60 @@ public class CrawlerService implements CrawlerOperations {
 
     @Override
     public int updateEvent(Document eventDocument) {
+        EventElementDTO eventElementDTO = getDataFromEventElement(eventDocument);
+
+
+        return 0;
+    }
+
+    private EventElementDTO getDataFromEventElement(Document eventDocument) {
         Elements divElements = eventDocument.select("div.container.mod.mod-content");
-        String description = detectDescription(divElements);
-
-        String beschreibungstext = eventDocument.select(".mod-content").eq(1).text();
-        if(beschreibungstext!= null && !beschreibungstext.isEmpty()) {
-            //Log.info("Beschreibungstext: " + beschreibungstext);
+        EventElementDTO eventElementDTO = new EventElementDTO();
+        Elements possibleDescriptionElements = new Elements();
+        for (Element divElement : divElements) {
+            if(divElement.classNames().size()==3)
+                possibleDescriptionElements.add(divElement);
         }
+        if (possibleDescriptionElements.size()==1) {
+            //Log.info("Description: " + description);
+            eventElementDTO.description = possibleDescriptionElements.get(0).text();
+        }
+        else if(possibleDescriptionElements.size()>1) {
+            eventElementDTO.description= possibleDescriptionElements.get(1).text();
 
+            //duration
+            Element durationElement = possibleDescriptionElements.get(0).selectFirst("p:contains(Dauer)");
+            String duration = durationElement.text().split("\n")[durationElement.text().split("\n").length-1];
+            duration = duration.replace("Dauer: ", "");
+            duration = duration.replace("Dauer ", "");
+            eventElementDTO.duration = duration;
+
+            //additional dates
+            if(possibleDescriptionElements.get(1).selectFirst("h4:contains(Termine)")!=null) {
+                Element termineElement = possibleDescriptionElements.get(1).selectFirst("h4:contains(Termine)").nextElementSibling().nextElementSibling();
+                String termine = termineElement.text();
+                }
+            }
+        else {
+            Log.info("Keine Beschreibung gefunden");
+        }
+        Element bannerElement = eventDocument.selectFirst("div.mod.mod-teaser--top");
+        //Get url from div: <div class="mod mod-teaser mod-teaser--top" style="background-image: url(/media/1400px_der_weg_zurueck_0411.jpg)"></div>
+        String bannerUrl = bannerElement.attr("style");
+        bannerUrl = bannerUrl.substring(bannerUrl.indexOf('(')+1, bannerUrl.indexOf(')'));
+        eventElementDTO.bannerPath = saveImage(bannerUrl);
+        Elements carouselElement = eventDocument.select("div.mod.mod-carousel");
+        Elements imageElements;
+        if(!carouselElement.isEmpty()) {
+            imageElements = carouselElement.select("img");
+            eventElementDTO.imagePaths = saveImages(imageElements);
+        }
         Elements videoDivs = eventDocument.select(".mod-video");
+        ArrayList<String> videoLinks = new ArrayList<>();
         for (Element videoDiv : videoDivs) {
-            String videoLink = videoDiv.select(".content-video").attr("data-id");
-            //Log.info("Video Link: " + videoLink);
+            videoLinks.add(videoDiv.select(".content-video").attr("data-id"));
         }
+        eventElementDTO.videoUris = videoLinks;
 
         Elements spotifyLinks = eventDocument.select("a[href*=spotify]");
         for (Element spotifyLink : spotifyLinks) {
@@ -67,28 +117,57 @@ public class CrawlerService implements CrawlerOperations {
         }
 
         Elements presseStimmenElements = eventDocument.select("h4:contains(Pressestimmen) + p");
-        for (Element presseStimmenElement : presseStimmenElements) {
-            String presseStimme = presseStimmenElement.text();
-            String herausgeber = presseStimmenElement.nextElementSibling().text();
-            //Log.info("Pressestimme: " + presseStimme);
-            //Log.info("Herausgeber: " + herausgeber);
-        }
+        eventElementDTO.press = presseStimmenElements.text();
 
         Elements besetzungElements = eventDocument.select("h4:contains(Besetzung) + p");
-        for (Element besetzungElement : besetzungElements) {
-            String besetzung = besetzungElement.text();
-            //Log.info("Besetzung: " + besetzung);
+        eventElementDTO.cast = besetzungElements.text();
+
+        ArrayList<String> soundCloudWidgetLinks = new ArrayList<>();
+
+        // Alle iframe-Elemente mit der Klasse "soundcloud-widget" auswählen
+        Elements iframeElements = eventDocument.select("iframe.soundcloud-widget");
+
+        // Durch die ausgewählten iframe-Elemente iterieren und die Links extrahieren
+        for (Element iframe : iframeElements) {
+            String src = iframe.attr("src");
+            soundCloudWidgetLinks.add(src);
         }
-        return 0;
+        eventElementDTO.soundcloudUris = soundCloudWidgetLinks;
+        return eventElementDTO;
     }
 
-    private String detectDescription(Elements divElements) {
-        for (Element divElement : divElements) {
-            if(divElement.classNames().size()==3)
-                Log.info(divElement);
+    private String saveImage(String bannerUrl) {
+        String imageName = bannerUrl.substring(bannerUrl.lastIndexOf('/') + 1);
 
+        try (InputStream in = new BufferedInputStream(new URL(bannerUrl).openStream())) {
+            Path imagePath = Path.of(imageName);
+            Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
+            Log.info("Bild gespeichert: " + imagePath);
+            return imagePath.toString();
+
+        } catch (IOException e) {
+            Log.error("Fehler beim Speichern des Bildes: " + e.getMessage());
         }
         return null;
+    }
+
+    private List<String> saveImages(Elements imageElements) {
+        ArrayList<String> imagePaths = new ArrayList<>();
+        for (Element imageElement : imageElements) {
+            String imageUrl = imageElement.absUrl("src");
+            String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+
+            try (InputStream in = new BufferedInputStream(new URL(imageUrl).openStream())) {
+                Path imagePath = Path.of(imageName);
+                Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
+                imagePaths.add(imagePath.toString());
+                Log.info("Bild gespeichert: " + imagePath);
+
+            } catch (IOException e) {
+                Log.error("Fehler beim Speichern des Bildes: " + e.getMessage());
+            }
+        }
+        return imagePaths;
     }
 
     private CalendarElementDTO getDataFromPlayElement(Element playElement) {
