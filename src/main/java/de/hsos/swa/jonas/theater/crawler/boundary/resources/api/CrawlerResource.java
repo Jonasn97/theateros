@@ -35,7 +35,7 @@ public class CrawlerResource {
     public Response postPlay() {
         //Step 1 - Update Entries from WEBSITE_URL
         //Step 2 - Update Plays from infolinks
-        Set<String> updatedLinks = null;
+        Set<String> updatedLinks;
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         try {
             updatedLinks = updateCalendar();
@@ -65,10 +65,9 @@ public class CrawlerResource {
     }
     Set<String> updateCalendar() throws IOException {
         try {
-            Set<String> updatedLinks = null;
             Document newCalendarDocument = Jsoup.connect(WEBSITE_URL).timeout(3000).get();
             if(calendarDocument !=null && calendarDocument.equals(newCalendarDocument)){
-                return null; //maybe throw NoChangesException?
+                return null; //TODO maybe throw NoChangesException?
             }
             calendarDocument = newCalendarDocument;
             return crawlerOperations.updateCalendar(calendarDocument);
@@ -84,7 +83,7 @@ public class CrawlerResource {
         {
             try {
                 Document eventDocument = Jsoup.connect(updatedLink).timeout(3000).get();
-                updatedEvents += crawlerOperations.updateEvent(eventDocument);
+                updatedEvents += crawlerOperations.updateEvent(updatedLink, eventDocument);
             } catch (IOException e) {
                 Log.error("Error while connecting to " + updatedLink + "\n" + e.getMessage());
                 e.printStackTrace();
