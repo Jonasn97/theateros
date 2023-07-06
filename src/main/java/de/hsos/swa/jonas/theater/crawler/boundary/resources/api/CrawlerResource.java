@@ -10,10 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -91,4 +88,19 @@ public class CrawlerResource {
         }
         return null;
     }
+    public void updateEvent(String filepath) {
+        try {
+            Document eventDocument=Jsoup.parse(websiteDownloader.readFile(filepath),"UTF-8");
+            crawlerOperations.updateEvent("https://www.theater-osnabrueck.de/spielplan-detail/?stid=230",eventDocument);
+        } catch (IOException e) {
+            Log.error("Error while reading File from " + filepath + "\n" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @GET
+    public Response testSpecificEvents() {
+        updateEvent("src/main/resources/file25.html");
+        return Response.ok().build();
+    }
+
 }
