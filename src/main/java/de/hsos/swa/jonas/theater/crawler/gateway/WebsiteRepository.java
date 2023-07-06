@@ -9,6 +9,7 @@ import io.quarkus.logging.Log;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.Objects;
 
 @ApplicationScoped
@@ -51,23 +52,51 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
     }
 
     @Override
+    @Transactional
     public int updateDatabase(EventElementDTO eventElementDTO) {
         Play play = Play.find("infolink", eventElementDTO.infolink).firstResult();
         if (play == null) {
             Log.error("Play doesn't exist!");
             throw new RuntimeException("Play doesn't exist!");
         }
-            play.description = play.description!=null? eventElementDTO.description : null;
-            play.duration = play.duration!=null? eventElementDTO.duration : null;
-            play.bannerPath = play.bannerPath!=null? eventElementDTO.bannerPath : null;
-            play.imagePaths = play.imagePaths!=null? eventElementDTO.imagePaths : null;
-            play.videoUris = play.videoUris!=null? eventElementDTO.videoUris : null;
-            play.spotifyUris = play.spotifyUris!=null? eventElementDTO.spotifyUris : null;
-            play.vimeoUris = play.vimeoUris!=null? eventElementDTO.vimeoUris : null;
-            play.soundcloudUris = play.soundcloudUris!=null? eventElementDTO.soundcloudUris : null;
-            play.team = play.team !=null? eventElementDTO.cast : null;
-            play.press = play.press!=null? eventElementDTO.press : null;
-            play.persist();
+        if(play.description== null &&eventElementDTO.description!= null) {
+            play.description = eventElementDTO.description;
+        }
+        if(play.duration== null &&eventElementDTO.duration!= null)
+            play.duration = eventElementDTO.duration;
+        if(play.bannerPath== null &&eventElementDTO.bannerPath!= null)
+            play.bannerPath = eventElementDTO.bannerPath;
+        if(eventElementDTO.imagePaths!=null && !new HashSet<>(play.imagePaths).containsAll(eventElementDTO.imagePaths)) {
+
+            eventElementDTO.imagePaths.stream()
+                    .filter(imagePath -> !play.imagePaths.contains(imagePath))
+                    .forEach(imagePath -> play.imagePaths.add(imagePath));
+        }
+        if(eventElementDTO.videoUris!=null && !new HashSet<>(play.videoUris).containsAll(eventElementDTO.videoUris)) {
+            eventElementDTO.videoUris.stream()
+                    .filter(videoUris -> !play.videoUris.contains(videoUris))
+                    .forEach(videoUris -> play.videoUris.add(videoUris));
+        }
+        if(eventElementDTO.spotifyUris!=null && !new HashSet<>(play.spotifyUris).containsAll(eventElementDTO.spotifyUris)) {
+            eventElementDTO.spotifyUris.stream()
+                    .filter(spotifyUris -> !play.spotifyUris.contains(spotifyUris))
+                    .forEach(spotifyUris -> play.spotifyUris.add(spotifyUris));
+        }
+        if(eventElementDTO.vimeoUris!=null && !new HashSet<>(play.vimeoUris).containsAll(eventElementDTO.vimeoUris)) {
+            eventElementDTO.vimeoUris.stream()
+                    .filter(vimeoUris -> !play.vimeoUris.contains(vimeoUris))
+                    .forEach(vimeoUris -> play.vimeoUris.add(vimeoUris));
+        }
+        if(eventElementDTO.soundcloudUris!=null && !new HashSet<>(play.soundcloudUris).containsAll(eventElementDTO.soundcloudUris)) {
+            eventElementDTO.soundcloudUris.stream()
+                    .filter(soundcloudUris -> !play.soundcloudUris.contains(soundcloudUris))
+                    .forEach(soundcloudUris -> play.soundcloudUris.add(soundcloudUris));
+        }
+        if(play.team== null &&eventElementDTO.cast!= null)
+            play.team = eventElementDTO.cast;
+        if(play.press== null &&eventElementDTO.press!= null)
+            play.press = eventElementDTO.press;
+        play.persist();
         return 1;
     }
 }
