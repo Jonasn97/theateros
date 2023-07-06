@@ -4,11 +4,13 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Play extends PanacheEntity {
@@ -21,6 +23,22 @@ public class Play extends PanacheEntity {
     public String kind;
     public String location;
     public String duration;
+
+    public String bannerPath;
+    @ElementCollection
+    public List<String> imagePaths;
+    @ElementCollection
+    public List<String> videoUris;
+    @ElementCollection
+    public List<String> spotifyUris;
+    @ElementCollection
+    public List<String> vimeoUris;
+    @ElementCollection
+    public List<String> soundcloudUris;
+
+    public String team;
+    public String press;
+
     @UpdateTimestamp
     public Timestamp lastUpdateTimestamp;
     @CreationTimestamp
@@ -39,6 +57,7 @@ public class Play extends PanacheEntity {
         this.kind = sparte;
         this.location = location;
     }
+
 
     public Play() {
 
