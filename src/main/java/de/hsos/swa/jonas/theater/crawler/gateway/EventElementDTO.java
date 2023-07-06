@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.util.List;
 
 public class EventElementDTO {
+    public String infolink;
     public String description;
     public String duration;
     public Date date;
@@ -12,8 +13,8 @@ public class EventElementDTO {
     public String bannerPath;
     public List<String> imagePaths;
     public List<String> videoUris;
-    public String[] spotifyUris;
-    public String[] vimeoUris;
+    public List<String> spotifyUris;
+    public List<String> vimeoUris;
     public List<String> soundcloudUris;
     public String cast;
     public String press;
