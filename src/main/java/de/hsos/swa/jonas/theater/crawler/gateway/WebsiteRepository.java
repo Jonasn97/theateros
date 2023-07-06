@@ -5,6 +5,8 @@ import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.logging.Log;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.util.Objects;
@@ -46,5 +48,26 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
         }
         updatedElements++;
         return updatedElements;
+    }
+
+    @Override
+    public int updateDatabase(EventElementDTO eventElementDTO) {
+        Play play = Play.find("infolink", eventElementDTO.infolink).firstResult();
+        if (play == null) {
+            Log.error("Play doesn't exist!");
+            throw new RuntimeException("Play doesn't exist!");
+        }
+            play.description = play.description!=null? eventElementDTO.description : null;
+            play.duration = play.duration!=null? eventElementDTO.duration : null;
+            play.bannerPath = play.bannerPath!=null? eventElementDTO.bannerPath : null;
+            play.imagePaths = play.imagePaths!=null? eventElementDTO.imagePaths : null;
+            play.videoUris = play.videoUris!=null? eventElementDTO.videoUris : null;
+            play.spotifyUris = play.spotifyUris!=null? eventElementDTO.spotifyUris : null;
+            play.vimeoUris = play.vimeoUris!=null? eventElementDTO.vimeoUris : null;
+            play.soundcloudUris = play.soundcloudUris!=null? eventElementDTO.soundcloudUris : null;
+            play.team = play.team !=null? eventElementDTO.cast : null;
+            play.press = play.press!=null? eventElementDTO.press : null;
+            play.persist();
+        return 1;
     }
 }
