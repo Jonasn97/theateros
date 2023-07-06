@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @ApplicationScoped
 public class CrawlerService implements CrawlerOperations {
@@ -34,15 +36,13 @@ public class CrawlerService implements CrawlerOperations {
     private static final String TIME_REGEX = ".*Beginn: ([0-9:]+) Uhr.*";
     private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-    private static String LANGUAGE_MODEL_PATH = "src/main/resources/opennlp-de-sentence_1-0_1-9-3.bin";
+    private static final String HOSTURL = "https://www.theater-osnabrueck.de/";
 
     @Inject
     CrawlerCatalog crawlerCatalog;
     @Override
     public Set<String> updateCalendar(Document calendarDocument) {
         Elements calenderElements = calendarDocument.select(CALENDER_ELEMENTS_SELECTOR);
-
-        Log.info("Anzahl Theaterstücke: " + calenderElements.size());
         int updatedElements = 0;
         Set<String> updatedInfolinks = new HashSet<>();
         for (Element calenderElement : calenderElements) {
@@ -60,7 +60,7 @@ public class CrawlerService implements CrawlerOperations {
         int updatedElements=0;
         updatedElements+= crawlerCatalog.updateDatabase(eventElementDTO);
 
-        return 0;
+        return updatedElements;
     }
 
     private EventElementDTO getDataFromEventElement(Document eventDocument) {
@@ -72,7 +72,6 @@ public class CrawlerService implements CrawlerOperations {
                 possibleDescriptionElements.add(divElement);
         }
         if (possibleDescriptionElements.size()==1) {
-            //Log.info("Description: " + description);
             eventElementDTO.description = possibleDescriptionElements.get(0).text();
         }
         else if(possibleDescriptionElements.size()>1) {
@@ -83,9 +82,12 @@ public class CrawlerService implements CrawlerOperations {
 
             String duration;
             if (durationElement != null) {
-                duration = durationElement.text().split("\n")[durationElement.text().split("\n").length-1];
-                duration = duration.replace("Dauer: ", "");
-                duration = duration.replace("Dauer ", "");
+                duration = durationElement.text();
+                Pattern pattern = Pattern.compile("Dauer:?\\s*(.*)");
+                Matcher matcher = pattern.matcher(duration);
+                if(matcher.find()) {
+                    duration = matcher.group(1).trim();
+                }
                 eventElementDTO.duration = duration;
             }
 
@@ -146,36 +148,32 @@ public class CrawlerService implements CrawlerOperations {
         return eventElementDTO;
     }
 
-    private String saveImage(String bannerUrl) {
-        String imageName = bannerUrl.substring(bannerUrl.lastIndexOf('/') + 1);
-
-        try (InputStream in = new BufferedInputStream(new URL(bannerUrl).openStream())) {
-            Path imagePath = Path.of(imageName);
+    private String saveImage(String imageUrl) {
+        String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+        imageName = imageName.replaceAll("[<>:\"/\\\\|?*]", "_"); // Ersetzt ungültige Zeichen durch Unterstriche
+        Path imagePath = Path.of(imageName);
+        if(Files.exists(imagePath))
+            return imagePath.toString();
+        if(!imageUrl.startsWith("https://"))
+            imageUrl = HOSTURL + imageUrl;
+        try (InputStream in = new BufferedInputStream(new URL(imageUrl).openStream())) {
             Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
-            Log.info("Bild gespeichert: " + imagePath);
             return imagePath.toString();
 
         } catch (IOException e) {
-            Log.error("Fehler beim Speichern des Bildes: " + e.getMessage());
+            Log.error("Fehler beim Speichern des Bilds: " + e.getMessage());
+            return null;
         }
-        return null;
     }
 
     private List<String> saveImages(Elements imageElements) {
-        ArrayList<String> imagePaths = new ArrayList<>();
+        List<String> imagePaths = new ArrayList<>();
+        String imagePath;
         for (Element imageElement : imageElements) {
             String imageUrl = imageElement.absUrl("src");
-            String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-
-            try (InputStream in = new BufferedInputStream(new URL(imageUrl).openStream())) {
-                Path imagePath = Path.of(imageName);
-                Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
-                imagePaths.add(imagePath.toString());
-                Log.info("Bild gespeichert: " + imagePath);
-
-            } catch (IOException e) {
-                Log.error("Fehler beim Speichern des Bildes: " + e.getMessage());
-            }
+            imagePath = saveImage(imageUrl);
+            if(imagePath!=null)
+                imagePaths.add(imagePath);
         }
         return imagePaths;
     }
