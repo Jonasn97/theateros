@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -19,6 +20,7 @@ public class Play extends PanacheEntity {
     public String stid;
     public String overline;
     public String title;
+    @Column(length = 10000)
     public String description;
     public String kind;
     public String location;
@@ -35,8 +37,9 @@ public class Play extends PanacheEntity {
     public List<String> vimeoUris;
     @ElementCollection
     public List<String> soundcloudUris;
-
+    @Column(length = 10000)
     public String team;
+    @Column(length = 10000)
     public String press;
 
     @UpdateTimestamp
