@@ -6,17 +6,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.net.URL;
 
 @ApplicationScoped
 public class WebsiteDownloader {
-    private static String OUTPUTFOLDER = "src/main/resources";
+    private static final String OUTPUTFOLDER = "src/main/resources";
     private static int counter = 1;
 
     public void downloadAllWebsites(Set<String> websiteUrls) {
@@ -31,21 +28,21 @@ public class WebsiteDownloader {
     public void downloadWebsite(String websiteURL, String outputFolder) throws IOException {
         URL url = new URL(websiteURL);
         String fileName = "file" + counter++ + ".html";
-                // ...
 
                 try (BufferedInputStream in = new BufferedInputStream(url.openStream())) {
                     // Read the website content into a string
                     String websiteContent = readWebsiteContent(in);
 
                     // Modify the content by removing unwanted parts
-                    String modifiedContent = removeUnwantedParts(websiteContent);
+                    //websiteContent = removeUnwantedParts(websiteContent);
 
                     // Write the modified content to the file
                     try (FileOutputStream fileOutputStream = new FileOutputStream(outputFolder + "/" + fileName)) {
-                        fileOutputStream.write(modifiedContent.getBytes(StandardCharsets.UTF_8));
+                        fileOutputStream.write(websiteContent.getBytes(StandardCharsets.UTF_8));
                     }
             }
         }
+
     private String readWebsiteContent(BufferedInputStream in) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -81,8 +78,10 @@ public class WebsiteDownloader {
         Elements linkElements = document.select("link");
         linkElements.remove();
         // Get the modified HTML content
-        String modifiedContent = document.html();
 
-        return modifiedContent;
+        return document.html();
+        }
+        public File readFile(String filePath) {
+        return new File(filePath);
         }
 }
