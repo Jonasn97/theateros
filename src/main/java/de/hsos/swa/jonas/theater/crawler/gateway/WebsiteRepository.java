@@ -9,7 +9,9 @@ import io.quarkus.logging.Log;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 @ApplicationScoped
@@ -66,31 +68,31 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             play.duration = eventElementDTO.duration;
         if(play.bannerPath== null &&eventElementDTO.bannerPath!= null)
             play.bannerPath = eventElementDTO.bannerPath;
-        if(eventElementDTO.imagePaths!=null && !new HashSet<>(play.imagePaths).containsAll(eventElementDTO.imagePaths)) {
+        List<List<String>> listsToCheck = Arrays.asList(
+                eventElementDTO.imagePaths,
+                eventElementDTO.videoUris,
+                eventElementDTO.spotifyUris,
+                eventElementDTO.vimeoUris,
+                eventElementDTO.soundcloudUris
+        );
 
-            eventElementDTO.imagePaths.stream()
-                    .filter(imagePath -> !play.imagePaths.contains(imagePath))
-                    .forEach(imagePath -> play.imagePaths.add(imagePath));
-        }
-        if(eventElementDTO.videoUris!=null && !new HashSet<>(play.videoUris).containsAll(eventElementDTO.videoUris)) {
-            eventElementDTO.videoUris.stream()
-                    .filter(videoUris -> !play.videoUris.contains(videoUris))
-                    .forEach(videoUris -> play.videoUris.add(videoUris));
-        }
-        if(eventElementDTO.spotifyUris!=null && !new HashSet<>(play.spotifyUris).containsAll(eventElementDTO.spotifyUris)) {
-            eventElementDTO.spotifyUris.stream()
-                    .filter(spotifyUris -> !play.spotifyUris.contains(spotifyUris))
-                    .forEach(spotifyUris -> play.spotifyUris.add(spotifyUris));
-        }
-        if(eventElementDTO.vimeoUris!=null && !new HashSet<>(play.vimeoUris).containsAll(eventElementDTO.vimeoUris)) {
-            eventElementDTO.vimeoUris.stream()
-                    .filter(vimeoUris -> !play.vimeoUris.contains(vimeoUris))
-                    .forEach(vimeoUris -> play.vimeoUris.add(vimeoUris));
-        }
-        if(eventElementDTO.soundcloudUris!=null && !new HashSet<>(play.soundcloudUris).containsAll(eventElementDTO.soundcloudUris)) {
-            eventElementDTO.soundcloudUris.stream()
-                    .filter(soundcloudUris -> !play.soundcloudUris.contains(soundcloudUris))
-                    .forEach(soundcloudUris -> play.soundcloudUris.add(soundcloudUris));
+        List<List<String>> playLists = Arrays.asList(
+                play.imagePaths,
+                play.videoUris,
+                play.spotifyUris,
+                play.vimeoUris,
+                play.soundcloudUris
+        );
+
+        for (int i = 0; i < listsToCheck.size(); i++) {
+            List<String> listToCheck = listsToCheck.get(i);
+            List<String> playList = playLists.get(i);
+
+            if (listToCheck != null && !new HashSet<>(playList).containsAll(listToCheck)) {
+                listToCheck.stream()
+                        .filter(item -> !playList.contains(item))
+                        .forEach(playList::add);
+            }
         }
         if(play.team== null &&eventElementDTO.cast!= null)
             play.team = eventElementDTO.cast;
