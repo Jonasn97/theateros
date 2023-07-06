@@ -6,5 +6,5 @@ import java.util.Set;
 
 public interface CrawlerOperations {
     Set<String> updateCalendar(Document calendarDocument);
-    int updateEvent(Document eventDocument);
+    int updateEvent(String updatedLink, Document eventDocument);
 }

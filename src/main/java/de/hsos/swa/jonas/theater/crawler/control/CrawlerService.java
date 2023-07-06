@@ -28,7 +28,7 @@ import java.util.Set;
 
 @ApplicationScoped
 public class CrawlerService implements CrawlerOperations {
-    private static final String PLAY_ELEMENTS_SELECTOR = "div.container.mod-teaser--kalender";
+    private static final String CALENDER_ELEMENTS_SELECTOR = "div.container.mod-teaser--kalender";
     private static final String INFO_LINK_SELECTOR = "a[href^=/veranstaltung]";
     private static final String OVERLINE_SELECTOR = "h4";
     private static final String TIME_REGEX = ".*Beginn: ([0-9:]+) Uhr.*";
@@ -40,13 +40,13 @@ public class CrawlerService implements CrawlerOperations {
     CrawlerCatalog crawlerCatalog;
     @Override
     public Set<String> updateCalendar(Document calendarDocument) {
-        Elements playElements = calendarDocument.select(PLAY_ELEMENTS_SELECTOR);
+        Elements calenderElements = calendarDocument.select(CALENDER_ELEMENTS_SELECTOR);
 
-        Log.info("Anzahl Theaterstücke: " + playElements.size());
+        Log.info("Anzahl Theaterstücke: " + calenderElements.size());
         int updatedElements = 0;
         Set<String> updatedInfolinks = new HashSet<>();
-        for (Element playElement : playElements) {
-            CalendarElementDTO calendarElementDTO = getDataFromPlayElement(playElement);
+        for (Element calenderElement : calenderElements) {
+            CalendarElementDTO calendarElementDTO = getDataFromCalenderEntryElement(calenderElement);
             updatedInfolinks.add(calendarElementDTO.infolink);
             updatedElements+= crawlerCatalog.updateDatabase(calendarElementDTO);
         }
@@ -54,9 +54,11 @@ public class CrawlerService implements CrawlerOperations {
     }
 
     @Override
-    public int updateEvent(Document eventDocument) {
+    public int updateEvent(String updatedLink, Document eventDocument) {
         EventElementDTO eventElementDTO = getDataFromEventElement(eventDocument);
-
+        eventElementDTO.infolink = updatedLink;
+        int updatedElements=0;
+        updatedElements+= crawlerCatalog.updateDatabase(eventElementDTO);
 
         return 0;
     }
@@ -78,10 +80,15 @@ public class CrawlerService implements CrawlerOperations {
 
             //duration
             Element durationElement = possibleDescriptionElements.get(0).selectFirst("p:contains(Dauer)");
-            String duration = durationElement.text().split("\n")[durationElement.text().split("\n").length-1];
-            duration = duration.replace("Dauer: ", "");
-            duration = duration.replace("Dauer ", "");
-            eventElementDTO.duration = duration;
+
+            String duration;
+            if (durationElement != null) {
+                duration = durationElement.text().split("\n")[durationElement.text().split("\n").length-1];
+                duration = duration.replace("Dauer: ", "");
+                duration = duration.replace("Dauer ", "");
+                eventElementDTO.duration = duration;
+            }
+
 
             //additional dates
             if(possibleDescriptionElements.get(1).selectFirst("h4:contains(Termine)")!=null) {
@@ -94,9 +101,12 @@ public class CrawlerService implements CrawlerOperations {
         }
         Element bannerElement = eventDocument.selectFirst("div.mod.mod-teaser--top");
         //Get url from div: <div class="mod mod-teaser mod-teaser--top" style="background-image: url(/media/1400px_der_weg_zurueck_0411.jpg)"></div>
-        String bannerUrl = bannerElement.attr("style");
-        bannerUrl = bannerUrl.substring(bannerUrl.indexOf('(')+1, bannerUrl.indexOf(')'));
-        eventElementDTO.bannerPath = saveImage(bannerUrl);
+        String bannerUrl;
+        if (bannerElement != null) {
+            bannerUrl = bannerElement.attr("style");
+            bannerUrl = bannerUrl.substring(bannerUrl.indexOf('(')+1, bannerUrl.indexOf(')'));
+            eventElementDTO.bannerPath = saveImage(bannerUrl);
+        }
         Elements carouselElement = eventDocument.select("div.mod.mod-carousel");
         Elements imageElements;
         if(!carouselElement.isEmpty()) {
@@ -170,15 +180,15 @@ public class CrawlerService implements CrawlerOperations {
         return imagePaths;
     }
 
-    private CalendarElementDTO getDataFromPlayElement(Element playElement) {
+    private CalendarElementDTO getDataFromCalenderEntryElement(Element calenderEntryElement) {
         //Extract basic playinfos: overline, title, infolink, sparte, location
         CalendarElementDTO calendarElementDTO = new CalendarElementDTO();
-        Element overlineElement = playElement.selectFirst(OVERLINE_SELECTOR);
+        Element overlineElement = calenderEntryElement.selectFirst(OVERLINE_SELECTOR);
         calendarElementDTO.overline = (overlineElement!=null)?overlineElement.text(): null;
 
-        calendarElementDTO.title = playElement.attr("data-sp-stueck");
+        calendarElementDTO.title = calenderEntryElement.attr("data-sp-stueck");
 
-        Element infoLinkElement = playElement.selectFirst(INFO_LINK_SELECTOR);
+        Element infoLinkElement = calenderEntryElement.selectFirst(INFO_LINK_SELECTOR);
         String infolink = infoLinkElement != null ? infoLinkElement.attr("abs:href") : "";
 
         String[] infolinkParts = infolink.split("/");
@@ -191,20 +201,20 @@ public class CrawlerService implements CrawlerOperations {
         calendarElementDTO.stid = stid;
         calendarElementDTO.auid = auid;
 
-        calendarElementDTO.kind = playElement.attr("data-sp-sparte");
+        calendarElementDTO.kind = calenderEntryElement.attr("data-sp-sparte");
 
-        calendarElementDTO.location = playElement.attr("data-sp-ort");
+        calendarElementDTO.location = calenderEntryElement.attr("data-sp-ort");
 
         //Extract performance infos: date, time, bookingLink, isCancelled, performanceType
-        String dateString = playElement.attr("data-sp-day");
-        Element infoElement = playElement.selectFirst(".info");
+        String dateString = calenderEntryElement.attr("data-sp-day");
+        Element infoElement = calenderEntryElement.selectFirst(".info");
         String timeString = (infoElement!=null)?infoElement.text().replaceAll(TIME_REGEX, "$1"): null;
-        Element bookinglinkElement = playElement.selectFirst("a.btn-primary");
+        Element bookinglinkElement = calenderEntryElement.selectFirst("a.btn-primary");
         calendarElementDTO.bookingLink = bookinglinkElement!=null? bookinglinkElement.attr("abs:href"): null;
         boolean isCancelled = calendarElementDTO.title.contains("Abgesagt");
         if(isCancelled)
             calendarElementDTO.bookingLink = null;
-        Element performanceType = playElement.select("span").last();
+        Element performanceType = calenderEntryElement.select("span").last();
         calendarElementDTO.performanceType = performanceType!=null? performanceType.text(): null; //TODO make performanceTypeString to enum
 
         calendarElementDTO.time = parseTime(timeString);
