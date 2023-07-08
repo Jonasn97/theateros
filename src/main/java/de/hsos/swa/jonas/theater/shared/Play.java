@@ -52,8 +52,8 @@ public class Play extends PanacheEntity {
     @OneToMany
     public Collection<Performance> performances = new ArrayList<>();
 
-    public Play(String infoLink, String overline, String title, String sparte, String location) {
-
+    public Play(String stid, String infoLink, String overline, String title, String sparte, String location) {
+        this.stid = stid;
         this.infolink = infoLink;
         this.overline = overline;
         this.title = title;
@@ -66,11 +66,6 @@ public class Play extends PanacheEntity {
 
     }
 }
-    //Youtubelinks
-    //PictureList
-    //Spotify Vorschau
-    //Pressestimmen
     //Pressezitat
-    //Besetzung
     //Fördernde
     //Rahmen

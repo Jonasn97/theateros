@@ -23,7 +23,7 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
         int updatedElements = 0;
         Play play = Play.find("infolink", calendarElementDTO.infolink).firstResult();
         if (play == null) {
-            play = new Play(calendarElementDTO.infolink, calendarElementDTO.overline, calendarElementDTO.title, calendarElementDTO.kind, calendarElementDTO.location);
+            play = new Play(calendarElementDTO.stid, calendarElementDTO.infolink, calendarElementDTO.overline, calendarElementDTO.title, calendarElementDTO.kind, calendarElementDTO.location);
             play.persist();
             updatedElements++;
         } else if (!Objects.equals(play.overline, calendarElementDTO.overline) || !Objects.equals(play.title, calendarElementDTO.title) || !Objects.equals(play.kind, calendarElementDTO.kind) || !Objects.equals(play.location, calendarElementDTO.location)){
