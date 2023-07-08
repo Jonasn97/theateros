@@ -116,17 +116,19 @@ public class CrawlerService implements CrawlerOperations {
             eventElementDTO.imagePaths = saveImages(imageElements);
         }
         Elements videoDivs = eventDocument.select(".mod-video");
-        ArrayList<String> videoLinks = new ArrayList<>();
+        List<String> videoLinks = new ArrayList<>();
         for (Element videoDiv : videoDivs) {
             videoLinks.add(videoDiv.select(".content-video").attr("data-id"));
         }
         eventElementDTO.videoUris = videoLinks;
 
         Elements spotifyLinks = eventDocument.select("a[href*=spotify]");
+        List <String> spotifyUri = new ArrayList<>();
         for (Element spotifyLink : spotifyLinks) {
             String spotifyUrl = spotifyLink.attr("href");
-            //Log.info("Spotify Link: " + spotifyUrl);
+            spotifyUri.add(spotifyUrl);
         }
+        eventElementDTO.spotifyUris = spotifyUri;
 
         Elements presseStimmenElements = eventDocument.select("h4:contains(Pressestimmen) + p");
         eventElementDTO.press = presseStimmenElements.text();
@@ -134,8 +136,7 @@ public class CrawlerService implements CrawlerOperations {
         Elements besetzungElements = eventDocument.select("h4:contains(Besetzung) + p");
         eventElementDTO.cast = besetzungElements.text();
 
-        ArrayList<String> soundCloudWidgetLinks = new ArrayList<>();
-
+        List<String> soundCloudWidgetLinks = new ArrayList<>();
         // Alle iframe-Elemente mit der Klasse "soundcloud-widget" auswählen
         Elements iframeElements = eventDocument.select("iframe.soundcloud-widget");
 
@@ -148,9 +149,9 @@ public class CrawlerService implements CrawlerOperations {
         return eventElementDTO;
     }
 
-    private String saveImage(String imageUrl) {
+    private String saveImage(String imageUrl) { //TODO should be in Boundary
         String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-        imageName = imageName.replaceAll("[<>:\"/\\\\|?*]", "_"); // Ersetzt ungültige Zeichen durch Unterstriche
+        imageName = imageName.replaceAll("[<>:\"/\\\\|?*]", "_");
         Path imagePath = Path.of(imageName);
         if(Files.exists(imagePath))
             return imagePath.toString();
