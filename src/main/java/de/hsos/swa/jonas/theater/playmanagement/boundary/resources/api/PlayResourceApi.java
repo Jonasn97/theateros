@@ -29,7 +29,7 @@ import java.util.Collection;
 @Path("/play")
 public class PlayResourceApi {
     private final static long FIRSTPAGE = 0;
-    private final static String FIRSTPAGESTRING = "0";
+    private final static String FIRSTPAGE_STRING = "0";
 
     @Inject
     PlayOperations playOperations;
@@ -56,7 +56,7 @@ public class PlayResourceApi {
                              @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                              @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                              @QueryParam("include") String include,
-                             @DefaultValue(FIRSTPAGESTRING)@QueryParam("page[number]") Long pageNumber,
+                             @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
 
@@ -87,7 +87,7 @@ public class PlayResourceApi {
                                      @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                      @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                      @QueryParam("include") String include,
-                                     @DefaultValue(FIRSTPAGESTRING)@QueryParam("page[number]") Long pageNumber,
+                                     @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                      @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
