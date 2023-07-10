@@ -152,7 +152,7 @@ public class CrawlerService implements CrawlerOperations {
     private String saveImage(String imageUrl) { //TODO should be in Boundary
         String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         imageName = imageName.replaceAll("[<>:\"/\\\\|?*]", "_");
-        Path imagePath = Path.of(imageName);
+        Path imagePath = Path.of("media/" + imageName);
         if(Files.exists(imagePath))
             return imagePath.toString();
         if(!imageUrl.startsWith("https://"))

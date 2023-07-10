@@ -13,7 +13,7 @@ import java.net.URL;
 
 @ApplicationScoped
 public class WebsiteDownloader {
-    private static final String OUTPUTFOLDER = "src/main/resources";
+    private static final String OUTPUTFOLDER = "src/main/resources/crawledPages";
     private static int counter = 1;
 
     public void downloadAllWebsites(Set<String> websiteUrls) {
