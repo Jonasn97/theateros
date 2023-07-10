@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
-@Entity
+@Entity(name = "AppUser")
 public class User extends PanacheEntity {
     public String username;
     @ElementCollection
