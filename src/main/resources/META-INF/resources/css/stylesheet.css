@@ -1,0 +1,48 @@
+.navigation-bar {
+    background-color: #fff;
+    border-radius: 3px;
+    min-height: 30px;
+    overflow: hidden;
+    position:fixed;
+    bottom: 0%;
+    width: 100%;
+    opacity: 1;
+    border-top: 1px solid var(--text, #CCC);
+box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+}
+.navigation-bar .list-items {
+    display: flex;
+    position: relative;
+    justify-content: space-around;
+    padding-top: 10px;
+
+}
+.navigation-bar .list-items .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 25px;
+    position: relative;
+    z-index: 2;
+}
+.navigation-bar .list-items .item .link {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:center;
+    position: relative;
+    z-index: 2;
+}
+.navigation-bar .list-items .item .link .icon{
+    fill: #CCC;
+}
+.navigation-bar .list-items .item .link .dot{
+    padding: 5px;
+    fill: #FFF;
+}
+.navigation-bar .list-items .item.active .link .icon {
+    fill: #9D8276;
+}
+.navigation-bar .list-items .item.active .link .dot {
+    fill: #9D8276;
+}
