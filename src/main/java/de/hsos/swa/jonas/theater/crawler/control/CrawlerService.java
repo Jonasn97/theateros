@@ -93,11 +93,20 @@ public class CrawlerService implements CrawlerOperations {
 
 
             //additional dates
+            Element termineBaseElement;
+            Element termineElement;
             if(possibleDescriptionElements.get(1).selectFirst("h4:contains(Termine)")!=null) {
-                Element termineElement = possibleDescriptionElements.get(1).selectFirst("h4:contains(Termine)").nextElementSibling().nextElementSibling();
-                String termine = termineElement.text();
+                termineBaseElement = possibleDescriptionElements.get(1).selectFirst("h4:contains(Termine)");
+                if(termineBaseElement.nextElementSibling()!=null) {
+                    if (termineBaseElement.nextElementSibling().nextElementSibling() != null) {
+                        termineElement = termineBaseElement.nextElementSibling().nextElementSibling();
+                        if (termineElement != null) {
+                            String termine = termineElement.text();
+                        }
+                    }
                 }
             }
+        }
         else {
             Log.info("Keine Beschreibung gefunden");
         }
