@@ -99,7 +99,7 @@ public class CrawlerResource {
     }
     @GET
     public Response testSpecificEvents() {
-        updateEvent("src/main/resources/file25.html");
+        updateEvent("src/main/resources/crawledPages/file25.html");
         return Response.ok().build();
     }
 

@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.Time;
@@ -161,7 +162,9 @@ public class CrawlerService implements CrawlerOperations {
     private String saveImage(String imageUrl) { //TODO should be in Boundary
         String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         imageName = imageName.replaceAll("[<>:\"/\\\\|?*]", "_");
-        Path imagePath = Path.of("media/" + imageName);
+        //store image in META-INF/resources/media
+        Path imagePath = Paths.get("src/main/resources/META-INF/resources/media/" + imageName);
+
         if(Files.exists(imagePath))
             return imagePath.toString();
         if(!imageUrl.startsWith("https://"))
@@ -172,6 +175,7 @@ public class CrawlerService implements CrawlerOperations {
 
         } catch (IOException e) {
             Log.error("Fehler beim Speichern des Bilds: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
