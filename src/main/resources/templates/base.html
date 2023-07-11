@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        {#include stylesheetLinks}{/}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Stücke</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#include stylesheetLinks}{/}
+        <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Taviraj&display=swap" >
+        
     </head>
     <body>
     <header>
@@ -22,10 +27,21 @@
             <h1>{plays.size}</h1>
             {#for play in plays}
             <div class="card">
-                <h2>{play.title}</h2>
+                <div class="card-content">
+                    <img class="image" src="{play.images.get(1)}" alt="">
+                    <div class="text">
+                    <div class="card-title-row">
+                        <div class="card-title">{play.title}</div>
+                        <div class="chip">
+                            <div class="chip-content">will hin!</div>
+                        </div>
+                    </div>
+                    <div class="card-subtitle">{play.kind}</div>
+                    <div class="card-info">als nächstes am {play.performances.getNext()}</div>
+                </div>
+                </div>
             </div>
             {/for}
-
         </main>
         <footer>
             <nav class="navigation-bar">
@@ -74,6 +90,4 @@
                 </div>
             </nav>
         </footer>
-        <script src="" async defer></script>
-    </body>
-</html>
+    </body></html>
