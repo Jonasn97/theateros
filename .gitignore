@@ -43,5 +43,4 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 
 # Quarkus Logs
-app.log
-
+/app.log*
