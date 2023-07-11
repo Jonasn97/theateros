@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Path("web/events")
+@Path("mobile/events")
 public class EventResourceMobile {
     private final static String FIRSTPAGE_STRING = "0";
     @Inject
