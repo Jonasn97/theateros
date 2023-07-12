@@ -68,32 +68,16 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             play.duration = eventElementDTO.duration;
         if(play.bannerPath== null &&eventElementDTO.bannerPath!= null)
             play.bannerPath = eventElementDTO.bannerPath;
-        List<List<String>> listsToCheck = Arrays.asList(
-                eventElementDTO.imagePaths,
-                eventElementDTO.videoUris,
-                eventElementDTO.spotifyUris,
-                eventElementDTO.vimeoUris,
-                eventElementDTO.soundcloudUris
-        );
-
-        List<List<String>> playLists = Arrays.asList(
-                play.imagePaths,
-                play.videoUris,
-                play.spotifyUris,
-                play.vimeoUris,
-                play.soundcloudUris
-        );
-
-        for (int i = 0; i < listsToCheck.size(); i++) {
-            List<String> listToCheck = listsToCheck.get(i);
-            List<String> playList = playLists.get(i);
-
-            if (listToCheck != null && !new HashSet<>(playList).containsAll(listToCheck)) {
-                listToCheck.stream()
-                        .filter(item -> !playList.contains(item))
-                        .forEach(playList::add);
-            }
-        }
+        if(eventElementDTO.imagePaths!= null)
+            play.imagePaths.addAll(eventElementDTO.imagePaths);
+        if(eventElementDTO.videoUris!= null)
+            play.videoUris.addAll(eventElementDTO.videoUris);
+        if(eventElementDTO.spotifyUris!= null)
+            play.spotifyUris.addAll(eventElementDTO.spotifyUris);
+        if(eventElementDTO.vimeoUris!= null)
+            play.vimeoUris.addAll(eventElementDTO.vimeoUris);
+        if(eventElementDTO.soundcloudUris!= null)
+            play.soundcloudUris.addAll(eventElementDTO.soundcloudUris);
         if(play.team== null &&eventElementDTO.cast!= null)
             play.team = eventElementDTO.cast;
         if(play.press== null &&eventElementDTO.press!= null)

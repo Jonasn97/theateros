@@ -126,14 +126,14 @@ public class CrawlerService implements CrawlerOperations {
             eventElementDTO.imagePaths = saveImages(imageElements);
         }
         Elements videoDivs = eventDocument.select(".mod-video");
-        List<String> videoLinks = new ArrayList<>();
+        Set<String> videoLinks = new HashSet<>();
         for (Element videoDiv : videoDivs) {
             videoLinks.add(videoDiv.select(".content-video").attr("data-id"));
         }
         eventElementDTO.videoUris = videoLinks;
 
         Elements spotifyLinks = eventDocument.select("a[href*=spotify]");
-        List <String> spotifyUri = new ArrayList<>();
+        Set <String> spotifyUri = new HashSet<>();
         for (Element spotifyLink : spotifyLinks) {
             String spotifyUrl = spotifyLink.attr("href");
             spotifyUri.add(spotifyUrl);
@@ -146,7 +146,7 @@ public class CrawlerService implements CrawlerOperations {
         Elements besetzungElements = eventDocument.select("h4:contains(Besetzung) + p");
         eventElementDTO.cast = besetzungElements.text();
 
-        List<String> soundCloudWidgetLinks = new ArrayList<>();
+        Set<String> soundCloudWidgetLinks = new HashSet<>();
         // Alle iframe-Elemente mit der Klasse "soundcloud-widget" auswählen
         Elements iframeElements = eventDocument.select("iframe.soundcloud-widget");
 
@@ -180,8 +180,8 @@ public class CrawlerService implements CrawlerOperations {
         }
     }
 
-    private List<String> saveImages(Elements imageElements) {
-        List<String> imagePaths = new ArrayList<>();
+    private Set<String> saveImages(Elements imageElements) {
+        Set<String> imagePaths = new HashSet<>();
         String imagePath;
         for (Element imageElement : imageElements) {
             String imageUrl = imageElement.absUrl("src");
