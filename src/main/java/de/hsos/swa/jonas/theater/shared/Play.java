@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Play extends PanacheEntity {
@@ -22,21 +23,22 @@ public class Play extends PanacheEntity {
     public String title;
     @Column(length = 10000)
     public String description;
+    public String thumbnailPath;
     public String kind;
     public String location;
     public String duration;
 
     public String bannerPath;
     @ElementCollection
-    public List<String> imagePaths;
+    public Set<String> imagePaths;
     @ElementCollection
-    public List<String> videoUris;
+    public Set<String> videoUris;
     @ElementCollection
-    public List<String> spotifyUris;
+    public Set<String> spotifyUris;
     @ElementCollection
-    public List<String> vimeoUris;
+    public Set<String> vimeoUris;
     @ElementCollection
-    public List<String> soundcloudUris;
+    public Set<String> soundcloudUris;
     @Column(length = 10000)
     public String team;
     @Column(length = 10000)
