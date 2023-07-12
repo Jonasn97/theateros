@@ -44,3 +44,9 @@ nb-configuration.xml
 
 # Quarkus Logs
 /app.log*
+
+# crawled Pages
+/src/main/resources/crawledPages/*
+
+# media
+/src/main/resources/META-INF/resources/media/*
