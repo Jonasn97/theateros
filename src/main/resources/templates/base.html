@@ -6,7 +6,6 @@
     <title>Stücke</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {#include stylesheetLinks}{/}
         <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,11 +23,10 @@
         </svg>
     </header>
         <main>
-            <h1>{plays.size}</h1>
             {#for play in plays}
             <div class="card">
                 <div class="card-content">
-                    <img class="image" src="{play.images.get(1)}" alt="">
+                    <img class="image" src="{#if play.thumbnailPath}{play.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}" alt="">
                     <div class="text">
                     <div class="card-title-row">
                         <div class="card-title">{play.title}</div>
@@ -36,8 +34,16 @@
                             <div class="chip-content">will hin!</div>
                         </div>
                     </div>
-                    <div class="card-subtitle">{play.kind}</div>
-                    <div class="card-info">als nächstes am {play.performances.getNext()}</div>
+                    <div class="card-subtitle">{#if play.kind}{play.kind}{/if}</div>
+                    <div class="card-info">
+                    {#if play.nextPerformance}
+                        {#if play.nextPerformance.performanceType}
+                            {play.nextPerformance.performanceType}
+                            {#else} als nächstes {/if} am
+                        {play.nextPerformance.startDate}
+                        {#if play.nextPerformance.hasTime} um {play.nextPerformance.startTime} {/if}
+                        {/if}
+                </div>
                 </div>
                 </div>
             </div>
