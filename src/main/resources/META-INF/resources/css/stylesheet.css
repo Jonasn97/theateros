@@ -5,9 +5,15 @@
     font-style: normal;
     font-weight: 500;
 }
+body {
 
+}
 /*Header*/
 header {
+    top:0;
+    position: sticky;
+    z-index: 10;
+    background-color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -49,6 +55,7 @@ header .icon {
 }
 
 .card .card-content {
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
@@ -57,9 +64,36 @@ header .icon {
 }
 
 .card .card-content .image {
-    width: 26%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    justify-content: center;
+    text-align: center;
+    align-items: stretch;
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 25%;
     border-radius: 20px 0px 0px 20px;
-    object-fit: cover;
+    background-size: cover;
+    background-color: #9D8276;
+    overflow: clip;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.card .card-content .image #day {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.card .card-content .image #month {
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.card .card-content .image #time {
+    font-size: 13px;
+    font-weight: 300;
 }
 
 .card .card-content .text {
@@ -96,7 +130,7 @@ header .icon {
 
 .card .card-content .text .card-title-row .chip {
     width: auto;
-    height: 16px;
+    height: auto;
     border-radius: 20px;
     background: #D7B9FF;
 }
@@ -109,6 +143,20 @@ header .icon {
     font-weight: 275;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.button {
+    border-radius: 5px;
+    background: #9747FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    text-align: center;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    color: #fff;
 }
 
 /*navigation*/

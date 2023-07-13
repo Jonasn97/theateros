@@ -26,16 +26,16 @@
             {#for play in plays}
             <div class="card">
                 <div class="card-content">
-                    <img class="image" src="{#if play.thumbnailPath}{play.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}" alt="">
+                <div class="image" style="background-image: url('{#if play.thumbnailPath}{play.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"></div><!--todo use title attribute for alt-text-->
                     <div class="text">
                     <div class="card-title-row">
-                        <div class="card-title">{play.title}</div>
+                        <span class="card-title">{play.title}</span>
                         <div class="chip">
                             <div class="chip-content">will hin!</div>
                         </div>
                     </div>
                     <div class="card-subtitle">{#if play.kind}{play.kind}{/if}</div>
-                    <div class="card-info">
+                    <span class="card-info">
                     {#if play.nextPerformance}
                         {#if play.nextPerformance.performanceType}
                             {play.nextPerformance.performanceType}
@@ -43,11 +43,14 @@
                         {play.nextPerformance.startDate}
                         {#if play.nextPerformance.hasTime} um {play.nextPerformance.startTime} {/if}
                         {/if}
-                </div>
+                </span>
                 </div>
                 </div>
             </div>
             {/for}
+                <form action="/mobile/events?page%5Bnumber%5D=2&page%5Bsize%5D=10" method="GET">
+                    <button class="button" type="submit">Mehr anzeigen</button>
+                </form>
         </main>
         <footer>
             <nav class="navigation-bar">
