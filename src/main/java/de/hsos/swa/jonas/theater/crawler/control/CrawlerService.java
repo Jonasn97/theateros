@@ -18,8 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,8 +39,8 @@ public class CrawlerService implements CrawlerOperations {
     private static final String INFO_LINK_SELECTOR = "a[href^=/veranstaltung]";
     private static final String OVERLINE_SELECTOR = "h4";
     private static final String TIME_REGEX = ".*Beginn: ([0-9:]+) Uhr.*";
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final String HOSTURL = "https://www.theater-osnabrueck.de/";
 
     @Inject
@@ -166,12 +170,12 @@ public class CrawlerService implements CrawlerOperations {
         Path imagePath = Paths.get("src/main/resources/META-INF/resources/media/" + imageName);
 
         if(Files.exists(imagePath))
-            return imagePath.toString();
+            return "/media/" + imageName;
         if(!imageUrl.startsWith("https://"))
             imageUrl = HOSTURL + imageUrl;
         try (InputStream in = new BufferedInputStream(new URL(imageUrl).openStream())) {
             Files.copy(in, imagePath, StandardCopyOption.REPLACE_EXISTING);
-            return imagePath.toString();
+            return "/media/" + imageName;
 
         } catch (IOException e) {
             Log.error("Fehler beim Speichern des Bilds: " + e.getMessage());
@@ -229,18 +233,27 @@ public class CrawlerService implements CrawlerOperations {
         Element performanceType = calenderEntryElement.select("span").last();
         calendarElementDTO.performanceType = performanceType!=null? performanceType.text(): null; //TODO make performanceTypeString to enum
 
-        calendarElementDTO.time = parseTime(timeString);
-        calendarElementDTO.date = parseDate(dateString);
+
+        LocalTime time = parseTime(timeString);
+
+        LocalDate date = parseDate(dateString);
+        if (time != null) {
+            calendarElementDTO.datetime = LocalDateTime.of(date,time);
+            calendarElementDTO.hasTime = true;
+        } else {
+            calendarElementDTO.datetime = LocalDateTime.from(date);
+            calendarElementDTO.hasTime = false;
+        }
         return calendarElementDTO;
     }
 
-    private Time parseTime(String timeString) {
+    private LocalTime parseTime(String timeString) {
 
         if(timeString == null) return null;
         if(timeString.matches("[0-9:]+")){
             try {
-                return new Time(TIME_FORMAT.parse(timeString).getTime());
-            } catch (ParseException e) {
+                return LocalTime.parse(timeString, TIME_FORMAT);
+            } catch (DateTimeParseException e) {
                 Log.error("Error parsing time: " + timeString);
                 e.printStackTrace();
             }
@@ -248,11 +261,11 @@ public class CrawlerService implements CrawlerOperations {
         return null;
     }
 
-    private Date parseDate(String dateString) {
+    private LocalDate parseDate(String dateString) {
         if(dateString == null) return null;
         try {
-            return new Date(DATE_FORMAT.parse(dateString).getTime());
-        } catch (ParseException e) {
+            return LocalDate.parse(dateString, DATE_FORMAT);
+        } catch (DateTimeParseException e) {
             Log.error("Error parsing date: " + dateString);
             e.printStackTrace();
         }

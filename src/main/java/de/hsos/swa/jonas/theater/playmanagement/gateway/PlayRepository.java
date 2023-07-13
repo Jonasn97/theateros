@@ -3,10 +3,7 @@ package de.hsos.swa.jonas.theater.playmanagement.gateway;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.shared.Play;
 import de.hsos.swa.jonas.theater.playmanagement.entity.PlayCatalog;
-import io.quarkus.logging.Log;
-
 import javax.enterprise.context.ApplicationScoped;
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.sql.Timestamp;
 
 @ApplicationScoped
 public class PlayRepository implements PlayCatalog {
@@ -38,16 +34,10 @@ public class PlayRepository implements PlayCatalog {
                         if (queryParametersDTO.startDateTimeFilter == null || queryParametersDTO.endDateTimeFilter == null) {
                             return true;
                         }
-                        Date start = Date.valueOf(queryParametersDTO.startDateTimeFilter.toLocalDate());
-                        Log.info("start: " + start.toString());
-                        Date end = Date.valueOf(queryParametersDTO.endDateTimeFilter.toLocalDate());
-                        Log.info("end: " + end.toString());
-
                         return play.performances.stream()
                                 .anyMatch(performance ->
-                                        performance.date != null &&
-                                                performance.date.getTime()>= start.getTime() &&
-                                                performance.date.getTime() <= end.getTime()
+                                        (performance.datetime != null &&
+                                                performance.datetime.compareTo(queryParametersDTO.startDateTimeFilter)>=0)
                                 );
                     })
                     .skip(queryParametersDTO.pageNumber * queryParametersDTO.pageSize)
@@ -69,16 +59,11 @@ public class PlayRepository implements PlayCatalog {
                         if (queryParametersDTO.startDateTimeFilter == null || queryParametersDTO.endDateTimeFilter == null) {
                             return true;
                         }
-                        Date start = Date.valueOf(queryParametersDTO.startDateTimeFilter.toLocalDate());
-                        Log.info("start: " + start.toString());
-                        Date end = Date.valueOf(queryParametersDTO.endDateTimeFilter.toLocalDate());
-                        Log.info("end: " + end.toString());
 
                         return play.performances.stream()
                                 .anyMatch(performance ->
-                                        performance.date != null &&
-                                                performance.date.getTime()>= start.getTime() &&
-                                                performance.date.getTime() <= end.getTime()
+                                        (performance.datetime != null &&
+                                                performance.datetime.compareTo(queryParametersDTO.startDateTimeFilter)>=0)
                                 );
                     })
                     .count();

@@ -1,7 +1,7 @@
 package de.hsos.swa.jonas.theater.crawler.gateway;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class CalendarElementDTO {
     public String infolink;
@@ -12,22 +12,22 @@ public class CalendarElementDTO {
     public String kind;
     public String location;
 
-    public Date date;
-    public Time time;
+    public LocalDateTime datetime;
+    public boolean hasTime;
     public String bookingLink;
 
     public boolean isCancelled;
 
     public String performanceType; // Letzte Vorstellung, Wiederaufnahme, offene Probe, Premiere, Zusatzvorstellung
 
-    public CalendarElementDTO(String infoLink, String overline, String title, String sparte, String location, Date date, Time time, String bookingLink, boolean isCancelled, String performanceTypeString) {
+    public CalendarElementDTO(String infoLink, String overline, String title, String sparte, String location, LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
         this.infolink = infoLink;
         this.overline = overline;
         this.title = title;
         this.kind = sparte;
         this.location = location;
-        this.date = date;
-        this.time = time;
+        this.datetime = datetime;
+        this.hasTime = hasTime;
         this.bookingLink = bookingLink;
         this.isCancelled = isCancelled;
         this.performanceType = performanceTypeString;
