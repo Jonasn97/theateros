@@ -48,8 +48,10 @@
                 </div>
             </div>
             {/for}
-                <form action="/mobile/events?page%5Bnumber%5D=2&page%5Bsize%5D=10" method="GET">
+                <form class="showMore" action="/mobile/events" method="GET">
                     <button class="button" type="submit">Mehr anzeigen</button>
+                    <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
+                    <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
                 </form>
         </main>
         <footer>
@@ -99,4 +101,5 @@
                 </div>
             </nav>
         </footer>
-    </body></html>
+    </body>
+</html>
