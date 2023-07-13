@@ -9,9 +9,6 @@ import io.quarkus.logging.Log;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 
 @ApplicationScoped
@@ -21,7 +18,7 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
     @Transactional
     public int updateDatabase(CalendarElementDTO calendarElementDTO) {
         int updatedElements = 0;
-        Play play = Play.find("infolink", calendarElementDTO.infolink).firstResult();
+        Play play = Play.find("stid", calendarElementDTO.stid).firstResult();
         if (play == null) {
             play = new Play(calendarElementDTO.stid, calendarElementDTO.infolink, calendarElementDTO.overline, calendarElementDTO.title, calendarElementDTO.kind, calendarElementDTO.location);
             play.persist();
@@ -35,7 +32,7 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             updatedElements++;
         }
         Performance existingPerformance = play.performances.stream()
-                .filter(p -> Objects.equals(p.date, calendarElementDTO.date) && Objects.equals(p.time, calendarElementDTO.time))
+                .filter(p -> Objects.equals(p.auid, calendarElementDTO.auid))
                 .findFirst()
                 .orElse(null);
         if (existingPerformance != null && (existingPerformance.isCancelled != calendarElementDTO.isCancelled || !Objects.equals(existingPerformance.performanceType, calendarElementDTO.performanceType))) {
@@ -44,7 +41,7 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             existingPerformance.performanceType = calendarElementDTO.performanceType;
             existingPerformance.persist();
         } else {
-            Performance performance = new Performance(calendarElementDTO.time, calendarElementDTO.date, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
+            Performance performance = new Performance(calendarElementDTO.auid, calendarElementDTO.datetime, calendarElementDTO.hasTime, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
             play.performances.add(performance);
             play.persist();
             play.performances.forEach(p -> PanacheEntityBase.persist(p));
@@ -82,6 +79,8 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             play.team = eventElementDTO.cast;
         if(play.press== null &&eventElementDTO.press!= null)
             play.press = eventElementDTO.press;
+        if(play.thumbnailPath== null &&play.imagePaths!= null && !play.imagePaths.isEmpty())
+            play.thumbnailPath = play.imagePaths.iterator().next();
         play.persist();
         return 1;
     }
