@@ -29,7 +29,7 @@ public class EventResourceMobile {
     Template base;
 
     @Produces(MediaType.TEXT_HTML)
-    @Consumes(MediaType.TEXT_HTML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @GET
     public Response listEvents(@QueryParam("filter[name]") String nameFilter,
                                @QueryParam("filter[status]") ArrayList<String> statusFilter,
@@ -58,7 +58,7 @@ public class EventResourceMobile {
         }).collect(Collectors.toList());
         Log.info(plays.size());
         Log.info(playDTOS.size());
-        TemplateInstance templateInstance =base.data("plays", playDTOS);
+        TemplateInstance templateInstance =base.data("plays", playDTOS, "queryParameters", queryParametersDTO);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
     }
