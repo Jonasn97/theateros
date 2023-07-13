@@ -1,8 +1,11 @@
 package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.mobile;
 
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
+import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.OutgoingEventDTO;
+import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.OutgoingNextPerformanceDTO;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
+import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.logging.Log;
 import io.quarkus.qute.Location;
@@ -13,9 +16,8 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("mobile/events")
@@ -40,7 +42,20 @@ public class EventResourceMobile {
                                @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
-        List<InitialPlayDTO> playDTOS = plays.stream().map(InitialPlayDTO.Converter::toDTO).collect(Collectors.toList());
+        List<OutgoingEventDTO> playDTOS = plays.stream().map(play -> {
+            LocalDateTime currentTime = LocalDateTime.now();
+            //find next performance with date and time
+            Optional<Performance> nextPerformance = play.performances.stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
+                    .filter(performance -> performance.datetime != null) // Filtere Vorstellungen ohne datetime aus
+                    .filter(performance -> performance.datetime.isAfter(currentTime)) // Filtere vergangene Vorstellungen aus
+                    .min(Comparator.comparing(performance -> performance.datetime));
+            OutgoingEventDTO outgoingEventDTO = OutgoingEventDTO.Converter.toDTO(play);
+            if (nextPerformance.isPresent()) {
+                Performance performance = nextPerformance.get();
+                outgoingEventDTO.nextPerformance = OutgoingNextPerformanceDTO.Converter.toDTO(performance);
+            }
+            return outgoingEventDTO;
+        }).collect(Collectors.toList());
         Log.info(plays.size());
         Log.info(playDTOS.size());
         TemplateInstance templateInstance =base.data("plays", playDTOS);
