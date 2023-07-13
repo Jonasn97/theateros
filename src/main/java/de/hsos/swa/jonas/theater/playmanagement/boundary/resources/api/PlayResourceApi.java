@@ -4,10 +4,7 @@ import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
 import de.hsos.swa.jonas.theater.shared.*;
-import de.hsos.swa.jonas.theater.shared.dto.ErrorDTO;
-import de.hsos.swa.jonas.theater.shared.dto.LinksDTO;
-import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
-import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;
+import de.hsos.swa.jonas.theater.shared.dto.*;
 import io.quarkus.logging.Log;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
@@ -59,7 +56,9 @@ public class PlayResourceApi {
                              @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
+        if (include != null && include.contains("performance")) {
 
+        }
         Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(plays.isEmpty()) {
@@ -72,14 +71,19 @@ public class PlayResourceApi {
                 .map( play -> {
                     String id = String.valueOf(play.id);
                     String type = "play";
+
                     LinksDTO linksDTO = createSelfLink(id);
                     InitialPlayDTO initialPlayDTO = InitialPlayDTO.Converter.toDTO(play);
-                    return new ResourceObjectDTO<>(id, type, initialPlayDTO, linksDTO);
+                    RelationshipDTO<Object> relationshipDTO = addRelationship(play.id, "performances");
+                    return new ResourceObjectDTO<>(id, type, initialPlayDTO, relationshipDTO, linksDTO);
                 })
                 .toList();
         responseWrapperDTO.links = createPaginationLinks(queryParametersDTO);
         return Response.ok().entity(responseWrapperDTO).build();
     }
+
+
+
     public Response getPlaysFallback(@QueryParam("filter[name]") String nameFilter,
                                      @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                      @QueryParam("filter[playType]") ArrayList<String> playTypeFilter,
@@ -94,11 +98,27 @@ public class PlayResourceApi {
         responseWrapperDTO.errors.add(new ErrorDTO("500", "PLAYS:2","Internal Server Error", "Something went wrong while processing your request"));
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
+    private RelationshipDTO<Object> addRelationship(long id, String relationship) {
+        LinksDTO linksDTO = createRelationshipLink(String.valueOf(id),relationship);
+        RelationshipDTO<Object> relationshipDTO = new RelationshipDTO<>();
+        relationshipDTO.links = linksDTO;
+        return relationshipDTO;
+    }
     private LinksDTO createSelfLink(String id) {
         LinksDTO linksDTO = new LinksDTO();
         linksDTO.self = uriInfo.getBaseUriBuilder()
                 .path(PlayResourceApi.class)
                 .path(id)
+                .build()
+                .toString();
+        return linksDTO;
+    }
+    private LinksDTO createRelationshipLink(String id, String relationship) {
+        LinksDTO linksDTO = new LinksDTO();
+        linksDTO.related = uriInfo.getBaseUriBuilder()
+                .path(PlayResourceApi.class)
+                .path(id)
+                .path(relationship)
                 .build()
                 .toString();
         return linksDTO;
