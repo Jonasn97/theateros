@@ -59,9 +59,9 @@ public class CrawlerService implements CrawlerOperations {
     }
 
     @Override
-    public int updateEvent(String updatedLink, Document eventDocument) {
+    public int updateEvent(String stid, Document eventDocument) {
         EventElementDTO eventElementDTO = getDataFromEventElement(eventDocument);
-        eventElementDTO.infolink = updatedLink;
+        eventElementDTO.stid = stid;
         int updatedElements=0;
         updatedElements+= crawlerCatalog.updateDatabase(eventElementDTO);
 
@@ -196,16 +196,16 @@ public class CrawlerService implements CrawlerOperations {
         return imagePaths;
     }
 
-    private CalendarElementDTO getDataFromCalenderEntryElement(Element calenderEntryElement) {
+    private CalendarElementDTO getDataFromCalenderEntryElement(Element calendarEntryElement) {
         //Extract basic playinfos: overline, title, infolink, sparte, location
         CalendarElementDTO calendarElementDTO = new CalendarElementDTO();
-        Element overlineElement = calenderEntryElement.selectFirst(OVERLINE_SELECTOR);
+        Element overlineElement = calendarEntryElement.selectFirst(OVERLINE_SELECTOR);
         calendarElementDTO.overline = (overlineElement!=null)?overlineElement.text(): null;
+        Log.info(calendarEntryElement.text());
+        calendarElementDTO.title = calendarEntryElement.attr("data-sp-stueck");
 
-        calendarElementDTO.title = calenderEntryElement.attr("data-sp-stueck");
-
-        Element infoLinkElement = calenderEntryElement.selectFirst(INFO_LINK_SELECTOR);
-        String infolink = infoLinkElement != null ? infoLinkElement.attr("abs:href") : "";
+        Element infoLinkElement = calendarEntryElement.selectFirst(INFO_LINK_SELECTOR);
+        String infolink = infoLinkElement != null ? infoLinkElement.attr("href") : "";
 
         String[] infolinkParts = infolink.split("/");
         String stid = infolinkParts[infolinkParts.length - 2];
@@ -217,20 +217,20 @@ public class CrawlerService implements CrawlerOperations {
         calendarElementDTO.stid = stid;
         calendarElementDTO.auid = auid;
 
-        calendarElementDTO.kind = calenderEntryElement.attr("data-sp-sparte");
+        calendarElementDTO.kind = calendarEntryElement.attr("data-sp-sparte");
 
-        calendarElementDTO.location = calenderEntryElement.attr("data-sp-ort");
+        calendarElementDTO.location = calendarEntryElement.attr("data-sp-ort");
 
         //Extract performance infos: date, time, bookingLink, isCancelled, performanceType
-        String dateString = calenderEntryElement.attr("data-sp-day");
-        Element infoElement = calenderEntryElement.selectFirst(".info");
+        String dateString = calendarEntryElement.attr("data-sp-day");
+        Element infoElement = calendarEntryElement.selectFirst(".info");
         String timeString = (infoElement!=null)?infoElement.text().replaceAll(TIME_REGEX, "$1"): null;
-        Element bookinglinkElement = calenderEntryElement.selectFirst("a.btn-primary");
+        Element bookinglinkElement = calendarEntryElement.selectFirst("a.btn-primary");
         calendarElementDTO.bookingLink = bookinglinkElement!=null? bookinglinkElement.attr("abs:href"): null;
         boolean isCancelled = calendarElementDTO.title.contains("Abgesagt");
         if(isCancelled)
             calendarElementDTO.bookingLink = null;
-        Element performanceType = calenderEntryElement.select("span").last();
+        Element performanceType = calendarEntryElement.select("span").last();
         calendarElementDTO.performanceType = performanceType!=null? performanceType.text(): null; //TODO make performanceTypeString to enum
 
 

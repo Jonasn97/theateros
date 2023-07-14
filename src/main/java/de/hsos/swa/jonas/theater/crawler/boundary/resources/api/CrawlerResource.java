@@ -22,7 +22,8 @@ import java.util.Set;
 @Path("/crawler")
 public class CrawlerResource {
     Document calendarDocument = null;
-    private static final String WEBSITE_URL = "https://www.theater-osnabrueck.de/kalender";
+    private static final String CALENDAR_URL = "https://www.theater-osnabrueck.de/kalender";
+    private static final String EVENT_URL = "https://www.theater-osnabrueck.de/spielplan-detail";
     @Inject
     CrawlerOperations crawlerOperations;
     @Inject
@@ -37,53 +38,56 @@ public class CrawlerResource {
         try {
             updatedStids = updateCalendarFromWebsite();
             if(updatedStids==null){
-                Log.info("No changes on " + WEBSITE_URL);
+                Log.info("No changes on " + CALENDAR_URL);
                 responseWrapperDTO.errors = new ArrayList<>();
-                responseWrapperDTO.errors.add(new ErrorDTO("204","CRAWL:0","No changes", "No changes on " + WEBSITE_URL));
+                responseWrapperDTO.errors.add(new ErrorDTO("204","CRAWL:0","No changes", "No changes on " + CALENDAR_URL));
                 return Response.status(Response.Status.NO_CONTENT).entity(responseWrapperDTO).build();
             }
             websiteDownloader.downloadAllWebsites(updatedStids);
             updateEventsFromWebsite(updatedStids);
 
-            Log.info("Updated " + updatedStids.size() + " events on " + WEBSITE_URL);
+            Log.info("Updated " + updatedStids.size() + " events on " + CALENDAR_URL);
             ResourceObjectDTO<String> updateDTO = new ResourceObjectDTO<>();
             updateDTO.id = "0";
             updateDTO.type = "Crawler";
-            updateDTO.attributes = "Updated " + updatedStids.size() + " events on " + WEBSITE_URL;
+            updateDTO.attributes = "Updated " + updatedStids.size() + " events on " + CALENDAR_URL;
             responseWrapperDTO.data = updateDTO;
             return Response.ok(responseWrapperDTO).build();
         } catch (IOException e) {
-            Log.error("Error while connecting to " + WEBSITE_URL + "\n" + e.getMessage());
+            Log.error("Error while connecting to " + CALENDAR_URL + "\n" + e.getMessage());
             responseWrapperDTO.errors = new ArrayList<>();
-            responseWrapperDTO.errors.add(new ErrorDTO("502","CRAWL:1","Error while connecting to " + WEBSITE_URL, e.getMessage()));
+            responseWrapperDTO.errors.add(new ErrorDTO("502","CRAWL:1","Error while connecting to " + CALENDAR_URL, e.getMessage()));
             return Response.status(Response.Status.BAD_GATEWAY).entity(responseWrapperDTO).build();
         }
         //TODO Check Document structure for changes. If changed, log alert, throw Exception and send 500
     }
     Set<String> updateCalendarFromWebsite() throws IOException {
         try {
-            Document newCalendarDocument = Jsoup.connect(WEBSITE_URL).timeout(3000).get();
+            Document newCalendarDocument = Jsoup.connect(CALENDAR_URL).timeout(3000).get();
             if(calendarDocument !=null && calendarDocument.equals(newCalendarDocument)){
                 return null; //TODO maybe throw NoChangesException?
             }
             calendarDocument = newCalendarDocument;
-            websiteDownloader.downloadWebsite(WEBSITE_URL);
+            websiteDownloader.downloadCalendar();
             return crawlerOperations.updateCalendar(calendarDocument);
         } catch (IOException e) {
-            Log.error("Error while connecting to " + WEBSITE_URL + "\n" + e.getMessage());
+            Log.error("Error while connecting to " + CALENDAR_URL + "\n" + e.getMessage());
             e.printStackTrace();
             throw e;
         }
     }
-    Set<String> updateEventsFromWebsite(Set<String> updatedLinks) {
+    Set<String> updateEventsFromWebsite(Set<String> updatedStids) {
         int updatedEvents = 0;
-        for (String updatedLink : updatedLinks)
+        String updatedLink;
+        for (String stid : updatedStids)
         {
             try {
+                updatedLink = websiteDownloader.getUrlFromStid(stid);
+
                 Document eventDocument = Jsoup.connect(updatedLink).timeout(3000).get();
-                updatedEvents += crawlerOperations.updateEvent(updatedLink, eventDocument);
+                updatedEvents += crawlerOperations.updateEvent(stid, eventDocument);
             } catch (IOException e) {
-                Log.error("Error while connecting to " + updatedLink + "\n" + e.getMessage());
+                Log.error("Error while connecting to Website with " + stid + "\n" + e.getMessage());
                 e.printStackTrace();
             }
         }

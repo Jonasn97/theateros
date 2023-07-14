@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class EventElementDTO {
-    public String infolink;
+    public String stid;
     public String description;
     public String duration;
     public Date date;

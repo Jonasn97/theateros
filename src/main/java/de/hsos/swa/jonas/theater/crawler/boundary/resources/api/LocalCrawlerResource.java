@@ -24,46 +24,44 @@ public class LocalCrawlerResource {
     CrawlerOperations crawlerOperations;
     @Inject
     WebsiteDownloader websiteDownloader;
-
-    private static final String CALENDER_PATH = "src/main/resources/crawledPages/calendar.html";
     @GET
     public Response crawlPlaysLocally() {
         //Step 1 - Update Entries from WEBSITE_URL
         //Step 2 - Update Plays from infolinks
-        Set<String> updatedLinks;
+        Set<String> updatedStids;
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         try {
-            updatedLinks = updateCalendarLocally(CALENDER_PATH);
-            if(updatedLinks==null){
+            updatedStids = updateCalendarLocally();
+            if(updatedStids==null){
                 responseWrapperDTO.errors = new ArrayList<>();
-                responseWrapperDTO.errors.add(new ErrorDTO("204","CRAWL:0","No changes", "No changes on " + CALENDER_PATH));
+                responseWrapperDTO.errors.add(new ErrorDTO("204","CRAWL:0","No changes", "No changes on calendarDocument"));
                 return Response.status(Response.Status.NO_CONTENT).entity(responseWrapperDTO).build();
             }
-            updateEventsLocally(updatedLinks);
+            updateEventsLocally(updatedStids);
 
-            Log.info("Updated " + updatedLinks.size() + " events on " + CALENDER_PATH);
+            Log.info("Updated " + updatedStids.size() + " events");
             ResourceObjectDTO<String> updateDTO = new ResourceObjectDTO<>();
             updateDTO.id = "0";
             updateDTO.type = "Crawler";
-            updateDTO.attributes = "Updated " + updatedLinks.size() + " events on " + CALENDER_PATH;
+            updateDTO.attributes = "Updated " + updatedStids.size() + " events on calendarDocument";
             responseWrapperDTO.data = updateDTO;
             return Response.ok(responseWrapperDTO).build();
         } catch (IOException e) {
-            Log.error("Error while connecting to " + CALENDER_PATH + "\n" + e.getMessage());
+            Log.error("Error while connecting to calendarDocument" + "\n" + e.getMessage());
             responseWrapperDTO.errors = new ArrayList<>();
-            responseWrapperDTO.errors.add(new ErrorDTO("502","CRAWL:1","Error while connecting to " + CALENDER_PATH, e.getMessage()));
+            responseWrapperDTO.errors.add(new ErrorDTO("502","CRAWL:1","Error while connecting to calendarDocument\n", e.getMessage()));
             return Response.status(Response.Status.BAD_GATEWAY).entity(responseWrapperDTO).build();
         }
         //TODO Check Document structure for changes. If changed, log alert, throw Exception and send 500
     }
-    void updateEventsLocally(Set<String> updatedLinks) {
+    void updateEventsLocally(Set<String> updatedStids) {
         int updatedEvents = 0;
-        for (String updatedLink : updatedLinks)
+        for (String updatedStid : updatedStids)
         {
-            String filepath = websiteDownloader.getPath(updatedLink);
+            String filepath = websiteDownloader.getPath(updatedStid);
             try {
             Document eventDocument = Jsoup.parse(websiteDownloader.readFile(filepath),"UTF-8");
-            updatedEvents += crawlerOperations.updateEvent(updatedLink, eventDocument);
+            updatedEvents += crawlerOperations.updateEvent(updatedStid, eventDocument);
 
             } catch (IOException e) {
                 Log.error("Error while connecting to filepath" + "\n" + e.getMessage());
@@ -72,8 +70,9 @@ public class LocalCrawlerResource {
         }
     }
 
-    Set<String> updateCalendarLocally(String calendarPath) throws IOException {
+    Set<String> updateCalendarLocally() throws IOException {
         try {
+            String calendarPath = websiteDownloader.getCalendarPath();
             Document newCalendarDocument = Jsoup.parse(websiteDownloader.readFile(calendarPath),"UTF-8");
             if(calendarDocument !=null && calendarDocument.equals(newCalendarDocument)){
                 return null; //TODO maybe throw NoChangesException?
@@ -81,7 +80,7 @@ public class LocalCrawlerResource {
             calendarDocument = newCalendarDocument;
             return crawlerOperations.updateCalendar(calendarDocument);
         } catch (IOException e) {
-            Log.error("Error while reading " + CALENDER_PATH + "\n" + e.getMessage());
+            Log.error("Error while reading calendarDocument" + "\n" + e.getMessage());
             e.printStackTrace();
             throw e;
         }

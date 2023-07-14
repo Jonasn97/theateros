@@ -53,7 +53,7 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
     @Override
     @Transactional
     public int updateDatabase(EventElementDTO eventElementDTO) {
-        Play play = Play.find("infolink", eventElementDTO.infolink).firstResult();
+        Play play = Play.find("stid", eventElementDTO.stid).firstResult();
         if (play == null) {
             Log.error("Play doesn't exist!");
             throw new RuntimeException("Play doesn't exist!");

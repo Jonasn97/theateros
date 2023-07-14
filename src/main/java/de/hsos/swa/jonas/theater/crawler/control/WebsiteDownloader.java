@@ -8,45 +8,31 @@ import org.jsoup.select.Elements;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Set;
 import java.net.URL;
 
 @ApplicationScoped
 public class WebsiteDownloader {
-    private static final String OUTPUTFOLDER = "src/main/resources/crawledPages";
-    private static final String WEBSITE_URL = "https://www.theater-osnabrueck.de/spielplan-detail/";
-    private static int counter = 1;
+    private static final String OUTPUTFOLDER = "src/main/resources/crawledPages/";
+    private static final String EVENTPATH = "spielplan-detail/";
+    private static final String EVENT_URL = "https://www.theater-osnabrueck.de/spielplan-detail";
+    private static final String CALENDAR_URL = "https://www.theater-osnabrueck.de/kalender";
+    private static final String CALENDAR_PATH = "calendar.html";
 
-    public void downloadAllWebsites(Map<String, String> websites) {
-        for (Map.Entry<String, String> entry : websites.entrySet()) {
-            String stid = entry.getKey();
-            String link = entry.getValue();
+    public void downloadAllWebsites(Set<String> stids) {
+        for (String stid : stids) {
+            String path = OUTPUTFOLDER + EVENTPATH + stid +".html";
+            String websiteUrl = EVENT_URL + "?stid=" + stid;
             try {
-                downloadWebsite(link, stid);
+                downloadWebsite(websiteUrl, path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    public String getPath(String websiteUrl) {
-        try {
-            URL url = new URL(websiteUrl);
-            String path= url.getPath();
-            String query = url.getQuery();
-            if (query != null && !query.isEmpty()) {
-                path += "?" + query;
-            }
-            String fileName = path+".html";
-            return OUTPUTFOLDER + "/" + fileName;
-        } catch (IOException e) {
-            e.printStackTrace();
-        return null;
-        }
-    }
-    public void downloadWebsite(String websiteURL, String filepath) throws IOException {
+
+    public void downloadWebsite(String websiteURL, String path) throws IOException {
             URL url = new URL(websiteURL);
-            String path = getPath(websiteURL);
 
                 try (BufferedInputStream in = new BufferedInputStream(url.openStream())) {
                     // Read the website content into a string
@@ -61,7 +47,13 @@ public class WebsiteDownloader {
                     }
             }
         }
-
+    public void downloadCalendar() {
+        try {
+            downloadWebsite(CALENDAR_URL, OUTPUTFOLDER + CALENDAR_PATH);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private String readWebsiteContent(BufferedInputStream in) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -103,4 +95,17 @@ public class WebsiteDownloader {
         public File readFile(String filePath) {
         return new File(filePath);
         }
+
+    public String getPath(String stid) {
+        return OUTPUTFOLDER + EVENTPATH + stid +".html";
+
+    }
+
+    public String getUrlFromStid(String stid) {
+        return EVENT_URL + "?stid=" + stid;
+    }
+
+    public String getCalendarPath() {
+        return OUTPUTFOLDER + CALENDAR_PATH;
+    }
 }
