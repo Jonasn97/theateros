@@ -1,6 +1,5 @@
 package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.mobile;
 
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.OutgoingEventDTO;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.OutgoingNextPerformanceDTO;
 import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
@@ -8,7 +7,6 @@ import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
 import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.logging.Log;
-import io.quarkus.qute.Location;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.Template;
 
@@ -26,7 +24,7 @@ public class EventResourceMobile {
     @Inject
     PlayOperations playOperations;
     @Inject
-    Template base;
+    Template stuecke;
 
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -58,7 +56,7 @@ public class EventResourceMobile {
         }).collect(Collectors.toList());
         Log.info(plays.size());
         Log.info(playDTOS.size());
-        TemplateInstance templateInstance =base.data("plays", playDTOS, "queryParameters", queryParametersDTO);
+        TemplateInstance templateInstance = stuecke.data("plays", playDTOS, "queryParameters", queryParametersDTO);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
     }
