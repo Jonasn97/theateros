@@ -188,7 +188,7 @@ public class CrawlerService implements CrawlerOperations {
         Set<String> imagePaths = new HashSet<>();
         String imagePath;
         for (Element imageElement : imageElements) {
-            String imageUrl = imageElement.absUrl("src");
+            String imageUrl = imageElement.attr("src");
             imagePath = saveImage(imageUrl);
             if(imagePath!=null)
                 imagePaths.add(imagePath);
@@ -201,7 +201,6 @@ public class CrawlerService implements CrawlerOperations {
         CalendarElementDTO calendarElementDTO = new CalendarElementDTO();
         Element overlineElement = calendarEntryElement.selectFirst(OVERLINE_SELECTOR);
         calendarElementDTO.overline = (overlineElement!=null)?overlineElement.text(): null;
-        Log.info(calendarEntryElement.text());
         calendarElementDTO.title = calendarEntryElement.attr("data-sp-stueck");
 
         Element infoLinkElement = calendarEntryElement.selectFirst(INFO_LINK_SELECTOR);
