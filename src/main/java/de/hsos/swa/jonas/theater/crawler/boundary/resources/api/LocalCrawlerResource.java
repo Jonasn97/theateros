@@ -10,83 +10,80 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-@Path("/crawler")
-public class CrawlerResource {
+@Path("/local/crawler")
+public class LocalCrawlerResource {
     Document calendarDocument = null;
-    private static final String WEBSITE_URL = "https://www.theater-osnabrueck.de/kalender";
     @Inject
     CrawlerOperations crawlerOperations;
     @Inject
     WebsiteDownloader websiteDownloader;
 
+    private static final String CALENDER_PATH = "src/main/resources/crawledPages/calendar.html";
     @GET
-    public Response crawlEventsFromWebsite() {
+    public Response crawlPlaysLocally() {
         //Step 1 - Update Entries from WEBSITE_URL
         //Step 2 - Update Plays from infolinks
-        Set<String> updatedStids;
+        Set<String> updatedLinks;
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         try {
-            updatedStids = updateCalendarFromWebsite();
-            if(updatedStids==null){
-                Log.info("No changes on " + WEBSITE_URL);
+            updatedLinks = updateCalendarLocally(CALENDER_PATH);
+            if(updatedLinks==null){
                 responseWrapperDTO.errors = new ArrayList<>();
-                responseWrapperDTO.errors.add(new ErrorDTO("204","CRAWL:0","No changes", "No changes on " + WEBSITE_URL));
+                responseWrapperDTO.errors.add(new ErrorDTO("204","CRAWL:0","No changes", "No changes on " + CALENDER_PATH));
                 return Response.status(Response.Status.NO_CONTENT).entity(responseWrapperDTO).build();
             }
-            websiteDownloader.downloadAllWebsites(updatedStids);
-            updateEventsFromWebsite(updatedStids);
+            updateEventsLocally(updatedLinks);
 
-            Log.info("Updated " + updatedStids.size() + " events on " + WEBSITE_URL);
+            Log.info("Updated " + updatedLinks.size() + " events on " + CALENDER_PATH);
             ResourceObjectDTO<String> updateDTO = new ResourceObjectDTO<>();
             updateDTO.id = "0";
             updateDTO.type = "Crawler";
-            updateDTO.attributes = "Updated " + updatedStids.size() + " events on " + WEBSITE_URL;
+            updateDTO.attributes = "Updated " + updatedLinks.size() + " events on " + CALENDER_PATH;
             responseWrapperDTO.data = updateDTO;
             return Response.ok(responseWrapperDTO).build();
         } catch (IOException e) {
-            Log.error("Error while connecting to " + WEBSITE_URL + "\n" + e.getMessage());
+            Log.error("Error while connecting to " + CALENDER_PATH + "\n" + e.getMessage());
             responseWrapperDTO.errors = new ArrayList<>();
-            responseWrapperDTO.errors.add(new ErrorDTO("502","CRAWL:1","Error while connecting to " + WEBSITE_URL, e.getMessage()));
+            responseWrapperDTO.errors.add(new ErrorDTO("502","CRAWL:1","Error while connecting to " + CALENDER_PATH, e.getMessage()));
             return Response.status(Response.Status.BAD_GATEWAY).entity(responseWrapperDTO).build();
         }
         //TODO Check Document structure for changes. If changed, log alert, throw Exception and send 500
     }
-    Set<String> updateCalendarFromWebsite() throws IOException {
+    void updateEventsLocally(Set<String> updatedLinks) {
+        int updatedEvents = 0;
+        for (String updatedLink : updatedLinks)
+        {
+            String filepath = websiteDownloader.getPath(updatedLink);
+            try {
+            Document eventDocument = Jsoup.parse(websiteDownloader.readFile(filepath),"UTF-8");
+            updatedEvents += crawlerOperations.updateEvent(updatedLink, eventDocument);
+
+            } catch (IOException e) {
+                Log.error("Error while connecting to filepath" + "\n" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    Set<String> updateCalendarLocally(String calendarPath) throws IOException {
         try {
-            Document newCalendarDocument = Jsoup.connect(WEBSITE_URL).timeout(3000).get();
+            Document newCalendarDocument = Jsoup.parse(websiteDownloader.readFile(calendarPath),"UTF-8");
             if(calendarDocument !=null && calendarDocument.equals(newCalendarDocument)){
                 return null; //TODO maybe throw NoChangesException?
             }
             calendarDocument = newCalendarDocument;
-            websiteDownloader.downloadWebsite(WEBSITE_URL);
             return crawlerOperations.updateCalendar(calendarDocument);
         } catch (IOException e) {
-            Log.error("Error while connecting to " + WEBSITE_URL + "\n" + e.getMessage());
+            Log.error("Error while reading " + CALENDER_PATH + "\n" + e.getMessage());
             e.printStackTrace();
             throw e;
         }
-    }
-    Set<String> updateEventsFromWebsite(Set<String> updatedLinks) {
-        int updatedEvents = 0;
-        for (String updatedLink : updatedLinks)
-        {
-            try {
-                Document eventDocument = Jsoup.connect(updatedLink).timeout(3000).get();
-                updatedEvents += crawlerOperations.updateEvent(updatedLink, eventDocument);
-            } catch (IOException e) {
-                Log.error("Error while connecting to " + updatedLink + "\n" + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 }

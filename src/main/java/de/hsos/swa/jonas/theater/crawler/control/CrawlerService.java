@@ -49,13 +49,13 @@ public class CrawlerService implements CrawlerOperations {
     public Set<String> updateCalendar(Document calendarDocument) {
         Elements calenderElements = calendarDocument.select(CALENDER_ELEMENTS_SELECTOR);
         int updatedElements = 0;
-        Set<String> updatedInfolinks = new HashSet<>();
+        Set<String> updatedStids = new HashSet<>();
         for (Element calenderElement : calenderElements) {
             CalendarElementDTO calendarElementDTO = getDataFromCalenderEntryElement(calenderElement);
-            updatedInfolinks.add(calendarElementDTO.infolink);
+            updatedStids.add(calendarElementDTO.stid);
             updatedElements+= crawlerCatalog.updateDatabase(calendarElementDTO);
         }
-    return updatedInfolinks;
+    return updatedStids;
     }
 
     @Override

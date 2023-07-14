@@ -8,26 +8,45 @@ import org.jsoup.select.Elements;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Set;
 import java.net.URL;
 
 @ApplicationScoped
 public class WebsiteDownloader {
     private static final String OUTPUTFOLDER = "src/main/resources/crawledPages";
+    private static final String WEBSITE_URL = "https://www.theater-osnabrueck.de/spielplan-detail/";
     private static int counter = 1;
 
-    public void downloadAllWebsites(Set<String> websiteUrls) {
-        for (String websiteUrl : websiteUrls) {
-                try {
-                    downloadWebsite(websiteUrl, OUTPUTFOLDER);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    public void downloadAllWebsites(Map<String, String> websites) {
+        for (Map.Entry<String, String> entry : websites.entrySet()) {
+            String stid = entry.getKey();
+            String link = entry.getValue();
+            try {
+                downloadWebsite(link, stid);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-    public void downloadWebsite(String websiteURL, String outputFolder) throws IOException {
-        URL url = new URL(websiteURL);
-        String fileName = "file" + counter++ + ".html";
+    public String getPath(String websiteUrl) {
+        try {
+            URL url = new URL(websiteUrl);
+            String path= url.getPath();
+            String query = url.getQuery();
+            if (query != null && !query.isEmpty()) {
+                path += "?" + query;
+            }
+            String fileName = path+".html";
+            return OUTPUTFOLDER + "/" + fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+        return null;
+        }
+    }
+    public void downloadWebsite(String websiteURL, String filepath) throws IOException {
+            URL url = new URL(websiteURL);
+            String path = getPath(websiteURL);
 
                 try (BufferedInputStream in = new BufferedInputStream(url.openStream())) {
                     // Read the website content into a string
@@ -37,7 +56,7 @@ public class WebsiteDownloader {
                     //websiteContent = removeUnwantedParts(websiteContent);
 
                     // Write the modified content to the file
-                    try (FileOutputStream fileOutputStream = new FileOutputStream(outputFolder + "/" + fileName)) {
+                    try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
                         fileOutputStream.write(websiteContent.getBytes(StandardCharsets.UTF_8));
                     }
             }
