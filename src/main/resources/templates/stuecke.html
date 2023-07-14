@@ -1,0 +1,75 @@
+{#include base}
+{#title}Stuecke{/title}
+{#script}<script type="text/javascript" src="/js/bubbles.js" defer></script>{/script}
+    {#for play in plays}
+        <div class="card">
+        <div class="card-content">
+        <div class="image" style="background-image: url('{#if play.thumbnailPath}{play.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"></div><!--todo use title attribute for alt-text-->
+        <div class="text">
+        <div class="card-title-row">
+            <span class="card-title">{play.title}</span>
+            <div class="chip">
+                <div class="chip-content">will hin!</div>
+            </div>
+        </div>
+        <div class="card-subtitle">{#if play.kind}{play.kind}{/if}</div>
+        <span class="card-info">
+        {#if play.nextPerformance}
+            {#if play.nextPerformance.performanceType}
+                {play.nextPerformance.performanceType}
+                {#else} als nächstes {/if} am
+            {play.nextPerformance.startDate}
+            {#if play.nextPerformance.hasTime} um {play.nextPerformance.startTime} {/if}
+        {/if}
+        </span>
+        </div>
+        </div>
+        </div>
+    {/for}
+    <form class="showMore" action="/mobile/events" method="GET">
+        <button class="button" type="submit">Mehr anzeigen</button>
+        <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
+        <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
+    </form>
+    <div id="searchOverlay">
+        <div class="bubble">
+            <span class="search-section">Suchen nach</span>
+            <div class="button-container">
+                <form action="/mobile/events" method="GET">
+                    <input class="search-input" type="text" placeholder="Suchbegriff eingeben" name="filter[name]">
+                    <button class="confirm-button" type="submit">Bestätigen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="filterOverlay">
+        <div class="bubble">
+            <span class="filter-text">Filtern nach</span>
+            <div class="button-container">
+                <form action="/mobile/events" method="GET">
+                    <span class="filter-section">Zeitraum</span>
+                    <input class="filter-checkbox" type="checkbox" id="7days-checkbox" name="filter[week]" value="7days">
+                    <label class="filter-label" for="7days-checkbox">nächste 7 Tage</label>
+                    <input class="filter-checkbox" type="checkbox" id="30days-checkbox" name="filter[month]" value="7days">
+                    <label class="filter-label" for="30days-checkbox">nächste 30 Tage</label>
+                    <span class="filter-section">Besonderheit</span>
+                    <input class="filter-checkbox" type="checkbox" id="premiere-checkbox" name="filter[performanceType]" value="Premiere">
+                    <label class="filter-label" for="premiere-checkbox">Premiere</label>
+                    <input class="filter-checkbox" type="checkbox" id="trial-checkbox" name="filter[performanceType]" value="Offene Probe">
+                    <label class="filter-label" for="trial-checkbox">Offene Probe</label>
+                    <span class="filter-section">Sparte</span>
+                    <input class="filter-checkbox" type="checkbox" id="musical-checkbox" name="filter[playType]" value="Musical">
+                    <label class="filter-label" for="musical-checkbox">Musical</label>
+                    <input class="filter-checkbox" type="checkbox" id="oper-checkbox" name="filter[playType]" value="Oper">
+                    <label class="filter-label" for="oper-checkbox">Oper</label>
+                    <input class="filter-checkbox" type="checkbox" id="schauspiel-checkbox" name="filter[playType]" value="Schauspiel">
+                    <label class="filter-label" for="schauspiel-checkbox">Schauspiel</label>
+                    <input class="filter-checkbox" type="checkbox" id="tanz-checkbox" name="filter[playType]" value="Tanz">
+                    <label class="filter-label" for="tanz-checkbox">Tanz</label>
+                    <button class="confirm-button" type="submit">Bestätigen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/include}

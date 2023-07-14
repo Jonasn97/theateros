@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns="">
     <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Stücke</title>
+        <title>{#insert title}Default Title{/}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
@@ -23,77 +23,7 @@
         </svg>
     </header>
         <main>
-            {#for play in plays}
-            <div class="card">
-                <div class="card-content">
-                <div class="image" style="background-image: url('{#if play.thumbnailPath}{play.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"></div><!--todo use title attribute for alt-text-->
-                    <div class="text">
-                    <div class="card-title-row">
-                        <span class="card-title">{play.title}</span>
-                        <div class="chip">
-                            <div class="chip-content">will hin!</div>
-                        </div>
-                    </div>
-                    <div class="card-subtitle">{#if play.kind}{play.kind}{/if}</div>
-                    <span class="card-info">
-                    {#if play.nextPerformance}
-                        {#if play.nextPerformance.performanceType}
-                            {play.nextPerformance.performanceType}
-                            {#else} als nächstes {/if} am
-                        {play.nextPerformance.startDate}
-                        {#if play.nextPerformance.hasTime} um {play.nextPerformance.startTime} {/if}
-                        {/if}
-                </span>
-                </div>
-                </div>
-            </div>
-            {/for}
-                <form class="showMore" action="/mobile/events" method="GET">
-                    <button class="button" type="submit">Mehr anzeigen</button>
-                    <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
-                    <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
-                </form>
-            <div id="searchOverlay">
-                <div class="bubble">
-                    <span class="search-section">Suchen nach</span>
-                    <div class="button-container">
-                        <form action="/mobile/events" method="GET">
-                            <input class="search-input" type="text" placeholder="Suchbegriff eingeben" name="filter[name]">
-                            <button class="confirm-button" type="submit">Bestätigen</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div id="filterOverlay">
-                <div class="bubble">
-                    <span class="filter-text">Filtern nach</span>
-                    <div class="button-container">
-                            <form action="/mobile/events" method="GET">
-                                <span class="filter-section">Zeitraum</span>
-                                <input class="filter-checkbox" type="checkbox" id="7days-checkbox" name="filter[week]" value="7days">
-                                <label class="filter-label" for="7days-checkbox">nächste 7 Tage</label>
-                                <input class="filter-checkbox" type="checkbox" id="30days-checkbox" name="filter[month]" value="7days">
-                                <label class="filter-label" for="30days-checkbox">nächste 30 Tage</label>
-                                <span class="filter-section">Besonderheit</span>
-                                <input class="filter-checkbox" type="checkbox" id="premiere-checkbox" name="filter[performanceType]" value="Premiere">
-                                <label class="filter-label" for="premiere-checkbox">Premiere</label>
-                                <input class="filter-checkbox" type="checkbox" id="trial-checkbox" name="filter[performanceType]" value="Offene Probe">
-                                <label class="filter-label" for="trial-checkbox">Offene Probe</label>
-                                <span class="filter-section">Sparte</span>
-                                <input class="filter-checkbox" type="checkbox" id="musical-checkbox" name="filter[playType]" value="Musical">
-                                <label class="filter-label" for="musical-checkbox">Musical</label>
-                                <input class="filter-checkbox" type="checkbox" id="oper-checkbox" name="filter[playType]" value="Oper">
-                                <label class="filter-label" for="oper-checkbox">Oper</label>
-                                <input class="filter-checkbox" type="checkbox" id="schauspiel-checkbox" name="filter[playType]" value="Schauspiel">
-                                <label class="filter-label" for="schauspiel-checkbox">Schauspiel</label>
-                                <input class="filter-checkbox" type="checkbox" id="tanz-checkbox" name="filter[playType]" value="Tanz">
-                                <label class="filter-label" for="tanz-checkbox">Tanz</label>
-                                <button class="confirm-button" type="submit">Bestätigen</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            {#insert}No body!{/}
         </main>
         <footer>
             <nav class="navigation-bar">
@@ -142,64 +72,6 @@
                 </div>
             </nav>
         </footer>
+    {#insert script}{/}
     </body>
-    <script>
-        document.getElementById('filterIcon').addEventListener('click', function(event) {
-            var filterIcon = event.target;
-            var filterOverlay = document.getElementById('filterOverlay');
-
-            // Position des Filter-Icons abrufen
-            var iconRect = filterIcon.getBoundingClientRect();
-            var iconTop = iconRect.top + iconRect.height;
-            var iconRight = window.innerWidth - iconRect.right;
-
-            // Position des Overlays festlegen
-            filterOverlay.style.top = iconTop + 'px';
-            filterOverlay.style.right = iconRight + 'px';
-            filterOverlay.style.display = 'block';
-
-            // Klick außerhalb der Bubble abfangen
-            event.stopPropagation(); // Bubble-Events stoppen
-            document.addEventListener('click', closeFilterBubble);
-        });
-
-        function closeFilterBubble(event) {
-            var filterOverlay = document.getElementById('filterOverlay');
-
-            // Überprüfen, ob Klick innerhalb der Bubble erfolgt ist
-            if (!filterOverlay.contains(event.target)) {
-                filterOverlay.style.display = 'none';
-                document.removeEventListener('click', closeFilterBubble);
-            }
-        }
-        document.getElementById('searchIcon').addEventListener('click', function(event) {
-            var searchIcon = event.target;
-            var searchOverlay = document.getElementById('searchOverlay');
-
-            // Position des Search-Icons abrufen
-            var iconRect = searchIcon.getBoundingClientRect();
-            var iconTop = iconRect.top + iconRect.height;
-            var iconLeft = iconRect.left;
-
-            // Position des Overlays festlegen
-            searchOverlay.style.top = iconTop + 'px';
-            searchOverlay.style.left = iconLeft + 'px';
-            searchOverlay.style.display = 'block';
-
-            // Klick außerhalb der Bubble abfangen
-            event.stopPropagation(); // Bubble-Events stoppen
-            document.addEventListener('click', closeSearchBubble);
-        });
-
-        function closeSearchBubble(event) {
-            var searchOverlay = document.getElementById('searchOverlay');
-
-            // Überprüfen, ob Klick innerhalb der Bubble erfolgt ist
-            if (!searchOverlay.contains(event.target)) {
-                searchOverlay.style.display = 'none';
-                document.removeEventListener('click', closeSearchBubble);
-            }
-        }
-    </script>
-
 </html>
