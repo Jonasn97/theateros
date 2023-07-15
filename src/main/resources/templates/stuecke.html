@@ -1,25 +1,25 @@
 {#include base}
 {#title}Stuecke{/title}
 {#script}<script type="text/javascript" src="/js/bubbles.js" defer></script>{/script}
-    {#for play in plays}
+    {#for event in events}
         <div class="card">
         <div class="card-content">
-        <div class="image" style="background-image: url('{#if play.thumbnailPath}{play.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"></div><!--todo use title attribute for alt-text-->
+        <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"></div><!--todo use title attribute for alt-text-->
         <div class="text">
         <div class="card-title-row">
-            <span class="card-title">{play.title}</span>
+            <span class="card-title">{event.title}</span>
             <div class="chip">
                 <div class="chip-content">will hin!</div>
             </div>
         </div>
-        <div class="card-subtitle">{#if play.kind}{play.kind}{/if}</div>
+        <div class="card-subtitle">{#if event.kind}{event.kind}{/if}</div>
         <span class="card-info">
-        {#if play.nextPerformance}
-            {#if play.nextPerformance.performanceType}
-                {play.nextPerformance.performanceType}
+        {#if event.nextPerformance}
+            {#if event.nextPerformance.performanceType}
+                {event.nextPerformance.performanceType}
                 {#else} als nächstes {/if} am
-            {play.nextPerformance.startDate}
-            {#if play.nextPerformance.hasTime} um {play.nextPerformance.startTime} {/if}
+            {event.nextPerformance.startDate}
+            {#if event.nextPerformance.hasTime} um {event.nextPerformance.startTime} {/if}
         {/if}
         </span>
         </div>

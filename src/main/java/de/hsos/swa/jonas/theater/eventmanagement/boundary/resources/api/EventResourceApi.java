@@ -1,8 +1,8 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.api;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.InitialPlayDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.*;
 import de.hsos.swa.jonas.theater.shared.dto.*;
 import io.quarkus.logging.Log;
@@ -23,13 +23,13 @@ import java.util.Collection;
 //2023-06-27T10:15:30
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/play")
-public class PlayResourceApi {
+@Path("web/events")
+public class EventResourceApi {
     private final static long FIRSTPAGE = 0;
     private final static String FIRSTPAGE_STRING = "0";
 
     @Inject
-    PlayOperations playOperations;
+    EventOperations eventOperations;
     @Context
     UriInfo uriInfo;
 
@@ -37,37 +37,37 @@ public class PlayResourceApi {
     @GET
     @Retry
     @Timeout(5000)
-    @Fallback(fallbackMethod = "getPlaysFallback")
+    @Fallback(fallbackMethod = "getEventsFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
-    @Operation(summary = "Get filtered Plays", description = "Get filtered and paged Plays")
+    @Operation(summary = "Get filtered Events", description = "Get filtered and paged Events")
     @APIResponses(value = {
-            @APIResponse(responseCode = "200", description = "Filtered Plays are returned"),
+            @APIResponse(responseCode = "200", description = "Filtered Events are returned"),
             @APIResponse(responseCode = "400", description = "Bad Request"),
-            @APIResponse(responseCode = "404", description = "No Plays found for selected filter"),
+            @APIResponse(responseCode = "404", description = "No Events found for selected filter"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Response getPlays(@QueryParam("filter[name]") String nameFilter,
-                             @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                             @QueryParam("filter[playType]") ArrayList<String> playTypeFilter,
-                             @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
-                             @QueryParam("filter[startDateTime]") String startDateTimeFilter,
-                             @QueryParam("filter[endDateTime]") String endDateTimeFilter,
-                             @QueryParam("include") String include,
-                             @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                             @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
+    public Response getEvents(@QueryParam("filter[name]") String nameFilter,
+                              @QueryParam("filter[status]") ArrayList<String> statusFilter,
+                              @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
+                              @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
+                              @QueryParam("filter[startDateTime]") String startDateTimeFilter,
+                              @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                              @QueryParam("include") String include,
+                              @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         if (include != null && include.contains("performance")) {
 
         }
-        Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
+        Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
-        if(plays.isEmpty()) {
+        if(events.isEmpty()) {
             responseWrapperDTO.errors = new ArrayList<>();
-            responseWrapperDTO.errors.add(new ErrorDTO("404", "PLAYS:1","No plays found", "Couldn't find any plays with the given filters"));
+            responseWrapperDTO.errors.add(new ErrorDTO("404", "EVENTS:1","No events found", "Couldn't find any events with the given filters"));
             return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
         }
 
-        responseWrapperDTO.data = plays.stream()
+        responseWrapperDTO.data = events.stream()
                 .map( play -> {
                     String id = String.valueOf(play.id);
                     String type = "play";
@@ -84,9 +84,9 @@ public class PlayResourceApi {
 
 
 
-    public Response getPlaysFallback(@QueryParam("filter[name]") String nameFilter,
+    public Response getEventsFallback(@QueryParam("filter[name]") String nameFilter,
                                      @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                                     @QueryParam("filter[playType]") ArrayList<String> playTypeFilter,
+                                     @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
                                      @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                      @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                      @QueryParam("filter[endDateTime]") String endDateTimeFilter,
@@ -95,7 +95,7 @@ public class PlayResourceApi {
                                      @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
-        responseWrapperDTO.errors.add(new ErrorDTO("500", "PLAYS:2","Internal Server Error", "Something went wrong while processing your request"));
+        responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
     private RelationshipDTO<Object> addRelationship(long id, String relationship) {
@@ -107,7 +107,7 @@ public class PlayResourceApi {
     private LinksDTO createSelfLink(String id) {
         LinksDTO linksDTO = new LinksDTO();
         linksDTO.self = uriInfo.getBaseUriBuilder()
-                .path(PlayResourceApi.class)
+                .path(EventResourceApi.class)
                 .path(id)
                 .build()
                 .toString();
@@ -116,7 +116,7 @@ public class PlayResourceApi {
     private LinksDTO createRelationshipLink(String id, String relationship) {
         LinksDTO linksDTO = new LinksDTO();
         linksDTO.related = uriInfo.getBaseUriBuilder()
-                .path(PlayResourceApi.class)
+                .path(EventResourceApi.class)
                 .path(id)
                 .path(relationship)
                 .build()
@@ -128,11 +128,11 @@ public class PlayResourceApi {
         Log.info("PageSize: " + queryParametersDTO.pageSize);
         Long pageNumber = queryParametersDTO.pageNumber;
         Long pageSize = queryParametersDTO.pageSize;
-        long maxSize = playOperations.getPlaysCount(queryParametersDTO);
+        long maxSize = eventOperations.getEventsCount(queryParametersDTO);
         Log.info("Size: " + maxSize);
         LinksDTO linksDTO = new LinksDTO();
         UriBuilder uriBuilder = uriInfo.getBaseUriBuilder()
-                .path(PlayResourceApi.class);
+                .path(EventResourceApi.class);
         linksDTO.first = uriBuilder
                 .queryParam("page[number]", FIRSTPAGE)
                 .queryParam("page[size]", pageSize)

@@ -1,12 +1,11 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.mobile;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.OutgoingEventDTO;
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.OutgoingNextPerformanceDTO;
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingEventDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingNextPerformanceDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.Performance;
-import de.hsos.swa.jonas.theater.shared.Play;
-import io.quarkus.logging.Log;
+import de.hsos.swa.jonas.theater.shared.Event;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.Template;
 
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public class EventResourceMobile {
     private final static String FIRSTPAGE_STRING = "0";
     @Inject
-    PlayOperations playOperations;
+    EventOperations eventOperations;
     @Inject
     Template stuecke;
 
@@ -39,8 +38,8 @@ public class EventResourceMobile {
                                @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
-        Collection<Play> plays = playOperations.getPlays(queryParametersDTO);
-        List<OutgoingEventDTO> playDTOS = plays.stream().map(play -> {
+        Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
+        List<OutgoingEventDTO> playDTOS = events.stream().map(play -> {
             LocalDateTime currentTime = LocalDateTime.now();
             //find next performance with date and time
             Optional<Performance> nextPerformance = play.performances.stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
@@ -54,9 +53,7 @@ public class EventResourceMobile {
             }
             return outgoingEventDTO;
         }).collect(Collectors.toList());
-        Log.info(plays.size());
-        Log.info(playDTOS.size());
-        TemplateInstance templateInstance = stuecke.data("plays", playDTOS, "queryParameters", queryParametersDTO);
+        TemplateInstance templateInstance = stuecke.data("events", playDTOS, "queryParameters", queryParametersDTO);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
     }

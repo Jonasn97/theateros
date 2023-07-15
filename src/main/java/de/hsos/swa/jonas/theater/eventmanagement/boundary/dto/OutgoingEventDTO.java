@@ -1,6 +1,6 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 
-import de.hsos.swa.jonas.theater.shared.Play;
+import de.hsos.swa.jonas.theater.shared.Event;
 
 public class OutgoingEventDTO {
     public long id;
@@ -23,8 +23,8 @@ public class OutgoingEventDTO {
     }
 
     public static class Converter {
-        public static OutgoingEventDTO toDTO(Play play) {
-            return new OutgoingEventDTO(play.id, play.title, play.kind, play.location, play.thumbnailPath);
+        public static OutgoingEventDTO toDTO(Event event) {
+            return new OutgoingEventDTO(event.id, event.title, event.kind, event.location, event.thumbnailPath);
         }
     }
 

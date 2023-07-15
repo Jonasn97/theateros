@@ -1,6 +1,6 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 
-import de.hsos.swa.jonas.theater.shared.Play;
+import de.hsos.swa.jonas.theater.shared.Event;
 
 public class InitialPlayDTO {
     public String stid;
@@ -21,11 +21,11 @@ public class InitialPlayDTO {
 
     }
     public static class Converter{
-        public static InitialPlayDTO toDTO(Play play){
-            return new InitialPlayDTO(play.stid, play.infolink, play.overline, play.title, play.kind, play.location);
+        public static InitialPlayDTO toDTO(Event event){
+            return new InitialPlayDTO(event.stid, event.infolink, event.overline, event.title, event.kind, event.location);
         }
-        public static Play fromDTO(InitialPlayDTO play){
-            return new Play(play.stid, play.infolink, play.overline, play.title, play.kind, play.location);
+        public static Event fromDTO(InitialPlayDTO play){
+            return new Event(play.stid, play.infolink, play.overline, play.title, play.kind, play.location);
         }
     }
 

@@ -1,9 +1,7 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 
 import de.hsos.swa.jonas.theater.shared.Performance;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

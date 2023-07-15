@@ -11,11 +11,10 @@ import javax.persistence.OneToMany;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Play extends PanacheEntity {
+public class Event extends PanacheEntity {
     public String infolink;
 
     public String stid;
@@ -54,7 +53,7 @@ public class Play extends PanacheEntity {
     @OneToMany
     public Collection<Performance> performances = new ArrayList<>();
 
-    public Play(String stid, String infoLink, String overline, String title, String sparte, String location) {
+    public Event(String stid, String infoLink, String overline, String title, String sparte, String location) {
         this.stid = stid;
         this.infolink = infoLink;
         this.overline = overline;
@@ -64,7 +63,7 @@ public class Play extends PanacheEntity {
     }
 
 
-    public Play() {
+    public Event() {
 
     }
 }

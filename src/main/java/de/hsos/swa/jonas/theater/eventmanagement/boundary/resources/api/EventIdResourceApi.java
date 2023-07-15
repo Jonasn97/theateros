@@ -1,9 +1,9 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.resources.api;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
-import de.hsos.swa.jonas.theater.playmanagement.control.PlayOperations;
+import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.dto.LinksDTO;
-import de.hsos.swa.jonas.theater.shared.Play;
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.InitialPlayDTO;
+import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.InitialPlayDTO;
 import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;
 
@@ -18,19 +18,19 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/play")
-public class PlayIdResourceApi {
+public class EventIdResourceApi {
 
     @Inject
-    PlayOperations playOperations;
+    EventOperations eventOperations;
 
     @Context
     UriInfo uriInfo;
 
-    @Path("/{playId}")
+    @Path("events/{eventId}")
     @GET
-    public Response getPlayById(@PathParam("playId") long playId,
+    public Response getPlayById(@PathParam("eventId") long playId,
                                 @QueryParam("include") String include){
-        Optional<Play> play = playOperations.getPlayById(playId);
+        Optional<Event> play = eventOperations.getEventsById(playId);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(play.isPresent()){
             InitialPlayDTO initialPlayDTO = InitialPlayDTO.Converter.toDTO(play.get());
@@ -49,7 +49,7 @@ public class PlayIdResourceApi {
     private LinksDTO createSelfLink(String id) {
         LinksDTO linksDTO = new LinksDTO();
         linksDTO.self = uriInfo.getBaseUriBuilder()
-                .path(PlayResourceApi.class)
+                .path(EventResourceApi.class)
                 .path(id)
                 .build()
                 .toString();

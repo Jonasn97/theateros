@@ -1,8 +1,8 @@
 package de.hsos.swa.jonas.theater.crawler.gateway;
 
 import de.hsos.swa.jonas.theater.crawler.entity.CrawlerCatalog;
+import de.hsos.swa.jonas.theater.shared.Event;
 import de.hsos.swa.jonas.theater.shared.Performance;
-import de.hsos.swa.jonas.theater.shared.Play;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.logging.Log;
@@ -12,26 +12,26 @@ import javax.transaction.Transactional;
 import java.util.Objects;
 
 @ApplicationScoped
-public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<Play, Long> {
+public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<Event, Long> {
 
     @Override
     @Transactional
     public int updateDatabase(CalendarElementDTO calendarElementDTO) {
         int updatedElements = 0;
-        Play play = Play.find("stid", calendarElementDTO.stid).firstResult();
-        if (play == null) {
-            play = new Play(calendarElementDTO.stid, calendarElementDTO.infolink, calendarElementDTO.overline, calendarElementDTO.title, calendarElementDTO.kind, calendarElementDTO.location);
-            play.persist();
+        Event event = Event.find("stid", calendarElementDTO.stid).firstResult();
+        if (event == null) {
+            event = new Event(calendarElementDTO.stid, calendarElementDTO.infolink, calendarElementDTO.overline, calendarElementDTO.title, calendarElementDTO.kind, calendarElementDTO.location);
+            event.persist();
             updatedElements++;
-        } else if (!Objects.equals(play.overline, calendarElementDTO.overline) || !Objects.equals(play.title, calendarElementDTO.title) || !Objects.equals(play.kind, calendarElementDTO.kind) || !Objects.equals(play.location, calendarElementDTO.location)){
-            play.overline = calendarElementDTO.overline;
-            play.title = calendarElementDTO.title;
-            play.kind = calendarElementDTO.kind;
-            play.location = calendarElementDTO.location;
-            play.persist();
+        } else if (!Objects.equals(event.overline, calendarElementDTO.overline) || !Objects.equals(event.title, calendarElementDTO.title) || !Objects.equals(event.kind, calendarElementDTO.kind) || !Objects.equals(event.location, calendarElementDTO.location)){
+            event.overline = calendarElementDTO.overline;
+            event.title = calendarElementDTO.title;
+            event.kind = calendarElementDTO.kind;
+            event.location = calendarElementDTO.location;
+            event.persist();
             updatedElements++;
         }
-        Performance existingPerformance = play.performances.stream()
+        Performance existingPerformance = event.performances.stream()
                 .filter(p -> Objects.equals(p.auid, calendarElementDTO.auid))
                 .findFirst()
                 .orElse(null);
@@ -42,9 +42,9 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
             existingPerformance.persist();
         } else {
             Performance performance = new Performance(calendarElementDTO.auid, calendarElementDTO.datetime, calendarElementDTO.hasTime, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
-            play.performances.add(performance);
-            play.persist();
-            play.performances.forEach(p -> PanacheEntityBase.persist(p));
+            event.performances.add(performance);
+            event.persist();
+            event.performances.forEach(p -> PanacheEntityBase.persist(p));
         }
         updatedElements++;
         return updatedElements;
@@ -53,35 +53,35 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<P
     @Override
     @Transactional
     public int updateDatabase(EventElementDTO eventElementDTO) {
-        Play play = Play.find("stid", eventElementDTO.stid).firstResult();
-        if (play == null) {
-            Log.error("Play doesn't exist!");
-            throw new RuntimeException("Play doesn't exist!");
+        Event event = Event.find("stid", eventElementDTO.stid).firstResult();
+        if (event == null) {
+            Log.error("Event doesn't exist!");
+            throw new RuntimeException("Event doesn't exist!");
         }
-        if(play.description== null &&eventElementDTO.description!= null) {
-            play.description = eventElementDTO.description;
+        if(event.description== null &&eventElementDTO.description!= null) {
+            event.description = eventElementDTO.description;
         }
-        if(play.duration== null &&eventElementDTO.duration!= null)
-            play.duration = eventElementDTO.duration;
-        if(play.bannerPath== null &&eventElementDTO.bannerPath!= null)
-            play.bannerPath = eventElementDTO.bannerPath;
+        if(event.duration== null &&eventElementDTO.duration!= null)
+            event.duration = eventElementDTO.duration;
+        if(event.bannerPath== null &&eventElementDTO.bannerPath!= null)
+            event.bannerPath = eventElementDTO.bannerPath;
         if(eventElementDTO.imagePaths!= null)
-            play.imagePaths.addAll(eventElementDTO.imagePaths);
+            event.imagePaths.addAll(eventElementDTO.imagePaths);
         if(eventElementDTO.videoUris!= null)
-            play.videoUris.addAll(eventElementDTO.videoUris);
+            event.videoUris.addAll(eventElementDTO.videoUris);
         if(eventElementDTO.spotifyUris!= null)
-            play.spotifyUris.addAll(eventElementDTO.spotifyUris);
+            event.spotifyUris.addAll(eventElementDTO.spotifyUris);
         if(eventElementDTO.vimeoUris!= null)
-            play.vimeoUris.addAll(eventElementDTO.vimeoUris);
+            event.vimeoUris.addAll(eventElementDTO.vimeoUris);
         if(eventElementDTO.soundcloudUris!= null)
-            play.soundcloudUris.addAll(eventElementDTO.soundcloudUris);
-        if(play.team== null &&eventElementDTO.cast!= null)
-            play.team = eventElementDTO.cast;
-        if(play.press== null &&eventElementDTO.press!= null)
-            play.press = eventElementDTO.press;
-        if(play.thumbnailPath== null &&play.imagePaths!= null && !play.imagePaths.isEmpty())
-            play.thumbnailPath = play.imagePaths.iterator().next();
-        play.persist();
+            event.soundcloudUris.addAll(eventElementDTO.soundcloudUris);
+        if(event.team== null &&eventElementDTO.cast!= null)
+            event.team = eventElementDTO.cast;
+        if(event.press== null &&eventElementDTO.press!= null)
+            event.press = eventElementDTO.press;
+        if(event.thumbnailPath== null && event.imagePaths!= null && !event.imagePaths.isEmpty())
+            event.thumbnailPath = event.imagePaths.iterator().next();
+        event.persist();
         return 1;
     }
 }

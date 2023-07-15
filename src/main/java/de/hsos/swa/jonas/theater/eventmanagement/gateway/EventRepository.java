@@ -1,8 +1,8 @@
-package de.hsos.swa.jonas.theater.playmanagement.gateway;
+package de.hsos.swa.jonas.theater.eventmanagement.gateway;
 
-import de.hsos.swa.jonas.theater.playmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.shared.Play;
-import de.hsos.swa.jonas.theater.playmanagement.entity.PlayCatalog;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.EventCatalog;
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,18 +13,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
-public class PlayRepository implements PlayCatalog {
-    @Override
-    public Collection<Play> getPlays(String nameFilter, ArrayList<String> statusFilter, ArrayList<String> playTypeFilter, ArrayList<String> performanceTypeFilter, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter, String include, long pageNumber, long pageSize) {
-
-        return null;//TODO Cascade delete function
-
-    }
+public class EventRepository implements EventCatalog {
 
     @Override
-    public Collection<Play> getPlays(QueryParametersDTO queryParametersDTO) {
-        List<Play> playlist = Play.listAll();
-        try(Stream<Play> plays = playlist.stream()) {
+    public Collection<Event> getEvents(QueryParametersDTO queryParametersDTO) {
+        List<Event> playlist = Event.listAll();
+        try(Stream<Event> plays = playlist.stream()) {
             return plays
                     .filter(play -> queryParametersDTO.nameFilter == null || play.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
                     //.filter(play -> statusFilter == null|| statusFilter.contains(play.status))
@@ -47,9 +41,9 @@ public class PlayRepository implements PlayCatalog {
     }
 
     @Override
-    public long getPlaysCount(QueryParametersDTO queryParametersDTO) {
-        List<Play> playlist = Play.listAll();
-        try(Stream<Play> plays = playlist.stream()) {
+    public long getEventsCount(QueryParametersDTO queryParametersDTO) {
+        List<Event> playlist = Event.listAll();
+        try(Stream<Event> plays = playlist.stream()) {
             return plays
                     .filter(play -> queryParametersDTO.nameFilter == null || play.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
                     //.filter(play -> statusFilter == null|| statusFilter.contains(play.status))
@@ -71,11 +65,11 @@ public class PlayRepository implements PlayCatalog {
     }
 
     @Override
-    public Optional<Play> getPlayById(long playId) {
-        return Play.findByIdOptional(playId);
+    public Optional<Event> getEventsById(long playId) {
+        return Event.findByIdOptional(playId);
     }
 
-    private boolean isPerformanceWithinDateRange(Play play, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {
+    private boolean isPerformanceWithinDateRange(Event event, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {
         return true;
     }
 }

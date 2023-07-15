@@ -1,7 +1,5 @@
-package de.hsos.swa.jonas.theater.playmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
