@@ -1,4 +1,3 @@
-alert("This alert box was called with the onload event");
 document.getElementById('filterIcon').addEventListener('click', function(event) {
     var filterIcon = event.target;
     var filterOverlay = document.getElementById('filterOverlay');
