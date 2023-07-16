@@ -6,15 +6,13 @@ public class OutgoingEventDTO {
     public long id;
     public String title;
     public String kind;
-    public String location;
     public String thumbnailPath;
     public OutgoingNextPerformanceDTO nextPerformance = null;
 
-    public OutgoingEventDTO(long id, String title, String kind, String location, String thumbnailPath) {
+    public OutgoingEventDTO(long id, String title, String kind, String thumbnailPath) {
         this.id = id;
         this.title = title;
         this.kind = kind;
-        this.location = location;
         this.thumbnailPath = thumbnailPath;
     }
 
@@ -24,7 +22,7 @@ public class OutgoingEventDTO {
 
     public static class Converter {
         public static OutgoingEventDTO toDTO(Event event) {
-            return new OutgoingEventDTO(event.id, event.title, event.kind, event.location, event.thumbnailPath);
+            return new OutgoingEventDTO(event.id, event.title, event.kind, event.thumbnailPath);
         }
     }
 

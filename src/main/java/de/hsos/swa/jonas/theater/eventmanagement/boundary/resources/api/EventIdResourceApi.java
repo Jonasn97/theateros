@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/play")
 public class EventIdResourceApi {
 
     @Inject
@@ -28,8 +27,8 @@ public class EventIdResourceApi {
 
     @Path("events/{eventId}")
     @GET
-    public Response getPlayById(@PathParam("eventId") long playId,
-                                @QueryParam("include") String include){
+    public Response getEventsById(@PathParam("eventId") long playId,
+                                  @QueryParam("include") String include){
         Optional<Event> play = eventOperations.getEventsById(playId);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(play.isPresent()){
