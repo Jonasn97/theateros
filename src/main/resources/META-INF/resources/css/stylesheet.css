@@ -14,10 +14,12 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 main {
     flex-grow: 1;
     overflow-y: auto;
 }
+
 /*Header*/
 header {
     background-color: #fff;
@@ -27,6 +29,7 @@ header {
     padding: 8px 8px 8px 16px;
     border-bottom: 1px solid #CCC
 }
+
 h1 {
     font-family: 'Baskerville Old Face', serif;
     align-items: center;
@@ -41,6 +44,7 @@ header .icon {
     height: 32px;
 }
 
+
 .icon.search {
     fill: black;
     max-width: 32px;
@@ -50,6 +54,15 @@ header .icon {
     fill: black;
 
 }
+
+.icon .left {
+    fill: black;
+}
+
+.icon .heart {
+    fill: none;
+}
+
 /*filterOverlay*/
 #filterOverlay {
     position: absolute;
@@ -83,6 +96,7 @@ header .icon {
     border-width: 0 8px 8px 8px;
     border-color: transparent transparent #fff transparent;
 }
+
 #filterOverlay .filter-section {
     color: #CCC;
     font-size: 14px;
@@ -96,6 +110,7 @@ header .icon {
     justify-content: center;
     gap: 8px;
 }
+
 #filterOverlay .bubble .close-icon {
     position: absolute;
     top: 8px;
@@ -108,6 +123,7 @@ header .icon {
 .close:hover {
     opacity: 0.8;
 }
+
 #filterOverlay .filter-button {
     border-radius: 10px;
     border: 0.5px solid #888;
@@ -118,6 +134,7 @@ header .icon {
     font-weight: 500;
     cursor: pointer;
 }
+
 .filter-checkbox {
     display: none;
 }
@@ -163,6 +180,7 @@ header .icon {
     font-weight: 300;
     color: #888;
 }
+
 /*search-Overlay*/
 #searchOverlay {
     position: absolute;
@@ -264,6 +282,7 @@ header .icon {
     background: #d7b9ff;
     color: #9747FF;
 }
+
 /*card*/
 .card {
     margin: 8px;
@@ -300,6 +319,7 @@ header .icon {
     padding-top: 8px;
     padding-bottom: 8px;
 }
+
 .card .card-content .image #day {
     font-size: 24px;
     font-weight: 700;
@@ -315,25 +335,25 @@ header .icon {
     font-weight: 300;
 }
 
-.card .card-content .text {
+.card-content .text {
     margin-left: 8px;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.card .card-content .text .card-subtitle {
+.card-content .text .card-subtitle {
     font-size: 14px;
     color: #888888;
     flex-direction: column;
 }
 
-.card .card-content .text .card-info {
+.card-content .text .card-info {
     font-size: 13px;
     color: #888888;
     flex-direction: column;
 }
 
-.card .card-content .text .card-title-row {
+.card-content .text .card-title-row {
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
@@ -341,20 +361,20 @@ header .icon {
     gap: 8px;
 }
 
-.card .card-content .text .card-title-row .card-title {
+.card-content .text .card-title-row .card-title {
     font-size: 17px;
     font-style: normal;
     font-weight: 500;
 }
 
-.card .card-content .text .card-title-row .chip {
+.card-content .text .card-title-row .chip {
     width: auto;
     height: auto;
     border-radius: 20px;
     background: #D7B9FF;
 }
 
-.card .card-content .text .card-title-row .chip .chip-content {
+.card-content .text .card-title-row .chip .chip-content {
     color: #9747FF;
     text-align: center;
     font-size: 10px;
@@ -363,7 +383,8 @@ header .icon {
     padding-left: 8px;
     padding-right: 8px;
 }
-.showMore{
+
+.showMore {
     margin: 8px;
     display: flex;
     border-radius: 20px;
@@ -372,6 +393,7 @@ header .icon {
     background: #9747FF;
 
 }
+
 .showMore button.button {
     width: 100%;
     background: #9747FF;
@@ -385,6 +407,7 @@ header .icon {
     border-radius: 20px;
     padding: 8px;
 }
+
 .showMore button.button:hover {
     background: #D7B9FF;
     border: #D7B9FF;
