@@ -1,0 +1,250 @@
+/* || General styles */
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Taviraj', Garamond, serif;
+}
+main {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+  
+  h1,
+  h2,
+  h3,
+  h4 {
+    all: unset;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 500;
+    text-align: left;
+  }
+  /*Header-Title*/
+  h1 {
+    font-family: 'Baskerville Old Face', Garamond, serif;
+    text-align: center;
+    font-size: 32px;
+  }
+  /*Normal-Title*/
+  h2 {
+    font-size: 17px;
+  }
+  /*Subtitle*/
+  h3 {
+    color: #888;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  /**/
+  h4 {
+    color: #888;
+    font-size: 13px;
+    font-weight: 300;
+  }
+  p {
+    all: unset;
+    font-size: 17px;
+    text-align: left;
+  }
+  span {
+
+  }
+  strong {
+
+  }
+  a {
+    text-decoration:none;
+    color: inherit;
+  }
+  ul {
+  }
+
+/* || Colors */
+.black {
+    color: black;
+}
+.grey {
+    color: #CCC;
+}
+.white {
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+}
+
+/* || Typography */
+
+/* … */
+
+/* || Header   */
+header.standard {
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 8px 8px 16px;
+    border-bottom: 1px solid #CCC;
+}
+header.extended {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-size: cover;
+    background-color: #9D8276;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: clip;
+}
+header.extended .title {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 8px 8px 16px;
+}
+header.extended svg {
+    fill:#fff;
+    filter: drop-shadow(1px 1px 3px #000);
+    
+}
+header.extended .info {
+    margin: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+header.extended .overlay {
+    background: linear-gradient(0deg, rgba(157,130,118,0.1) 0%,rgba(157,130,118,0.3) 100%); 
+}
+/*card*/
+.card {
+    margin: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+    border-radius: 20px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.12);
+}
+.card .image {
+    border-radius: 20px 5px 5px 20px;
+    background-size: cover;
+    background-color: #9D8276;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 25%;
+    overflow: clip;
+    
+}
+.basic-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.basic-info div {
+    display: flex;
+    align-items: center;
+}
+/*card for Spielzeiten*/
+.card .image .overlay {
+    width:100%;
+    height: 100%;
+    background-color: rgba(157, 130, 118, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#day {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 100%;
+}
+
+#month, #time {
+    font-size: 17px;
+    font-weight: 300;
+}
+/**/
+/* chip */
+#chip {
+    font-size: 11px;
+    color: #9747FF;
+    border-radius: 20px;
+    background: #D7B9FF; 
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: 2px 8px 2px 8px;
+    flex-shrink: 0;
+}
+/* || Detail Tabs */
+.detail-tabs {
+    display: flex;
+    justify-content: space-around;
+    align-items:flex-start;
+    flex-direction: row;
+    padding-top: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    background-color: #fff;
+    min-height: 30px;
+    width: 100%;
+}
+.tab label {
+
+}
+.detail-tabs a.active svg{
+    fill: black;
+}
+/* || Bottom Navigation */
+nav {
+    background-color: #fff;
+    min-height: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    padding-top: 8px;
+}
+
+footer nav {
+    flex-shrink: 0;
+    border-radius: 3px;
+    border-top: 1px solid #CCC;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 25px;
+    align-items: center;
+}
+
+nav a .icon {
+    fill: #CCC;
+}
+
+nav a .dot {
+    padding: 5px;
+}
+
+footer nav a.active svg {
+    fill: #9D8276;
+}

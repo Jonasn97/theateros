@@ -15,10 +15,7 @@ body {
     flex-direction: column;
 }
 
-main {
-    flex-grow: 1;
-    overflow-y: auto;
-}
+
 
 /*Header*/
 header {
