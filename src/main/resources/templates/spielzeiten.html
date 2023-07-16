@@ -1,10 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{#include base}
+{#title}Spielzeiten{/title}
+{#pagecss}
+<link rel="stylesheet" type="text/css" href="/css/stuecke.css">
+{/pagecss}
+{#script}<script type="text/javascript" src="/js/bubbles.js" defer></script>{/script}
+{#header}
+<header class="standard">
+    <svg id="searchIcon" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24.6558 21.6141L19.7881 16.7464C19.5684 16.5267 19.2706 16.4046 18.9581 16.4046H18.1623C19.5098 14.6812 20.3105 12.5134 20.3105 10.1553C20.3105 4.54545 15.7651 0 10.1553 0C4.54545 0 0 4.54545 0 10.1553C0 15.7651 4.54545 20.3105 10.1553 20.3105C12.5134 20.3105 14.6812 19.5098 16.4046 18.1623V18.9581C16.4046 19.2706 16.5267 19.5684 16.7464 19.7881L21.6141 24.6558C22.073 25.1147 22.8152 25.1147 23.2692 24.6558L24.6509 23.2741C25.1099 22.8152 25.1099 22.073 24.6558 21.6141ZM10.1553 16.4046C6.70345 16.4046 3.90587 13.612 3.90587 10.1553C3.90587 6.70345 6.69857 3.90587 10.1553 3.90587C13.6071 3.90587 16.4046 6.69856 16.4046 10.1553C16.4046 13.6071 13.612 16.4046 10.1553 16.4046Z"/>
+    </svg>
+    <h1>{#insert title}Default Title{/}</h1>
+    <svg id="filterIcon" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.8269 0H1.17324C0.132319 0 -0.392925 1.26299 0.344624 2.00054L9.37499 11.0323V21.0937C9.37499 21.4761 9.56156 21.8345 9.87485 22.0538L13.7811 24.7872C14.5517 25.3267 15.625 24.7799 15.625 23.8271V11.0323L24.6556 2.00054C25.3916 1.26445 24.87 0 23.8269 0Z"/>
+    </svg>
+</header>
+{/header}
+{#for event in events}
+<a class="card" href="">
+    <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"><!--todo use title attribute for alt-text-->
+    <div class="overlay">
+        <span id="month">Mai</span>
+        <span id="day">02</span>
+        <span id="time">19:30</span>
+    </div>
+    </div>
+    <div class="basic-info">
+        <div>
+            <h2>{event.title}</h2>
+            <span id="chip">will hin!</span>
+        </div>
+        <h3>{#if event.kind}{event.kind}{/if}</h3>
+        {#if event.nextPerformance}
+        <h3>{#if event.nextPerformance.performanceType}
+            {event.nextPerformance.performanceType}
+            {#else} als nächstes {/if} am
+            {event.nextPerformance.startDate}
+            {#if event.nextPerformance.hasTime} um {event.nextPerformance.startTime} {/if}
+            {/if}
+        </h3>
+    </div>
+</a>
+{/for}
+<form class="showMore" action="/mobile/events" method="GET">
+    <button class="button" type="submit">Mehr anzeigen</button>
+    <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
+    <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
+</form>
+<div id="searchOverlay">
+    <div class="overlay">
+        <span class="search-section">Suchen nach</span>
+        <div class="button-container">
+            <form action="/mobile/events" method="GET">
+                <input class="search-input" type="text" placeholder="Suchbegriff eingeben" name="filter[name]">
+                <button class="confirm-button" type="submit">Bestätigen</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-</body>
-</html>
+<div id="filterOverlay">
+    <div class="overlay">
+        <span class="filter-text">Filtern nach</span>
+        <div class="button-container">
+            <form action="/mobile/events" method="GET">
+                <span class="filter-section">Zeitraum</span>
+                <input class="filter-checkbox" type="checkbox" id="7days-checkbox" name="filter[week]" value="7days">
+                <label class="filter-label" for="7days-checkbox">nächste 7 Tage</label>
+                <input class="filter-checkbox" type="checkbox" id="30days-checkbox" name="filter[month]" value="7days">
+                <label class="filter-label" for="30days-checkbox">nächste 30 Tage</label>
+                <span class="filter-section">Besonderheit</span>
+                <input class="filter-checkbox" type="checkbox" id="premiere-checkbox" name="filter[performanceType]" value="Premiere">
+                <label class="filter-label" for="premiere-checkbox">Premiere</label>
+                <input class="filter-checkbox" type="checkbox" id="trial-checkbox" name="filter[performanceType]" value="Offene Probe">
+                <label class="filter-label" for="trial-checkbox">Offene Probe</label>
+                <span class="filter-section">Sparte</span>
+                <input class="filter-checkbox" type="checkbox" id="musical-checkbox" name="filter[playType]" value="Musical">
+                <label class="filter-label" for="musical-checkbox">Musical</label>
+                <input class="filter-checkbox" type="checkbox" id="oper-checkbox" name="filter[playType]" value="Oper">
+                <label class="filter-label" for="oper-checkbox">Oper</label>
+                <input class="filter-checkbox" type="checkbox" id="schauspiel-checkbox" name="filter[playType]" value="Schauspiel">
+                <label class="filter-label" for="schauspiel-checkbox">Schauspiel</label>
+                <input class="filter-checkbox" type="checkbox" id="tanz-checkbox" name="filter[playType]" value="Tanz">
+                <label class="filter-label" for="tanz-checkbox">Tanz</label>
+                <button class="confirm-button" type="submit">Bestätigen</button>
+            </form>
+        </div>
+    </div>
+</div>
+{/include}

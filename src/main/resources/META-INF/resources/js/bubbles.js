@@ -1,6 +1,6 @@
-document.getElementById('filterIcon').addEventListener('click', function(event) {
+document.querySelector('#filterIcon').addEventListener('click', function(event) {
     var filterIcon = event.target;
-    var filterOverlay = document.getElementById('filterOverlay');
+    var filterOverlay = document.querySelector('.overlay');
 
     // Position des Filter-Icons abrufen
     var iconRect = filterIcon.getBoundingClientRect();
@@ -18,7 +18,7 @@ document.getElementById('filterIcon').addEventListener('click', function(event) 
 });
 
 function closeFilterBubble(event) {
-    var filterOverlay = document.getElementById('filterOverlay');
+    var filterOverlay = document.querySelector('.overlay');
 
     // Überprüfen, ob Klick innerhalb der Bubble erfolgt ist
     if (!filterOverlay.contains(event.target)) {
@@ -26,9 +26,10 @@ function closeFilterBubble(event) {
         document.removeEventListener('click', closeFilterBubble);
     }
 }
-document.getElementById('searchIcon').addEventListener('click', function(event) {
+
+document.querySelector('#searchIcon').addEventListener('click', function(event) {
     var searchIcon = event.target;
-    var searchOverlay = document.getElementById('searchOverlay');
+    var searchOverlay = document.querySelector('.overlay');
 
     // Position des Search-Icons abrufen
     var iconRect = searchIcon.getBoundingClientRect();
@@ -46,7 +47,7 @@ document.getElementById('searchIcon').addEventListener('click', function(event) 
 });
 
 function closeSearchBubble(event) {
-    var searchOverlay = document.getElementById('searchOverlay');
+    var searchOverlay = document.querySelector('.searchOverlay');
 
     // Überprüfen, ob Klick innerhalb der Bubble erfolgt ist
     if (!searchOverlay.contains(event.target)) {

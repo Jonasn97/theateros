@@ -78,55 +78,126 @@ main {
 
 /* || Typography */
 
-/* … */
-
-/* || Header   */
-header.standard {
-    background-color: #fff;
+/* Show More - Stücke & Details */
+.showMore {
+    margin: 8px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 8px 8px 16px;
-    border-bottom: 1px solid #CCC;
+    border-radius: 20px;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.12);
+    justify-content: center;
+    background: #9747FF;
+
 }
-header.extended {
+/*Overlay Stücke & Details*/
+.overlay {
+    position: absolute;
+    top: calc(100% + 8px);
+    display: none;
+    z-index: 9999;
+}
+
+.overlay.bubble {
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background-size: cover;
-    background-color: #9D8276;
-    background-repeat: no-repeat;
-    background-position: center;
-    overflow: clip;
-}
-header.extended .title {
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
-    color: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    padding: 16px 8px 8px 16px;
-}
-header.extended svg {
-    fill:#fff;
-    filter: drop-shadow(1px 1px 3px #000);
-    
-}
-header.extended .info {
-    margin: 8px;
-    padding: 8px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: stretch;
+    padding: 16px;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.16);
 }
 
-header.extended .overlay {
-    background: linear-gradient(0deg, rgba(157,130,118,0.1) 0%,rgba(157,130,118,0.3) 100%); 
+.overlay .bubble::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 8px 8px;
+    border-color: transparent transparent #fff transparent;
 }
-/*card*/
+
+.overlay .section {
+    color: #CCC;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.overlay .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.close:hover {
+    opacity: 0.8;
+}
+
+.overlay .button {
+    border-radius: 10px;
+    border: 0.5px solid #888;
+    background: #fff;
+    color: #ccc;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.overlay .checkbox {
+    display: none;
+}
+
+.overlay .checkbox + .label {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 0.5px solid #888;
+    background: #fff;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.overlay .checkbox:checked + .label {
+    border-color: #9747FF;
+    color: #9747FF;
+}
+
+.overlay .input {
+    border-radius: 10px;
+    border: 0.5px solid #888;
+    background: #fff;
+    color: #000;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.overlay .confirm-button {
+    margin-top: 16px;
+    width: 100%;
+    background: #9747FF;
+    align-self: stretch;
+    text-align: center;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    border: none;
+    color: #fff;
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.overlay .confirm-button:hover {
+    background: #d7b9ff;
+    color: #9747FF;
+}
+/* Card*/
+
 .card {
     margin: 8px;
     padding: 8px;
@@ -158,27 +229,6 @@ header.extended .overlay {
     display: flex;
     align-items: center;
 }
-/*card for Spielzeiten*/
-.card .image .overlay {
-    width:100%;
-    height: 100%;
-    background-color: rgba(157, 130, 118, 0.7);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-#day {
-    font-size: 32px;
-    font-weight: 900;
-    line-height: 100%;
-}
-
-#month, #time {
-    font-size: 17px;
-    font-weight: 300;
-}
-/**/
 /* chip */
 #chip {
     font-size: 11px;
@@ -190,25 +240,22 @@ header.extended .overlay {
     padding: 2px 8px 2px 8px;
     flex-shrink: 0;
 }
-/* || Detail Tabs */
-.detail-tabs {
-    display: flex;
-    justify-content: space-around;
-    align-items:flex-start;
-    flex-direction: row;
-    padding-top: 8px;
-    font-size: 10px;
-    font-weight: 500;
+button {
+    background: #9747FF;
     text-align: center;
-    background-color: #fff;
-    min-height: 30px;
-    width: 100%;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    border: #9747FF;
+    color: #fff;
+    border-radius: 20px;
+    padding: 8px;
+    margin: 4px;
 }
-.tab label {
-
-}
-.detail-tabs a.active svg{
-    fill: black;
+button:hover {
+    background: #D7B9FF;
+    border: #D7B9FF;
+    color: #9747FF;
 }
 /* || Bottom Navigation */
 nav {
