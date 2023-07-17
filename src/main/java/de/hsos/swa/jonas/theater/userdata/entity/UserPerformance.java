@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.user.entity;
+package de.hsos.swa.jonas.theater.userdata.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
