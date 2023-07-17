@@ -15,7 +15,7 @@
     </svg>
 </header>
 {/header}
-{#for event in events}
+{#for performance in performances}
 <a class="card" href="">
     <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"><!--todo use title attribute for alt-text-->
     <div class="overlay">
@@ -26,16 +26,12 @@
     </div>
     <div class="basic-info">
         <div>
-            <h2>{event.title}</h2>
+            <h2>{performance.title}</h2>
             <span id="chip">will hin!</span>
         </div>
-        <h3>{#if event.kind}{event.kind}{/if}</h3>
-        {#if event.nextPerformance}
-        <h3>{#if event.nextPerformance.performanceType}
-            {event.nextPerformance.performanceType}
-            {#else} als nächstes {/if} am
-            {event.nextPerformance.startDate}
-            {#if event.nextPerformance.hasTime} um {event.nextPerformance.startTime} {/if}
+        <h3>{#if performance.kind}{performance.kind}{/if}</h3>
+        <h3>{#if performance.performanceType}
+            {performance.performanceType}
             {/if}
         </h3>
     </div>

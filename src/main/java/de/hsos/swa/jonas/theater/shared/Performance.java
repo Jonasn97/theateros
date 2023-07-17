@@ -11,6 +11,10 @@ import java.util.Date;
 
 @Entity
 public class Performance extends PanacheEntity {
+
+        @ManyToOne
+        public Event event;
+
         @UpdateTimestamp
         public Timestamp lastUpdateTimestamp;
         @CreationTimestamp

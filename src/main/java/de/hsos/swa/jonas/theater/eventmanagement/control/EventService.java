@@ -3,6 +3,7 @@ package de.hsos.swa.jonas.theater.eventmanagement.control;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.shared.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.EventCatalog;
+import de.hsos.swa.jonas.theater.shared.Performance;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,5 +28,10 @@ public class EventService implements EventOperations {
     @Override
     public Optional<Event> getEventsById(long playId) {
         return eventCatalog.getEventsById(playId);
+    }
+
+    @Override
+    public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
+        return eventCatalog.getPerformances(queryParametersDTO);
     }
 }
