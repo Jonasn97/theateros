@@ -5,14 +5,16 @@ import de.hsos.swa.jonas.theater.shared.Performance;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class OutgoingDetailEventDTO {
     public long id;
     public String title;
     public String kind;
     public String location;
-    public String bannerPath;
+    public String thumbnailPath;
     public String duration;
     public String description;
     public Collection<PerformanceDTO> performances;
@@ -30,13 +32,15 @@ public class OutgoingDetailEventDTO {
             dto.title = event.title;
             dto.kind = event.kind;
             dto.location = event.location;
-            dto.bannerPath = event.bannerPath;
+            dto.thumbnailPath = event.bannerPath;
             dto.duration = event.duration;
             dto.description = event.description;
             dto.performances = new ArrayList<>();
-            for (Performance performance : event.performances) {
-                dto.performances.add(PerformanceDTO.Converter.toDTO(performance));
-            }
+            List<Performance> sortedPerformances = event.performances.stream()
+                    .sorted((p1, p2) -> p1.datetime.compareTo(p2.datetime)).toList();
+            dto.performances = sortedPerformances.stream()
+                    .map(PerformanceDTO.Converter::toDTO)
+                    .collect(Collectors.toList());
             dto.cast = event.team;
             dto.imagePaths = event.imagePaths;
             dto.videoUris = event.videoUris;

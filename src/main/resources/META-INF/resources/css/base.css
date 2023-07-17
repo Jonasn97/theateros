@@ -88,114 +88,6 @@ main {
     background: #9747FF;
 
 }
-/*Overlay Stücke & Details*/
-.overlay {
-    position: absolute;
-    top: calc(100% + 8px);
-    display: none;
-    z-index: 9999;
-}
-
-.overlay.bubble {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16px;
-    border-radius: 4px;
-    background-color: #fff;
-    color: #000;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.16);
-}
-
-.overlay .bubble::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 8px 8px 8px;
-    border-color: transparent transparent #fff transparent;
-}
-
-.overlay .section {
-    color: #CCC;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.overlay .button-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-}
-
-.close:hover {
-    opacity: 0.8;
-}
-
-.overlay .button {
-    border-radius: 10px;
-    border: 0.5px solid #888;
-    background: #fff;
-    color: #ccc;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.overlay .checkbox {
-    display: none;
-}
-
-.overlay .checkbox + .label {
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 10px;
-    border: 0.5px solid #888;
-    background: #fff;
-    color: #ccc;
-    cursor: pointer;
-}
-
-.overlay .checkbox:checked + .label {
-    border-color: #9747FF;
-    color: #9747FF;
-}
-
-.overlay .input {
-    border-radius: 10px;
-    border: 0.5px solid #888;
-    background: #fff;
-    color: #000;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.overlay .confirm-button {
-    margin-top: 16px;
-    width: 100%;
-    background: #9747FF;
-    align-self: stretch;
-    text-align: center;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 500;
-    border: none;
-    color: #fff;
-    border-radius: 20px;
-    padding: 8px;
-}
-
-.overlay .confirm-button:hover {
-    background: #d7b9ff;
-    color: #9747FF;
-}
 /* Card*/
 
 .card {
@@ -229,6 +121,27 @@ main {
     display: flex;
     align-items: center;
 }
+/*card for Spielzeiten*/
+.card .image .overlay {
+    width:100%;
+    height: 100%;
+    background-color: rgba(157, 130, 118, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#day {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 100%;
+}
+
+#month, #time {
+    font-size: 17px;
+    font-weight: 300;
+}
+/**/
 /* chip */
 #chip {
     font-size: 11px;

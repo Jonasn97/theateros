@@ -16,7 +16,7 @@
 </header>
 {/header}
 {#for event in events}
-<a class="card" href="">
+<a class="card" href="/mobile/events/{event.id}">
     <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"></div><!--todo use title attribute for alt-text-->
     <div class="basic-info">
         <div>

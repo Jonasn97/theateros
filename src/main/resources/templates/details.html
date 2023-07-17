@@ -1,11 +1,14 @@
 {#include base}
 {#title}Details{/title}
+    {#pagecss}
+        <link rel="stylesheet" type="text/css" href="/css/details.css">
+    {/pagecss}
 {#header}
-    <header class="extended" style="background-image: url('../META-INF/resources/media/sg221017196.jpeg');">
+    <header class="extended" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');">
         <div class="overlay">
-            <div class="title"><svg class="icon" width="13" height="21" viewBox="0 0 13 21" xmlns="http://www.w3.org/2000/svg">
+            <div class="title"><a href="{#if referrer}{referrer}{#else}/mobile/events{/if}"><svg class="icon" width="13" height="21" viewBox="0 0 13 21" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0.321857 9.72255L9.22301 0.821857C9.65215 0.392714 10.3483 0.392714 10.7774 0.821857L11.8157 1.86013C12.2444 2.28882 12.2449 2.98314 11.8176 3.41274L4.76304 10.4998L11.8171 17.5873C12.2449 18.0169 12.244 18.7112 11.8153 19.1399L10.777 20.1781C10.3478 20.6073 9.65169 20.6073 9.22255 20.1781L0.321857 11.277C-0.107286 10.8478 -0.107286 10.1517 0.321857 9.72255Z"/>
-                </svg>
+                </svg></a>
                 <h1>{#insert title}Default Title{/}</h1>
                 <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M17.516 3c2.382 0 4.487 1.564 4.487 4.712 0 4.963-6.528 8.297-10.003 11.935-3.475-3.638-10.002-6.971-10.002-11.934 0-3.055 2.008-4.713 4.487-4.713 3.18 0 4.846 3.644 5.515 5.312.667-1.666 2.333-5.312 5.516-5.312zm0-2c-2.174 0-4.346 1.062-5.516 3.419-1.17-2.357-3.342-3.419-5.515-3.419-3.403 0-6.484 2.39-6.484 6.689 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 12-8.041 12-15.311 0-4.586-3.414-6.689-6.484-6.689z"/>
                 </svg>
@@ -49,24 +52,26 @@
         <p class="grey">{event.description}</p>
     </section>
     <section class="performances">
+        {#for performance in event.performances}
         <div class="card">
-            <div class="image" style="background-image: url('../META-INF/resources/media/sg221017196.jpeg');">
+            <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');">
                 <div class="overlay">
-                    <span id="month">Mai</span>
-                    <span id="day">02</span>
-                    <span id="time">19:30</span>
+                    <span id="month">{performance.month}</span>
+                    <span id="day">{performance.day}</span>
+                    <span id="time">{#if performance.time}{performance.time}{/if}</span>
                 </div>
             </div>
+
             <div class="buttons">
-                <h2>Premierenvorstellung</h2>
+                <h2>{#if performance.performanceType}{performance.performanceType}{/if}</h2>
                 <button>zum Kalender</button> <!--geplant Status setzen-->
                 <button>als gesehen markieren</button> <!--als gesehen setzen-->
                 <button>als verpasst markieren</button> <!--als verpasst setzen-->
-                <button>zum Shop</button> <!--geplant Status setzen-->
+                <a rel="noopener noreferrer" target="_blank" href="{#if performance.bookingLink}{performance.bookingLink}{/if}"> <button>zum Shop</button></a> <!--geplant Status setzen-->
                 <button>Ticket gekauft</button> <!--Ticket gekauft Status setzen-->
-
             </div>
         </div>
+        {/for}
     </section>
     <section class="cast">
         <p class="grey">{event.cast}</p>
