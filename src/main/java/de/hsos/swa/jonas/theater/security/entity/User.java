@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 @Entity
 @Table(name = "users")
 @UserDefinition
-@Transactional
 public class User extends PanacheEntity {
     @Username
     public String username;
@@ -23,6 +22,7 @@ public class User extends PanacheEntity {
     @Roles
     public String role;
 
+    @Transactional(Transactional.TxType.MANDATORY)
     public static void add(String username, String password, String role) {
         User user = new User();
         user.username = username;
