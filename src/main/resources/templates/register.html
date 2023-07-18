@@ -1,0 +1,17 @@
+{#include base}
+    {#header}
+<header class="standard">
+    <h1>{#insert title}Default Title{/}</h1>
+</header>
+    {/header}
+{#title}Registriere dich!{/title}
+    <form action="/mobile/register" method="post">
+        <label for="j_username"><b>Benutzername</b></label>
+        <input type="text" placeholder="Benutzernamen eingeben" name="username" required>
+
+        <label for="j_password"><b>Passwort</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+
+        <button type="submit">Registrieren</button>
+    </form>
+{/include}
