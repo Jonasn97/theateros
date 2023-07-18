@@ -35,7 +35,8 @@ public class Performance extends PanacheEntity {
         }
 
 
-        public Performance(String auid, LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
+        public Performance(Event event, String auid, LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
+                this.event = event;
                 this.auid = auid;
                 this.datetime = datetime;
                 this.hasTime = hasTime;

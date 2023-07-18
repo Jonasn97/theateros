@@ -41,7 +41,7 @@ public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<E
             existingPerformance.performanceType = calendarElementDTO.performanceType;
             existingPerformance.persist();
         } else {
-            Performance performance = new Performance(calendarElementDTO.auid, calendarElementDTO.datetime, calendarElementDTO.hasTime, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
+            Performance performance = new Performance(event, calendarElementDTO.auid, calendarElementDTO.datetime, calendarElementDTO.hasTime, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
             event.performances.add(performance);
             event.persist();
             event.performances.forEach(p -> PanacheEntityBase.persist(p));

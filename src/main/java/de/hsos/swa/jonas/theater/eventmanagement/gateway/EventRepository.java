@@ -78,6 +78,8 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
                 .filter(performance -> queryParametersDTO.nameFilter == null || performance.event.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
                 .filter(performance -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(performance.event.kind))
                 //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
+                //Sort by dates from now on
+                .sorted(Comparator.comparing(performance -> performance.datetime))
                 .skip(queryParametersDTO.pageNumber * queryParametersDTO.pageSize)
                 .limit(queryParametersDTO.pageSize)
                 .collect(Collectors.toList());
