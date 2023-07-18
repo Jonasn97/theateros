@@ -182,3 +182,6 @@ up-popup[size=full] up-popup {
 [up-href], [up-clickable] {
   cursor: pointer;
 }
+up-modal-box, up-drawer-box, up-cover-box, up-popup {
+  border-radius: 20px;
+}
