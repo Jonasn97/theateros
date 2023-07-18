@@ -167,6 +167,8 @@ button {
     border-radius: 20px;
     padding: 8px;
     margin: 4px;
+    cursor:pointer;
+
 }
 button:hover {
     background: #D7B9FF;
