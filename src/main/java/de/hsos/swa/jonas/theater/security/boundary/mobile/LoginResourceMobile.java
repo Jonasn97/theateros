@@ -11,14 +11,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-@Path("")
+import java.util.Set;
+
+@Path("/mobile")
 public class LoginResourceMobile {
     @Inject
     Template login;
-    @Inject
-    Template loggedIn;
-    @Inject
-    SecurityIdentity identity;
 
     @Path("/login")
     @GET
@@ -28,13 +26,5 @@ public class LoginResourceMobile {
         return Response.ok().entity(html).build();
     }
 
-    @Path("/deins")
-    @RolesAllowed("user")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public Response getLoggedInPage(@Context SecurityContext securityContext){
-        TemplateInstance instance = loggedIn.data("user", identity.getPrincipal().getName());
-        String html = instance.render();
-        return Response.ok().entity(html).build();
-    }
+
 }
