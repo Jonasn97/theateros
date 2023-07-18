@@ -80,17 +80,6 @@ main {
 }
 
 /* || Typography */
-
-/* Show More - Stücke & Details */
-.showMore {
-    margin: 8px;
-    display: flex;
-    border-radius: 20px;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.12);
-    justify-content: center;
-    background: #9747FF;
-
-}
 /* Card*/
 
 .card {
