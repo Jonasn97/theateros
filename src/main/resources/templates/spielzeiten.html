@@ -3,7 +3,6 @@
 {#pagecss}
 <link rel="stylesheet" type="text/css" href="/css/stuecke.css">
 {/pagecss}
-{#script}<script type="text/javascript" src="/js/bubbles.js" defer></script>{/script}
 {#header}
 <header class="standard">
     <svg id="searchIcon" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
@@ -17,11 +16,11 @@
 {/header}
 {#for performance in performances}
 <a class="card" href="">
-    <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"><!--todo use title attribute for alt-text-->
+    <div class="image" style="background-image: url('{#if performance.thumbnailPath}{performance.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"><!--todo use title attribute for alt-text-->
     <div class="overlay">
-        <span id="month">Mai</span>
-        <span id="day">02</span>
-        <span id="time">19:30</span>
+        <span id="month">{performance.month}</span>
+        <span id="day">{performance.day}</span>
+        <span id="time">{#if performance.time}{performance.time}{/if}</span>
     </div>
     </div>
     <div class="basic-info">
@@ -37,7 +36,7 @@
     </div>
 </a>
 {/for}
-<form class="showMore" action="/mobile/events" method="GET">
+<form class="showMore" action="/mobile/performances" method="GET">
     <button class="button" type="submit">Mehr anzeigen</button>
     <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
     <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
@@ -46,7 +45,7 @@
     <div class="overlay">
         <span class="search-section">Suchen nach</span>
         <div class="button-container">
-            <form action="/mobile/events" method="GET">
+            <form action="/mobile/performances" method="GET">
                 <input class="search-input" type="text" placeholder="Suchbegriff eingeben" name="filter[name]">
                 <button class="confirm-button" type="submit">Bestätigen</button>
             </form>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Filtern</title>
+    <!--<link rel="stylesheet" type="text/css" href="/css/unpoly.css" >
+    <script type="text/javascript" src="/js/unpoly.js" defer></script>-->
+</head>
+<body>
+<main>
+<div id="filterOverlay">
+    <div class="overlay">
+        <span class="filter-text">Filtern nach</span>
+        <div class="button-container">
+            <form action="/mobile/events" method="GET">
+                <span class="filter-section">Zeitraum</span>
+                <input class="filter-checkbox" type="checkbox" id="7days-checkbox" name="filter[week]" value="7days">
+                <label class="filter-label" for="7days-checkbox">nächste 7 Tage</label>
+                <input class="filter-checkbox" type="checkbox" id="30days-checkbox" name="filter[month]" value="7days">
+                <label class="filter-label" for="30days-checkbox">nächste 30 Tage</label>
+                <span class="filter-section">Besonderheit</span>
+                <input class="filter-checkbox" type="checkbox" id="premiere-checkbox" name="filter[performanceType]" value="Premiere">
+                <label class="filter-label" for="premiere-checkbox">Premiere</label>
+                <input class="filter-checkbox" type="checkbox" id="trial-checkbox" name="filter[performanceType]" value="Offene Probe">
+                <label class="filter-label" for="trial-checkbox">Offene Probe</label>
+                <span class="filter-section">Sparte</span>
+                <input class="filter-checkbox" type="checkbox" id="musical-checkbox" name="filter[playType]" value="Musical">
+                <label class="filter-label" for="musical-checkbox">Musical</label>
+                <input class="filter-checkbox" type="checkbox" id="oper-checkbox" name="filter[playType]" value="Oper">
+                <label class="filter-label" for="oper-checkbox">Oper</label>
+                <input class="filter-checkbox" type="checkbox" id="schauspiel-checkbox" name="filter[playType]" value="Schauspiel">
+                <label class="filter-label" for="schauspiel-checkbox">Schauspiel</label>
+                <input class="filter-checkbox" type="checkbox" id="tanz-checkbox" name="filter[playType]" value="Tanz">
+                <label class="filter-label" for="tanz-checkbox">Tanz</label>
+                <button class="confirm-button" type="submit">Bestätigen</button>
+            </form>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

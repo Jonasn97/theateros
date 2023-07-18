@@ -6,12 +6,17 @@
         <title>{#insert title}Default Title{/}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/css/unpoly.css" >
         <link rel="stylesheet" type="text/css" href="/css/base.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Taviraj&display=swap" >
-        {#insert pagecss}{/}
-        
+        <script type="text/javascript" src="/js/unpoly.js" defer></script>
+        {#insert pagecss}
+
+            {/}
+        {#insert script}
+            {/}
     </head>
     <body>
         {#insert header}
@@ -57,6 +62,5 @@
                 </a>
             </nav>
         </footer>
-    {#insert script}{/}
     </body>
 </html>
