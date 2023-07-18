@@ -31,7 +31,7 @@ header.extended .info {
     align-items: stretch;
 }
 
-header.extended .overlay {
+header.extended .colored-layer {
     background: linear-gradient(0deg, rgba(157,130,118,0.1) 0%,rgba(157,130,118,0.3) 100%);
 }
 /* || Detail Tabs */

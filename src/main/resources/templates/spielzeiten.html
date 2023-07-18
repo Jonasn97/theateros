@@ -17,7 +17,7 @@
 {#for performance in performances}
 <a class="card" href="">
     <div class="image" style="background-image: url('{#if performance.thumbnailPath}{performance.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');"><!--todo use title attribute for alt-text-->
-    <div class="overlay">
+    <div class="colored-layer">
         <span id="month">{performance.month}</span>
         <span id="day">{performance.day}</span>
         <span id="time">{#if performance.time}{performance.time}{/if}</span>
@@ -42,7 +42,7 @@
     <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
 </form>
 <div id="searchOverlay">
-    <div class="overlay">
+    <div class="colored-layer">
         <span class="search-section">Suchen nach</span>
         <div class="button-container">
             <form action="/mobile/performances" method="GET">
@@ -54,7 +54,7 @@
 </div>
 
 <div id="filterOverlay">
-    <div class="overlay">
+    <div class="colored-layer">
         <span class="filter-text">Filtern nach</span>
         <div class="button-container">
             <form action="/mobile/events" method="GET">

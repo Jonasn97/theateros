@@ -5,7 +5,7 @@
     {/pagecss}
 {#header}
     <header class="extended" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');">
-        <div class="overlay">
+        <div class="colored-layer">
             <div class="title"><a href="{#if referrer}{referrer}{#else}/mobile/events{/if}"><svg class="icon" width="13" height="21" viewBox="0 0 13 21" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0.321857 9.72255L9.22301 0.821857C9.65215 0.392714 10.3483 0.392714 10.7774 0.821857L11.8157 1.86013C12.2444 2.28882 12.2449 2.98314 11.8176 3.41274L4.76304 10.4998L11.8171 17.5873C12.2449 18.0169 12.244 18.7112 11.8153 19.1399L10.777 20.1781C10.3478 20.6073 9.65169 20.6073 9.22255 20.1781L0.321857 11.277C-0.107286 10.8478 -0.107286 10.1517 0.321857 9.72255Z"/>
                 </svg></a>
@@ -55,7 +55,7 @@
         {#for performance in event.performances}
         <div class="card">
             <div class="image" style="background-image: url('{#if event.thumbnailPath}{event.thumbnailPath}{#else}/media/sg221017196.jpeg{/if}');">
-                <div class="overlay">
+                <div class="colored-layer">
                     <span id="month">{performance.month}</span>
                     <span id="day">{performance.day}</span>
                     <span id="time">{#if performance.time}{performance.time}{/if}</span>
