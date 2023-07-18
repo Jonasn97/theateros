@@ -7,6 +7,7 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 public class PerformanceDTO {
+    public long id;
     public String month;
     public String day;
     public String time;
@@ -20,7 +21,8 @@ public class PerformanceDTO {
     public PerformanceDTO() {
     }
 
-    public PerformanceDTO(LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
+    public PerformanceDTO(long id, LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
+        this.id = id;
         this.day = datetime.format(java.time.format.DateTimeFormatter.ofPattern("dd"));
         this.month = datetime.format(java.time.format.DateTimeFormatter.ofPattern("MMMM"));
         if(hasTime) {
@@ -32,7 +34,7 @@ public class PerformanceDTO {
     }
     public static class Converter {
         public static PerformanceDTO toDTO(Performance performance) {
-            return new PerformanceDTO(performance.datetime, performance.hasTime, performance.bookingLink, performance.isCancelled, performance.performanceType);
+            return new PerformanceDTO(performance.id, performance.datetime, performance.hasTime, performance.bookingLink, performance.isCancelled, performance.performanceType);
         }
     }
 }

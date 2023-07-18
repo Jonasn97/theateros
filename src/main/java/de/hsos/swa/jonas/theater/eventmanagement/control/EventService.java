@@ -34,4 +34,9 @@ public class EventService implements EventOperations {
     public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
         return eventCatalog.getPerformances(queryParametersDTO);
     }
+
+    @Override
+    public Optional<Performance> getPerformance(Long id) {
+        return eventCatalog.getPerformance(id);
+    }
 }

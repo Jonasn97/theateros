@@ -96,6 +96,12 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-security-jpa</artifactId>
         </dependency>
+        <!--calender-->
+        <dependency>
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j</artifactId>
+            <version>3.2.11</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

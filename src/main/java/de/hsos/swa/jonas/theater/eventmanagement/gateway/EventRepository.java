@@ -7,7 +7,6 @@ import de.hsos.swa.jonas.theater.shared.Performance;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,6 +82,11 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
                 .skip(queryParametersDTO.pageNumber * queryParametersDTO.pageSize)
                 .limit(queryParametersDTO.pageSize)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Performance> getPerformance(Long id) {
+        return Performance.findByIdOptional(id);
     }
 
     private boolean isPerformanceWithinDateRange(Event event, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {
