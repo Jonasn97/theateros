@@ -8,3 +8,94 @@ header.standard {
     padding: 8px 8px 8px 16px;
     border-bottom: 1px solid #CCC;
 }
+.overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overlay.title {
+    text-transform: uppercase;
+    font-size: 13px;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filter-section {
+    display: block;
+    margin-top: 16px;
+    color: #888;
+}
+.filter-checkbox + .filter-label {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 20px;
+    border: 0.5px solid #888;
+    background: #FFF;
+    color: #CCC;
+    cursor: pointer;
+}
+
+.filter-checkbox {
+    display: none;
+}
+
+.filter-label {
+    display: inline-block;
+    padding: 2px;
+    margin-top: 4px;
+    margin-right: 4px;
+    border-radius: 20px;
+    background-color: #fff;
+    border: 1px solid #888;
+    color: #888;
+    text-align: center;
+    cursor: pointer;
+    line-height: inherit;
+}
+
+.filter-checkbox:checked + .filter-label {
+    border-color: #9747FF;
+    color: #9747FF;
+}
+.filter-label:hover {
+    background-color: #f1f1f1;
+    color: #9747ff;
+}
+
+.confirm-button {
+    display: block;
+    padding: 8px 16px;
+    background-color: #9747FF;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    margin: 4px 0 0 0;
+}
+
+.confirm-button:hover {
+    background-color: #7B2EB3;
+}
+.search-input {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #888;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #9747ff;
+}

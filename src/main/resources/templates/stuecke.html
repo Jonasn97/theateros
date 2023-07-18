@@ -39,10 +39,19 @@
         </h3>
     </div>
 </a>
+{#else}
+        <h2>Keine Stücke gefunden</h2>
 {/for}
 <form class="showMore" action="/mobile/events" method="GET" up-target="main">
     <button class="button" type="submit">Mehr anzeigen</button>
     <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
     <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
+    <input type="hidden" name="filter[startDateTime]" value="{queryParameters.startDateTimeFilter}">
+    <input type="hidden" name="filter[endDateTime]" value="{queryParameters.endDateTimeFilter}">
+    <input type="hidden" name="filter[name]" value="{queryParameters.nameFilter}">
+    <input type="hidden" name="filter[status]" value="{queryParameters.statusFilter}">
+    <input type="hidden" name="filter[eventType]" value="{queryParameters.playTypeFilter}">
+    <input type="hidden" name="filter[performanceType]" value="{queryParameters.performanceTypeFilter}">
+    <input type="hidden" name="include" value="{queryParameters.include}">
 </form>
 {/include}
