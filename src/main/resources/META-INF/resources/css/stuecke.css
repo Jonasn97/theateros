@@ -98,19 +98,3 @@ header.standard {
 .confirm-button:hover {
     background-color: #7B2EB3;
 }
-.search-input {
-    display: block;
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid #888;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-    margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: #9747ff;
-}

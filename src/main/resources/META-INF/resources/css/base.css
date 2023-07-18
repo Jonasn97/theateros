@@ -164,6 +164,25 @@ button:hover {
     border: #D7B9FF;
     color: #9747FF;
 }
+
+
+/* || Input */
+input {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #888;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #9747ff;
+}
 /* || Bottom Navigation */
 nav {
     background-color: #fff;
