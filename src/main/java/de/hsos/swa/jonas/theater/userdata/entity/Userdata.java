@@ -12,11 +12,11 @@ import java.util.Set;
 public class Userdata extends PanacheEntity {
     public String username;
     @ElementCollection
-    public Set<Long> commentId;
+    public Set<Long> commentIds;
     @OneToMany
-    public Set<UserEvent> event;
+    public Set<UserEvent> userEvents;
     @OneToMany
-    public Set<UserPerformance> performance;
+    public Set<UserPerformance> userPerformances;
 
     @Transactional(Transactional.TxType.MANDATORY)
     public static boolean add(String username){
