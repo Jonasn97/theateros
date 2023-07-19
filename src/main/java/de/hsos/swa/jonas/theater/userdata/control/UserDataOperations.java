@@ -1,6 +1,6 @@
 package de.hsos.swa.jonas.theater.userdata.control;
 
-import de.hsos.swa.jonas.theater.userdata.entity.EventState;
+import de.hsos.swa.jonas.theater.shared.EventState;
 
 import java.util.Map;
 import java.util.Set;

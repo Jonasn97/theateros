@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.userdata.entity;
+package de.hsos.swa.jonas.theater.shared;
 
 public enum EventState {
     INTERESTED("Interessiert"),

@@ -1,6 +1,6 @@
 package de.hsos.swa.jonas.theater.userdata.gateway;
 
-import de.hsos.swa.jonas.theater.userdata.entity.EventState;
+import de.hsos.swa.jonas.theater.shared.EventState;
 import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
 import de.hsos.swa.jonas.theater.userdata.entity.Userdata;
 

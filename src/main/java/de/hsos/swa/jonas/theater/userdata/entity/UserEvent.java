@@ -1,5 +1,6 @@
 package de.hsos.swa.jonas.theater.userdata.entity;
 
+import de.hsos.swa.jonas.theater.shared.EventState;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;

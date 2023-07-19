@@ -6,7 +6,7 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Event;
-import de.hsos.swa.jonas.theater.userdata.entity.EventState;
+import de.hsos.swa.jonas.theater.shared.EventState;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.Template;
 import io.vertx.core.eventbus.EventBus;

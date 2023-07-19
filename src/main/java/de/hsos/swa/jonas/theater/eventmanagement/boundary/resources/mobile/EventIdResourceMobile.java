@@ -1,13 +1,9 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.InitialPlayDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingDetailEventDTO;
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingEventDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.Event;
-import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
-import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;
-import de.hsos.swa.jonas.theater.userdata.entity.EventState;
+import de.hsos.swa.jonas.theater.shared.EventState;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
@@ -18,8 +14,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
