@@ -6,13 +6,18 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.Performance;
 import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.userdata.entity.EventState;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.Template;
+import io.vertx.core.eventbus.EventBus;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +29,9 @@ public class EventResourceMobile {
     EventOperations eventOperations;
     @Inject
     Template stuecke;
-
+    @Inject
+    EventBus eventBus;
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @GET
@@ -36,9 +43,17 @@ public class EventResourceMobile {
                                @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                @QueryParam("include") String include,
                                @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                               @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
+                               @DefaultValue("10")@QueryParam("page[size]") Long pageSize,@Context SecurityContext securityContext) {
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
+        String username;
+        Map<Long, EventState> eventStates = null;
+        if(securityContext.getUserPrincipal()!= null && securityContext.getUserPrincipal().getName()!= null) {
+            username = securityContext.getUserPrincipal().getName();
+        Set<Long> eventIds = events.stream().map(event -> event.id).collect(Collectors.toSet());
+        eventStates = eventOperations.getEventStatus(username, eventIds);
+        }
+        Map<Long, EventState> finalEventStates = eventStates;
         List<OutgoingEventDTO> playDTOS = events.stream().map(play -> {
             LocalDateTime currentTime = LocalDateTime.now();
             //find next performance with date and time
@@ -47,12 +62,15 @@ public class EventResourceMobile {
                     .filter(performance -> performance.datetime.isAfter(currentTime)) // Filtere vergangene Vorstellungen aus
                     .min(Comparator.comparing(performance -> performance.datetime));
             OutgoingEventDTO outgoingEventDTO = OutgoingEventDTO.Converter.toDTO(play);
+            if(finalEventStates != null)
+                outgoingEventDTO.eventState = finalEventStates.get(play.id);
             if (nextPerformance.isPresent()) {
                 Performance performance = nextPerformance.get();
                 outgoingEventDTO.nextPerformance = OutgoingNextPerformanceDTO.Converter.toDTO(performance);
             }
             return outgoingEventDTO;
         }).collect(Collectors.toList());
+
         int active = 1;
         TemplateInstance templateInstance = stuecke.data("events", playDTOS, "queryParameters", queryParametersDTO, "active", active);
     String html = templateInstance.render();
