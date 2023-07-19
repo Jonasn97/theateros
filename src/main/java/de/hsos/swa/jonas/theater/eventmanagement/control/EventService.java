@@ -4,16 +4,22 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO
 import de.hsos.swa.jonas.theater.shared.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.EventCatalog;
 import de.hsos.swa.jonas.theater.shared.Performance;
+import de.hsos.swa.jonas.theater.userdata.entity.EventState;
+import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @ApplicationScoped
 public class EventService implements EventOperations {
     @Inject
     EventCatalog eventCatalog;
+    @Inject
+    UserDataCatalog userDataCatalog;
 
     @Override
     public Collection<Event> getEvents(QueryParametersDTO queryParametersDTO) {
@@ -28,6 +34,16 @@ public class EventService implements EventOperations {
     @Override
     public Optional<Event> getEventsById(long playId) {
         return eventCatalog.getEventsById(playId);
+    }
+
+    @Override
+    public Map<Long, EventState> getEventStatus(String username, Set<Long> eventIds) {
+        return userDataCatalog.getEventState(username, eventIds);
+    }
+
+    @Override
+    public Optional<EventState> getEventStatus(String username, Long eventId) {
+        return userDataCatalog.getEventState(username, eventId);
     }
 
     @Override
