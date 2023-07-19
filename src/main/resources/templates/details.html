@@ -17,7 +17,8 @@
                 <div class="basic-info">
                     <div>
                         <h2 class="white">{event.title} - {event.location}</h2>
-                        <span id="chip">will hin</span>
+                        <a href="/templates/states.html" require-session up-layer="new" up-mode="modal" id="chip"{#if event.eventState}
+                           { class="{event.eventState.cssClass} " > {event.eventState.getLabel}  {#else} class = "none-state">Nicht gesetzt {/if}</a>
                     </div>
                     <h3 class="white">{event.kind}</h3>
                     <h3 class="white">{#if event.duration}{event.duration}{/if}</h3>
