@@ -22,7 +22,8 @@ public class LoginResourceMobile {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getLoginPage(){
-        String html = login.render();
+        int active = 0;
+        String html = login.data("active", active).render();
         return Response.ok().entity(html).build();
     }
 

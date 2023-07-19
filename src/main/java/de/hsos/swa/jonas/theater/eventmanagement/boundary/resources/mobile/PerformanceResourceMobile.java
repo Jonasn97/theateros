@@ -44,7 +44,8 @@ public class PerformanceResourceMobile {
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Performance> performances = eventOperations.getPerformances(queryParametersDTO);
         Collection<PerformanceEventDTO> performanceEventDTOS = performances.stream().map(PerformanceEventDTO.Converter::toDTO).collect(java.util.stream.Collectors.toList());
-        String html = spielzeiten.data("performances", performanceEventDTOS, "queryParameters", queryParametersDTO).render();
+        int active = 2;
+        String html = spielzeiten.data("performances", performanceEventDTOS, "queryParameters", queryParametersDTO, "active", active).render();
         return Response.ok().entity(html).build();
     }
     @Path("/performances/{id}")

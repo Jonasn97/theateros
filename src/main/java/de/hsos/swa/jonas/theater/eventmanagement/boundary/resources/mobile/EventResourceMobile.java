@@ -53,7 +53,8 @@ public class EventResourceMobile {
             }
             return outgoingEventDTO;
         }).collect(Collectors.toList());
-        TemplateInstance templateInstance = stuecke.data("events", playDTOS, "queryParameters", queryParametersDTO);
+        int active = 1;
+        TemplateInstance templateInstance = stuecke.data("events", playDTOS, "queryParameters", queryParametersDTO, "active", active);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
     }

@@ -34,6 +34,7 @@ public class EventIdResourceMobile {
         Optional<Event> play = eventOperations.getEventsById(playId);
         if(play.isPresent()){
         OutgoingDetailEventDTO outgoingDetailEventDTO = OutgoingDetailEventDTO.Converter.toDTO(play.get());
+        int active = 1;
             TemplateInstance instance = details.data("event", outgoingDetailEventDTO, "referrer",referrer);
             String html = instance.render();
             return Response.ok().entity(html).build();

@@ -28,7 +28,8 @@ public class UserResourceMobile {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Response getLoggedInPage(@Context SecurityContext securityContext){
         String username = securityContext.getUserPrincipal().getName();
-        TemplateInstance instance = yours.data("user", username);
+        int active = 0;
+        TemplateInstance instance = yours.data("user", username, "active",active);
         String html = instance.render();
         return Response.ok().entity(html).build();
     }

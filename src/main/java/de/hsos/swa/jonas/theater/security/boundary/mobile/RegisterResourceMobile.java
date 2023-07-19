@@ -24,7 +24,8 @@ public class RegisterResourceMobile {
     @Path("/register")
     @Produces(MediaType.TEXT_HTML)
     public Response getRegisterPage() {
-        String html = register.render();
+        int active = 0;
+        String html = register.data("active", active).render();
         return Response.ok().entity(html).build();
     }
 
