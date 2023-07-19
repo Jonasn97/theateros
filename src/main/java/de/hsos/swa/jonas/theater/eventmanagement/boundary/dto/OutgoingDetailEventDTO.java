@@ -2,6 +2,7 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 
 import de.hsos.swa.jonas.theater.shared.Event;
 import de.hsos.swa.jonas.theater.shared.Performance;
+import de.hsos.swa.jonas.theater.userdata.entity.EventState;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,7 @@ public class OutgoingDetailEventDTO {
     public String title;
     public String kind;
     public String location;
+    public EventState eventState;
     public String thumbnailPath;
     public String duration;
     public String description;
@@ -24,6 +26,10 @@ public class OutgoingDetailEventDTO {
     public Set<String> spotifyUris;
     public Set<String> vimeoUris;
     public Set<String> soundcloudUris;
+
+    public void setEventState(EventState eventState) {
+        this.eventState = eventState;
+    }
 
     public static class Converter {
         public static OutgoingDetailEventDTO toDTO(Event event) {

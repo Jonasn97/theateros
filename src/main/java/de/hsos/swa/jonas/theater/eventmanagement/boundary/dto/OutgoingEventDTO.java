@@ -1,12 +1,14 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 
 import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.userdata.entity.EventState;
 
 public class OutgoingEventDTO {
     public long id;
     public String title;
     public String kind;
     public String thumbnailPath;
+    public EventState eventState;
     public OutgoingNextPerformanceDTO nextPerformance = null;
 
     public OutgoingEventDTO(long id, String title, String kind, String thumbnailPath) {
