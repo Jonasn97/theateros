@@ -24,12 +24,17 @@ public class User extends PanacheEntity {
 
     @Transactional(Transactional.TxType.MANDATORY)
     public static void add(String username, String password, String role) {
-        User user = new User();
-        user.username = username;
-        user.password = BcryptUtil.bcryptHash(password);
-        user.role = role;
-        user.persist();
+        User.find("username", username).firstResultOptional().ifPresentOrElse(
+                user -> {
+                    throw new RuntimeException("User already exists");
+                },
+                () -> {
+                    User user = new User();
+                    user.username = username;
+                    user.password = BcryptUtil.bcryptHash(password);
+                    user.role = role;
+                    user.persist();
+                }
+        );
     }
-
-
 }

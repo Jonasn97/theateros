@@ -10,6 +10,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Path("/mobile")
 public class RegisterResourceMobile {
@@ -17,10 +19,11 @@ public class RegisterResourceMobile {
     javax.enterprise.event.Event<String> registerEvent;
     @Inject
     Template register;
+
     @GET
     @Path("/register")
     @Produces(MediaType.TEXT_HTML)
-    public Response getRegisterPage(){
+    public Response getRegisterPage() {
         String html = register.render();
         return Response.ok().entity(html).build();
     }
@@ -30,9 +33,9 @@ public class RegisterResourceMobile {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Response registerUser(@FormParam("username")String username, @FormParam("password")String password){
+    public Response registerUser(@FormParam("username") String username, @FormParam("password") String password) {
         User.add(username, password, "user");
-        registerEvent.fire(username);
+       registerEvent.fire(username);
         return Response.seeOther(URI.create("/mobile/login")).build();
-    }
+        }
 }

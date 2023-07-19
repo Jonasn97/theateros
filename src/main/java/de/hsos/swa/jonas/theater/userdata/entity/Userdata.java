@@ -19,9 +19,17 @@ public class Userdata extends PanacheEntity {
     public Set<UserPerformance> performance;
 
     @Transactional(Transactional.TxType.MANDATORY)
-    public static void add(String username){
-        Userdata userdata = new Userdata();
-        userdata.username = username;
-        userdata.persist();
+    public static boolean add(String username){
+        Userdata.find("username", username).firstResultOptional().ifPresentOrElse(
+                user -> {
+                    throw new RuntimeException("User already exists");
+                },
+                () -> {
+                    Userdata user = new Userdata();
+                    user.username = username;
+                    user.persist();
+                }
+        );
+        return false;
     }
 }
