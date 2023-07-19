@@ -3,9 +3,12 @@ package de.hsos.swa.jonas.theater.eventmanagement.control;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.shared.Event;
 import de.hsos.swa.jonas.theater.shared.Performance;
+import de.hsos.swa.jonas.theater.userdata.entity.EventState;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public interface EventOperations {
     Collection<Event> getEvents(QueryParametersDTO queryParametersDTO);
@@ -13,6 +16,8 @@ public interface EventOperations {
     long getEventsCount(QueryParametersDTO queryParametersDTO);
 
     Optional<Event> getEventsById(long playId);
+    Map<Long, EventState> getEventStatus(String username, Set<Long> eventIds);
+    Optional<EventState> getEventStatus(String username, Long eventId);
 
     Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO);
 
