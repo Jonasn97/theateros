@@ -145,11 +145,39 @@ header.standard {
 }
 /**/
 /* chip */
+.seen-state {
+    color: #4B6A60;
+    background: #Cee5DD;
+}
+
+.interested-state {
+    color: #9747FF;
+    background: #D7B7FF;
+}
+
+.not-interested-state {
+    color: #B95130;
+    background: #FB949D;
+}
+
+.unsure-state {
+    color: #43473F;
+    background: #FFECC7;
+}
+
+.miss-out-state {
+    color: #755BEC;
+    background: #B7BBF7;
+}
+
+.none-state {
+    color: #5b6056;
+    background: #f1f0ed;
+}
+
 #chip {
     font-size: 11px;
-    color: #9747FF;
     border-radius: 20px;
-    background: #D7B9FF; 
     margin-left: 8px;
     margin-right: 8px;
     padding: 2px 8px 2px 8px;
