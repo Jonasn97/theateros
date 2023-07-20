@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.crawler.gateway;
+package de.hsos.swa.jonas.theater.dataprovider.gateway;
 
 public class InitialPlayDTO {
     public String infolink;

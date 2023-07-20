@@ -1,8 +1,7 @@
-package de.hsos.swa.jonas.theater.crawler.gateway;
+package de.hsos.swa.jonas.theater.dataprovider.gateway;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.List;
 import java.util.Set;
 
 public class EventElementDTO {

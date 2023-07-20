@@ -1,7 +1,7 @@
-package de.hsos.swa.jonas.theater.crawler.boundary.resources.api;
+package de.hsos.swa.jonas.theater.dataprovider.boundary.resources.api;
 
-import de.hsos.swa.jonas.theater.crawler.control.CrawlerOperations;
-import de.hsos.swa.jonas.theater.crawler.control.WebsiteDownloader;
+import de.hsos.swa.jonas.theater.dataprovider.control.CrawlerOperations;
+import de.hsos.swa.jonas.theater.dataprovider.control.WebsiteDownloader;
 import de.hsos.swa.jonas.theater.shared.dto.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;

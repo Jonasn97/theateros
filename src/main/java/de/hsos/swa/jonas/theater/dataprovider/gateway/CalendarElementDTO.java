@@ -1,7 +1,6 @@
-package de.hsos.swa.jonas.theater.crawler.gateway;
+package de.hsos.swa.jonas.theater.dataprovider.gateway;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class CalendarElementDTO {
     public String infolink;

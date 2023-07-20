@@ -1,6 +1,6 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.InitialPlayDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.shared.*;
@@ -23,7 +23,7 @@ import java.util.Collection;
 //2023-06-27T10:15:30
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("web/events")
+@Path("api/events")
 public class EventResourceApi {
     private final static long FIRSTPAGE = 0;
     private final static String FIRSTPAGE_STRING = "0";
@@ -73,9 +73,9 @@ public class EventResourceApi {
                     String type = "play";
 
                     LinksDTO linksDTO = createSelfLink(id);
-                    InitialPlayDTO initialPlayDTO = InitialPlayDTO.Converter.toDTO(play);
+                    OutgoingEventDTOApi outgoingEventDTOApi = OutgoingEventDTOApi.Converter.toDTO(play);
                     RelationshipDTO<Object> relationshipDTO = addRelationship(play.id, "performances");
-                    return new ResourceObjectDTO<>(id, type, initialPlayDTO, relationshipDTO, linksDTO);
+                    return new ResourceObjectDTO<>(id, type, outgoingEventDTOApi, relationshipDTO, linksDTO);
                 })
                 .toList();
         responseWrapperDTO.links = createPaginationLinks(queryParametersDTO);

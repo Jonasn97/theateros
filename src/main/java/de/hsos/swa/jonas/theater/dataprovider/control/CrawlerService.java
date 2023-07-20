@@ -1,8 +1,8 @@
-package de.hsos.swa.jonas.theater.crawler.control;
+package de.hsos.swa.jonas.theater.dataprovider.control;
 
-import de.hsos.swa.jonas.theater.crawler.entity.CrawlerCatalog;
-import de.hsos.swa.jonas.theater.crawler.gateway.CalendarElementDTO;
-import de.hsos.swa.jonas.theater.crawler.gateway.EventElementDTO;
+import de.hsos.swa.jonas.theater.dataprovider.entity.CrawlerCatalog;
+import de.hsos.swa.jonas.theater.dataprovider.gateway.CalendarElementDTO;
+import de.hsos.swa.jonas.theater.dataprovider.gateway.EventElementDTO;
 import io.quarkus.logging.Log;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,12 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

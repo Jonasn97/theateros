@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.crawler.control;
+package de.hsos.swa.jonas.theater.dataprovider.control;
 
 import org.jsoup.nodes.Document;
 

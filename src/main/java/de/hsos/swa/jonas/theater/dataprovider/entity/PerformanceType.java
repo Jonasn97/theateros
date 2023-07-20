@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.crawler.entity;
+package de.hsos.swa.jonas.theater.dataprovider.entity;
 
 public enum PerformanceType {
     LAST_PERFORMANCE("Letzte Vorstellung"),

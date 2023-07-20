@@ -1,6 +1,6 @@
-package de.hsos.swa.jonas.theater.crawler.gateway;
+package de.hsos.swa.jonas.theater.dataprovider.gateway;
 
-import de.hsos.swa.jonas.theater.crawler.entity.CrawlerCatalog;
+import de.hsos.swa.jonas.theater.dataprovider.entity.CrawlerCatalog;
 import de.hsos.swa.jonas.theater.shared.Event;
 import de.hsos.swa.jonas.theater.shared.Performance;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
