@@ -73,9 +73,9 @@ public class PerformanceResourceMobile {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Performance performance = optionalPerformance.get();
-        String eventName = performance.event.getTitle();
-        Location eventLocation =new Location(performance.event.getLocation());
-        Date date = new Date(performance.datetime.toEpochSecond(java.time.ZoneOffset.UTC));
+        String eventName = performance.getEvent().getTitle();
+        Location eventLocation =new Location(performance.getEvent().getLocation());
+        Date date = new Date(performance.getDatetime().toEpochSecond(java.time.ZoneOffset.UTC));
         VEvent vEvent = new VEvent(date, eventName);
         vEvent.getProperties().add(eventLocation);
         calenderFile.getComponents().add(vEvent);

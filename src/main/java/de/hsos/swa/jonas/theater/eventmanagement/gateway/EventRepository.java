@@ -30,8 +30,8 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
                         }
                         return play.getPerformances().stream()
                                 .anyMatch(performance ->
-                                        (performance.datetime != null &&
-                                                performance.datetime.compareTo(queryParametersDTO.startDateTimeFilter)>=0 && performance.datetime.compareTo(queryParametersDTO.endDateTimeFilter)<=0
+                                        (performance.getDatetime() != null &&
+                                                performance.getDatetime().compareTo(queryParametersDTO.startDateTimeFilter)>=0 && performance.getDatetime().compareTo(queryParametersDTO.endDateTimeFilter)<=0
                                 ));
                     })
                     .skip(queryParametersDTO.pageNumber * queryParametersDTO.pageSize)
@@ -56,8 +56,8 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
 
                         return play.getPerformances().stream()
                                 .anyMatch(performance ->
-                                        (performance.datetime != null &&
-                                                performance.datetime.compareTo(queryParametersDTO.startDateTimeFilter)>=0)
+                                        (performance.getDatetime() != null &&
+                                                performance.getDatetime().compareTo(queryParametersDTO.startDateTimeFilter)>=0)
                                 );
                     })
                     .count();

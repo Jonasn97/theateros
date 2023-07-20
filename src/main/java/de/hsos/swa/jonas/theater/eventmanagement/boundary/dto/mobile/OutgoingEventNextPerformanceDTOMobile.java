@@ -27,7 +27,7 @@ public class OutgoingEventNextPerformanceDTOMobile {
 
     public static class Converter {
         public static OutgoingEventNextPerformanceDTOMobile toDTO(Performance nextPerformance) {
-            return new OutgoingEventNextPerformanceDTOMobile(nextPerformance.performanceType, nextPerformance.datetime, nextPerformance.hasTime);
+            return new OutgoingEventNextPerformanceDTOMobile(nextPerformance.getPerformanceType(), nextPerformance.getDatetime(), nextPerformance.isHasTime());
         }
     }
 }

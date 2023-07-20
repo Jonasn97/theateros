@@ -34,13 +34,13 @@ public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBa
             updatedElements++;
         }
         Performance existingPerformance = event.getPerformances().stream()
-                .filter(p -> Objects.equals(p.auid, calendarElementDTO.auid))
+                .filter(p -> Objects.equals(p.getAuid(), calendarElementDTO.auid))
                 .findFirst()
                 .orElse(null);
-        if (existingPerformance != null && (existingPerformance.isCancelled != calendarElementDTO.isCancelled || !Objects.equals(existingPerformance.performanceType, calendarElementDTO.performanceType))) {
-            existingPerformance.bookingLink = calendarElementDTO.bookingLink;
-            existingPerformance.isCancelled = calendarElementDTO.isCancelled;
-            existingPerformance.performanceType = calendarElementDTO.performanceType;
+        if (existingPerformance != null && (existingPerformance.isCancelled() != calendarElementDTO.isCancelled || !Objects.equals(existingPerformance.getPerformanceType(), calendarElementDTO.performanceType))) {
+            existingPerformance.setBookingLink(calendarElementDTO.bookingLink);
+            existingPerformance.setCancelled(calendarElementDTO.isCancelled);
+            existingPerformance.setPerformanceType(calendarElementDTO.performanceType);
             existingPerformance.persist();
         } else {
             Performance performance = new Performance(event, calendarElementDTO.auid, calendarElementDTO.datetime, calendarElementDTO.hasTime, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);

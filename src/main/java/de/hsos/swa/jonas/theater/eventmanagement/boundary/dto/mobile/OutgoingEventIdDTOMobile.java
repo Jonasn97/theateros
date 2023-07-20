@@ -43,7 +43,7 @@ public class OutgoingEventIdDTOMobile {
             dto.description = event.getDescription();
             dto.performances = new ArrayList<>();
             List<Performance> sortedPerformances = event.getPerformances().stream()
-                    .sorted((p1, p2) -> p1.datetime.compareTo(p2.datetime)).toList();
+                    .sorted((p1, p2) -> p1.getDatetime().compareTo(p2.getDatetime())).toList();
             dto.performances = sortedPerformances.stream()
                     .map(OutgoingPerformanceDTOMobile.Converter::toDTO)
                     .collect(Collectors.toList());

@@ -32,7 +32,7 @@ public class OutgoingPerformanceDTOMobile {
     }
     public static class Converter {
         public static OutgoingPerformanceDTOMobile toDTO(Performance performance) {
-            return new OutgoingPerformanceDTOMobile(performance.id, performance.datetime, performance.hasTime, performance.bookingLink, performance.isCancelled, performance.performanceType);
+            return new OutgoingPerformanceDTOMobile(performance.id, performance.getDatetime(), performance.isHasTime(), performance.getBookingLink(), performance.isCancelled(), performance.getPerformanceType());
         }
     }
 }

@@ -12,21 +12,21 @@ import java.time.LocalDateTime;
 public class Performance extends PanacheEntity {
 
         @ManyToOne
-        public Event event;
+        private Event event;
 
         @UpdateTimestamp
-        public Timestamp lastUpdateTimestamp;
+        private Timestamp lastUpdateTimestamp;
         @CreationTimestamp
-        public Timestamp createdTimestamp;
+        private Timestamp createdTimestamp;
         @Convert(converter = LocalDateTimeConverter.class)
-        public LocalDateTime datetime;
-        public String auid;
-        public String bookingLink;
-        public boolean hasTime;
+        private LocalDateTime datetime;
+        private String auid;
+        private String bookingLink;
+        private boolean hasTime;
 
-        public boolean isCancelled;
+        private boolean isCancelled;
 
-        public String performanceType; // Letzte Vorstellung, Wiederaufnahme, offene Probe, Premiere, Zusatzvorstellung
+        private String performanceType; // Letzte Vorstellung, Wiederaufnahme, offene Probe, Premiere, Zusatzvorstellung
 
         //freie Plätze
 
@@ -60,5 +60,77 @@ public class Performance extends PanacheEntity {
                         }
                         return null;
                 }
+        }
+
+        public Event getEvent() {
+                return event;
+        }
+
+        public void setEvent(Event event) {
+                this.event = event;
+        }
+
+        public Timestamp getLastUpdateTimestamp() {
+                return lastUpdateTimestamp;
+        }
+
+        public void setLastUpdateTimestamp(Timestamp lastUpdateTimestamp) {
+                this.lastUpdateTimestamp = lastUpdateTimestamp;
+        }
+
+        public Timestamp getCreatedTimestamp() {
+                return createdTimestamp;
+        }
+
+        public void setCreatedTimestamp(Timestamp createdTimestamp) {
+                this.createdTimestamp = createdTimestamp;
+        }
+
+        public LocalDateTime getDatetime() {
+                return datetime;
+        }
+
+        public void setDatetime(LocalDateTime datetime) {
+                this.datetime = datetime;
+        }
+
+        public String getAuid() {
+                return auid;
+        }
+
+        public void setAuid(String auid) {
+                this.auid = auid;
+        }
+
+        public String getBookingLink() {
+                return bookingLink;
+        }
+
+        public void setBookingLink(String bookingLink) {
+                this.bookingLink = bookingLink;
+        }
+
+        public boolean isHasTime() {
+                return hasTime;
+        }
+
+        public void setHasTime(boolean hasTime) {
+                this.hasTime = hasTime;
+        }
+
+        public boolean isCancelled() {
+                return isCancelled;
+        }
+
+        public void setCancelled(boolean cancelled) {
+                isCancelled = cancelled;
+        }
+
+        public String getPerformanceType() {
+                return performanceType;
+        }
+
+        public void setPerformanceType(String performanceType) {
+                this.performanceType = performanceType;
         }
 }
