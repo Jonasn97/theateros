@@ -19,7 +19,7 @@ public class OutgoingEventDTOApi {
     }
     public static class Converter{
         public static OutgoingEventDTOApi toDTO(Event event){
-            return new OutgoingEventDTOApi(event.title, event.kind, event.location, event.thumbnailPath);
+            return new OutgoingEventDTOApi(event.getTitle(), event.getKind(), event.getLocation(), event.getThumbnailPath());
         }
     }
 

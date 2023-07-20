@@ -25,15 +25,15 @@ public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBa
             event = new Event(calendarElementDTO.stid, calendarElementDTO.infolink, calendarElementDTO.overline, calendarElementDTO.title, calendarElementDTO.kind, calendarElementDTO.location);
             event.persist();
             updatedElements++;
-        } else if (!Objects.equals(event.overline, calendarElementDTO.overline) || !Objects.equals(event.title, calendarElementDTO.title) || !Objects.equals(event.kind, calendarElementDTO.kind) || !Objects.equals(event.location, calendarElementDTO.location)){
-            event.overline = calendarElementDTO.overline;
-            event.title = calendarElementDTO.title;
-            event.kind = calendarElementDTO.kind;
-            event.location = calendarElementDTO.location;
+        } else if (!Objects.equals(event.getOverline(), calendarElementDTO.overline) || !Objects.equals(event.getTitle(), calendarElementDTO.title) || !Objects.equals(event.getKind(), calendarElementDTO.kind) || !Objects.equals(event.getLocation(), calendarElementDTO.location)){
+            event.setOverline(calendarElementDTO.overline);
+            event.setTitle(calendarElementDTO.title);
+            event.setKind(calendarElementDTO.kind);
+            event.setLocation(calendarElementDTO.location);
             event.persist();
             updatedElements++;
         }
-        Performance existingPerformance = event.performances.stream()
+        Performance existingPerformance = event.getPerformances().stream()
                 .filter(p -> Objects.equals(p.auid, calendarElementDTO.auid))
                 .findFirst()
                 .orElse(null);
@@ -44,9 +44,9 @@ public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBa
             existingPerformance.persist();
         } else {
             Performance performance = new Performance(event, calendarElementDTO.auid, calendarElementDTO.datetime, calendarElementDTO.hasTime, calendarElementDTO.bookingLink, calendarElementDTO.isCancelled, calendarElementDTO.performanceType);
-            event.performances.add(performance);
+            event.getPerformances().add(performance);
             event.persist();
-            event.performances.forEach(p -> PanacheEntityBase.persist(p));
+            event.getPerformances().forEach(p -> PanacheEntityBase.persist(p));
         }
         updatedElements++;
         return updatedElements;
@@ -60,29 +60,29 @@ public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBa
             Log.error("Event doesn't exist!");
             throw new RuntimeException("Event doesn't exist!");
         }
-        if(event.description== null &&eventElementDTO.description!= null) {
-            event.description = eventElementDTO.description;
+        if(event.getDescription()== null &&eventElementDTO.description!= null) {
+            event.setDescription(eventElementDTO.description);
         }
-        if(event.duration== null &&eventElementDTO.duration!= null)
-            event.duration = eventElementDTO.duration;
-        if(event.bannerPath== null &&eventElementDTO.bannerPath!= null)
-            event.bannerPath = eventElementDTO.bannerPath;
+        if(event.getDuration()== null &&eventElementDTO.duration!= null)
+            event.setDuration(eventElementDTO.duration);
+        if(event.getBannerPath()== null &&eventElementDTO.bannerPath!= null)
+            event.setBannerPath(eventElementDTO.bannerPath);
         if(eventElementDTO.imagePaths!= null)
-            event.imagePaths.addAll(eventElementDTO.imagePaths);
+            event.getImagePaths().addAll(eventElementDTO.imagePaths);
         if(eventElementDTO.videoUris!= null)
-            event.videoUris.addAll(eventElementDTO.videoUris);
+            event.getVideoUris().addAll(eventElementDTO.videoUris);
         if(eventElementDTO.spotifyUris!= null)
-            event.spotifyUris.addAll(eventElementDTO.spotifyUris);
+            event.getSpotifyUris().addAll(eventElementDTO.spotifyUris);
         if(eventElementDTO.vimeoUris!= null)
-            event.vimeoUris.addAll(eventElementDTO.vimeoUris);
+            event.getVimeoUris().addAll(eventElementDTO.vimeoUris);
         if(eventElementDTO.soundcloudUris!= null)
-            event.soundcloudUris.addAll(eventElementDTO.soundcloudUris);
-        if(event.team== null &&eventElementDTO.cast!= null)
-            event.team = eventElementDTO.cast;
-        if(event.press== null &&eventElementDTO.press!= null)
-            event.press = eventElementDTO.press;
-        if(event.thumbnailPath== null && event.imagePaths!= null && !event.imagePaths.isEmpty())
-            event.thumbnailPath = event.imagePaths.iterator().next();
+            event.getSoundcloudUris().addAll(eventElementDTO.soundcloudUris);
+        if(event.getTeam()== null &&eventElementDTO.cast!= null)
+            event.setTeam(eventElementDTO.cast);
+        if(event.getPress()== null &&eventElementDTO.press!= null)
+            event.setPress(eventElementDTO.press);
+        if(event.getThumbnailPath()== null && event.getImagePaths()!= null && !event.getImagePaths().isEmpty())
+            event.setThumbnailPath(event.getImagePaths().iterator().next());
         event.persist();
         return 1;
     }

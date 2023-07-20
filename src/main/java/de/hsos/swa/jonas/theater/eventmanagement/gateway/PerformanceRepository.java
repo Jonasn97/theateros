@@ -18,8 +18,8 @@ public class PerformanceRepository implements PerformanceCatalog {
         List<Performance> performances = Performance.listAll();
         return performances.stream()
                 //.filter(performance -> performance.datetime == null || performance.datetime.isAfter(queryParametersDTO.startDateTimeFilter) && performance.datetime.isBefore(queryParametersDTO.endDateTimeFilter))
-                .filter(performance -> queryParametersDTO.nameFilter == null || performance.event.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
-                .filter(performance -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(performance.event.kind))
+                .filter(performance -> queryParametersDTO.nameFilter == null || performance.event.getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
+                .filter(performance -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(performance.event.getKind()))
                 //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
                 //Sort by dates from now on
                 .sorted(Comparator.comparing(performance -> performance.datetime))

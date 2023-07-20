@@ -20,15 +20,15 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         List<Event> playlist = Event.listAll();
         try(Stream<Event> plays = playlist.stream()) {
             return plays
-                    .filter(play -> queryParametersDTO.nameFilter == null || play.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
+                    .filter(play -> queryParametersDTO.nameFilter == null || play.getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
                     //.filter(play -> statusFilter == null|| statusFilter.contains(play.status))
-                    .filter(play -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(play.kind))
+                    .filter(play -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(play.getKind()))
                     //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
                     .filter(play -> {
                         if (queryParametersDTO.startDateTimeFilter == null || queryParametersDTO.endDateTimeFilter == null) {
                             return true;
                         }
-                        return play.performances.stream()
+                        return play.getPerformances().stream()
                                 .anyMatch(performance ->
                                         (performance.datetime != null &&
                                                 performance.datetime.compareTo(queryParametersDTO.startDateTimeFilter)>=0 && performance.datetime.compareTo(queryParametersDTO.endDateTimeFilter)<=0
@@ -45,16 +45,16 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         List<Event> playlist = Event.listAll();
         try(Stream<Event> plays = playlist.stream()) {
             return plays
-                    .filter(play -> queryParametersDTO.nameFilter == null || play.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
+                    .filter(play -> queryParametersDTO.nameFilter == null || play.getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
                     //.filter(play -> statusFilter == null|| statusFilter.contains(play.status))
-                    .filter(play -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(play.kind))
+                    .filter(play -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(play.getKind()))
                     //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
                     .filter(play -> {
                         if (queryParametersDTO.startDateTimeFilter == null || queryParametersDTO.endDateTimeFilter == null) {
                             return true;
                         }
 
-                        return play.performances.stream()
+                        return play.getPerformances().stream()
                                 .anyMatch(performance ->
                                         (performance.datetime != null &&
                                                 performance.datetime.compareTo(queryParametersDTO.startDateTimeFilter)>=0)

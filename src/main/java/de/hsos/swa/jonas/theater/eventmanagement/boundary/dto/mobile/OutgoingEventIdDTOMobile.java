@@ -35,24 +35,24 @@ public class OutgoingEventIdDTOMobile {
         public static OutgoingEventIdDTOMobile toDTO(Event event) {
             OutgoingEventIdDTOMobile dto = new OutgoingEventIdDTOMobile();
             dto.id = event.id;
-            dto.title = event.title;
-            dto.kind = event.kind;
-            dto.location = event.location;
-            dto.thumbnailPath = event.bannerPath;
-            dto.duration = event.duration;
-            dto.description = event.description;
+            dto.title = event.getTitle();
+            dto.kind = event.getKind();
+            dto.location = event.getLocation();
+            dto.thumbnailPath = event.getBannerPath();
+            dto.duration = event.getDuration();
+            dto.description = event.getDescription();
             dto.performances = new ArrayList<>();
-            List<Performance> sortedPerformances = event.performances.stream()
+            List<Performance> sortedPerformances = event.getPerformances().stream()
                     .sorted((p1, p2) -> p1.datetime.compareTo(p2.datetime)).toList();
             dto.performances = sortedPerformances.stream()
                     .map(OutgoingPerformanceDTOMobile.Converter::toDTO)
                     .collect(Collectors.toList());
-            dto.cast = event.team;
-            dto.imagePaths = event.imagePaths;
-            dto.videoUris = event.videoUris;
-            dto.spotifyUris = event.spotifyUris;
-            dto.vimeoUris = event.vimeoUris;
-            dto.soundcloudUris = event.soundcloudUris;
+            dto.cast = event.getTeam();
+            dto.imagePaths = event.getImagePaths();
+            dto.videoUris = event.getVideoUris();
+            dto.spotifyUris = event.getSpotifyUris();
+            dto.vimeoUris = event.getVimeoUris();
+            dto.soundcloudUris = event.getSoundcloudUris();
             return dto;
         }
     }

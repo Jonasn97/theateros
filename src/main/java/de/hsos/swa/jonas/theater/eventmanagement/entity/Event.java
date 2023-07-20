@@ -15,43 +15,44 @@ import java.util.Set;
 
 @Entity
 public class Event extends PanacheEntity {
-    public String infolink;
+    private String infolink;
 
-    public String stid;
-    public String overline;
-    public String title;
+    private String stid;
+    private String overline;
+    private String title;
     @Column(length = 10000)
-    public String description;
-    public String thumbnailPath;
-    public String kind;
-    public String location;
-    public String duration;
+    private String description;
+    private String thumbnailPath;
+    private String kind;
+    private String location;
+    private String duration;
 
-    public String bannerPath;
+    private String bannerPath;
+
     @ElementCollection
-    public Set<String> imagePaths;
+    private Set<String> imagePaths;
     @ElementCollection
-    public Set<String> videoUris;
+    private Set<String> videoUris;
     @ElementCollection
-    public Set<String> spotifyUris;
+    private Set<String> spotifyUris;
     @ElementCollection
-    public Set<String> vimeoUris;
+    private Set<String> vimeoUris;
     @ElementCollection
-    public Set<String> soundcloudUris;
+    private Set<String> soundcloudUris;
     @Column(length = 10000)
-    public String team;
+    private String team;
     @Column(length = 10000)
-    public String press;
+    private String press;
 
     @UpdateTimestamp
-    public Timestamp lastUpdateTimestamp;
+    private Timestamp lastUpdateTimestamp;
     @CreationTimestamp
-    public Timestamp createdTimestamp;
+    private Timestamp createdTimestamp;
 
-    public String playtype; //Gastspiel, Sonderveranstaltung, Konzert, Sonstiges
+    private String playtype; //Gastspiel, Sonderveranstaltung, Konzert, Sonstiges
 
     @OneToMany
-    public Collection<Performance> performances = new ArrayList<>();
+    private Collection<Performance> performances = new ArrayList<>();
 
     public Event(String stid, String infoLink, String overline, String title, String sparte, String location) {
         this.stid = stid;
@@ -65,6 +66,173 @@ public class Event extends PanacheEntity {
 
     public Event() {
 
+    }
+    public String getInfolink() {
+        return infolink;
+    }
+
+    public void setInfolink(String infolink) {
+        this.infolink = infolink;
+    }
+
+    public String getStid() {
+        return stid;
+    }
+
+    public void setStid(String stid) {
+        this.stid = stid;
+    }
+
+    public String getOverline() {
+        return overline;
+    }
+
+    public void setOverline(String overline) {
+        this.overline = overline;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getThumbnailPath() {
+        return thumbnailPath;
+    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getBannerPath() {
+        return bannerPath;
+    }
+
+    public void setBannerPath(String bannerPath) {
+        this.bannerPath = bannerPath;
+    }
+
+    public Set<String> getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(Set<String> imagePaths) {
+        this.imagePaths = imagePaths;
+    }
+
+    public Set<String> getVideoUris() {
+        return videoUris;
+    }
+
+    public void setVideoUris(Set<String> videoUris) {
+        this.videoUris = videoUris;
+    }
+
+    public Set<String> getSpotifyUris() {
+        return spotifyUris;
+    }
+
+    public void setSpotifyUris(Set<String> spotifyUris) {
+        this.spotifyUris = spotifyUris;
+    }
+
+    public Set<String> getVimeoUris() {
+        return vimeoUris;
+    }
+
+    public void setVimeoUris(Set<String> vimeoUris) {
+        this.vimeoUris = vimeoUris;
+    }
+
+    public Set<String> getSoundcloudUris() {
+        return soundcloudUris;
+    }
+
+    public void setSoundcloudUris(Set<String> soundcloudUris) {
+        this.soundcloudUris = soundcloudUris;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public String getPress() {
+        return press;
+    }
+
+    public void setPress(String press) {
+        this.press = press;
+    }
+
+    public Timestamp getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
+    }
+
+    public void setLastUpdateTimestamp(Timestamp lastUpdateTimestamp) {
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
+    }
+
+    public Timestamp getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(Timestamp createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public String getPlaytype() {
+        return playtype;
+    }
+
+    public void setPlaytype(String playtype) {
+        this.playtype = playtype;
+    }
+
+    public Collection<Performance> getPerformances() {
+        return performances;
+    }
+
+    public void setPerformances(Collection<Performance> performances) {
+        this.performances = performances;
     }
 }
     //Pressezitat

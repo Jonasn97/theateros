@@ -58,7 +58,7 @@ public class EventResourceMobile {
         List<OutgoingEventDTOMobile> outgoingEventDTOMobiles = events.stream().map(event -> {
             LocalDateTime currentTime = LocalDateTime.now();
             //find next performance with date and time
-            Optional<Performance> nextPerformance = event.performances.stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
+            Optional<Performance> nextPerformance = event.getPerformances().stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
                     .filter(performance -> performance.datetime != null) // Filtere Vorstellungen ohne datetime aus
                     .filter(performance -> performance.datetime.isAfter(currentTime)) // Filtere vergangene Vorstellungen aus
                     .min(Comparator.comparing(performance -> performance.datetime));

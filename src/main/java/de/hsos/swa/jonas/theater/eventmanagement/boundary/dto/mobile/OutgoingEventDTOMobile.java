@@ -24,7 +24,7 @@ public class OutgoingEventDTOMobile {
 
     public static class Converter {
         public static OutgoingEventDTOMobile toDTO(Event event) {
-            return new OutgoingEventDTOMobile(event.id, event.title, event.kind, event.thumbnailPath);
+            return new OutgoingEventDTOMobile(event.id, event.getTitle(), event.getKind(), event.getThumbnailPath());
         }
     }
 

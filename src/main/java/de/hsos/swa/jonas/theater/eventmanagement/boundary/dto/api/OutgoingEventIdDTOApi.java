@@ -29,7 +29,7 @@ public class OutgoingEventIdDTOApi {
     }
     public static class Converter{
         public static OutgoingEventIdDTOApi toDTO(Event event){
-            return new OutgoingEventIdDTOApi(event.title, event.kind, event.location, event.thumbnailPath, event.stid, event.description, event.duration, event.team, event.press);
+            return new OutgoingEventIdDTOApi(event.getTitle(), event.getKind(), event.getLocation(), event.getThumbnailPath(), event.getStid(), event.getDescription(), event.getDuration(), event.getTeam(), event.getPress());
         }
     }
 

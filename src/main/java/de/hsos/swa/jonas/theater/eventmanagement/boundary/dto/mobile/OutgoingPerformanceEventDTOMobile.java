@@ -34,7 +34,7 @@ public class OutgoingPerformanceEventDTOMobile {
     }
     public static class Converter {
         public static OutgoingPerformanceEventDTOMobile toDTO(Performance performance) {
-            return new OutgoingPerformanceEventDTOMobile(performance.id, performance.event.id, performance.event.title, performance.event.kind, performance.event.thumbnailPath, performance.datetime, performance.hasTime, performance.isCancelled, performance.performanceType);
+            return new OutgoingPerformanceEventDTOMobile(performance.id, performance.event.id, performance.event.getTitle(), performance.event.getKind(), performance.event.getThumbnailPath(), performance.datetime, performance.hasTime, performance.isCancelled, performance.performanceType);
         }
     }
 
