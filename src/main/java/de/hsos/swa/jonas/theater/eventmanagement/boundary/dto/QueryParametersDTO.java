@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class QueryParametersDTO {
     public String nameFilter;
     public ArrayList<String> statusFilter;
-    public ArrayList<String> playTypeFilter;
+    public ArrayList<String> kindFilter;
     public ArrayList<String> performanceTypeFilter;
     public LocalDateTime startDateTimeFilter;
     public LocalDateTime endDateTimeFilter;
@@ -17,10 +17,10 @@ public class QueryParametersDTO {
     public QueryParametersDTO() {
     }
 
-    public QueryParametersDTO(String nameFilter, ArrayList<String> statusFilter, ArrayList<String> playTypeFilter, ArrayList<String> performanceTypeFilter, String startDateTimeFilter, String endDateTimeFilter, String include, Long pageNumber, Long pageSize) {
+    public QueryParametersDTO(String nameFilter, ArrayList<String> statusFilter, ArrayList<String> kindFilter, ArrayList<String> performanceTypeFilter, String startDateTimeFilter, String endDateTimeFilter, String include, Long pageNumber, Long pageSize) {
         this.nameFilter = nameFilter;
         this.statusFilter = statusFilter;
-        this.playTypeFilter = playTypeFilter;
+        this.kindFilter = kindFilter;
         this.performanceTypeFilter = performanceTypeFilter;
         parseDates(startDateTimeFilter, endDateTimeFilter);
         this.include = include;

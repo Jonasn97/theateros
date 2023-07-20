@@ -14,6 +14,7 @@ import io.vertx.core.eventbus.EventBus;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
@@ -43,11 +44,18 @@ public class EventResourceMobile {
                                @QueryParam("filter[playType]") ArrayList<String> playTypeFilter,
                                @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                @QueryParam("filter[startDateTime]") String startDateTimeFilter,
-                               @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                               @Pattern(regexp = "7days|30days") @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                @QueryParam("include") String include,
                                @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                @Positive @Max(50) @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
                                @Context SecurityContext securityContext) {
+        if(endDateTimeFilter!=null &&endDateTimeFilter.equals("7days")) {
+            endDateTimeFilter = String.valueOf(LocalDateTime.now().plusDays(7));
+            startDateTimeFilter = String.valueOf(LocalDateTime.now());
+        } else if(endDateTimeFilter!=null &&endDateTimeFilter.equals("30days")) {
+            endDateTimeFilter = String.valueOf(LocalDateTime.now().plusDays(30));
+            startDateTimeFilter = String.valueOf(LocalDateTime.now());
+        }
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
         String username;
@@ -60,10 +68,9 @@ public class EventResourceMobile {
         Map<Long, EventState> finalEventStates = eventStates;
         List<OutgoingEventDTOMobile> outgoingEventDTOMobiles = events.stream().map(event -> {
             LocalDateTime currentTime = LocalDateTime.now();
-            //find next performance with date and time
-            Optional<Performance> nextPerformance = event.getPerformances().stream().filter(performance -> !performance.isCancelled()) // Filtere abgesagte Vorstellungen aus
-                    .filter(performance -> performance.getDatetime() != null) // Filtere Vorstellungen ohne datetime aus
-                    .filter(performance -> performance.getDatetime().isAfter(currentTime)) // Filtere vergangene Vorstellungen aus
+            Optional<Performance> nextPerformance = event.getPerformances().stream().filter(performance -> !performance.isCancelled())
+                    .filter(performance -> performance.getDatetime() != null)
+                    .filter(performance -> performance.getDatetime().isAfter(currentTime))
                     .min(Comparator.comparing(performance -> performance.getDatetime()));
             OutgoingEventDTOMobile outgoingEventDTOMobile = OutgoingEventDTOMobile.Converter.toDTO(event);
             if(finalEventStates != null && finalEventStates.containsKey(event.id))

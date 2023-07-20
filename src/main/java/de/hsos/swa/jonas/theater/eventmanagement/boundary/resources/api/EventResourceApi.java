@@ -16,6 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
@@ -51,14 +52,16 @@ public class EventResourceApi {
     })
     public Response getEvents(@QueryParam("filter[name]") String nameFilter,
                               @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                              @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
+                              @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                               @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
+                              @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") // yyyy-MM-ddTHH:mm:ss
                               @QueryParam("filter[startDateTime]") String startDateTimeFilter,
-                              @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                              @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") // yyyy-MM-ddTHH:mm:ss
+                                @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                               @QueryParam("include") String include,
                               @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                               @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
-        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
+        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, kindFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
 
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
@@ -87,7 +90,7 @@ public class EventResourceApi {
 
     public Response getEventsFallback(@QueryParam("filter[name]") String nameFilter,
                                      @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                                     @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
+                                     @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                                      @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                      @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                      @QueryParam("filter[endDateTime]") String endDateTimeFilter,

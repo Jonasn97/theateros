@@ -1,10 +1,8 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingPerformanceDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.control.PerformanceOperations;
-import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.*;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -21,7 +19,6 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -50,14 +47,14 @@ public class PerformanceResourceApi {
     })
     public Response getPerformances(@QueryParam("filter[name]") String nameFilter,
                               @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                              @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
+                              @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                               @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                               @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                               @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                               @QueryParam("include") String include,
                                     @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                     @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
-        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
+        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, kindFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Performance> performances = performanceOperations.getPerformances(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(performances.isEmpty()) {
@@ -85,7 +82,7 @@ public class PerformanceResourceApi {
 
     public Response getPerformancesFallback(@QueryParam("filter[name]") String nameFilter,
                                       @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                                      @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
+                                      @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                                       @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                       @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                       @QueryParam("filter[endDateTime]") String endDateTimeFilter,

@@ -64,8 +64,8 @@ public class PerformanceIdResourceApi {
         return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
     }
 
-    @Path("/{eventId}/performances")
-    public Response getPerformanceByIdFallback(@Positive @PathParam("eventId") long eventId){
+    @Path("{performanceId}/fallback")
+    public Response getPerformanceByIdFallback(@Positive @PathParam("performanceId") long performanceId){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
         responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));

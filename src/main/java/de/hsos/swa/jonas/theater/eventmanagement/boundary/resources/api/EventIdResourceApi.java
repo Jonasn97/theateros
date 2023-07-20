@@ -66,7 +66,7 @@ public class EventIdResourceApi {
         responseWrapperDTO.errors.add(new ErrorDTO("404", "EVENTS:5","Event not found", "Couldn't find event with the given id"));
         return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
     }
-    @Path("{eventId}")
+    @Path("{eventId}/fallback")
     public Response getEventByIdFallback(@Positive @PathParam("eventId") long eventId){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();

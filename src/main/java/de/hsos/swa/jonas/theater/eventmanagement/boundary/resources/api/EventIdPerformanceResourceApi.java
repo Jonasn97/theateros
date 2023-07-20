@@ -64,7 +64,7 @@ public class EventIdPerformanceResourceApi {
 
         return Response.ok().entity(responseWrapperDTO).build();
     }
-    @Path("/{eventId}/performances")
+    @Path("/{eventId}/performances/fallback")
     public Response getPerformancesByEventIdFallback(@Positive @PathParam("eventId") long eventId){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
