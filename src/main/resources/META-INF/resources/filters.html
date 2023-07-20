@@ -11,23 +11,23 @@
         <div class="button-container">
             <form action="/mobile/events" method="GET">
                 <span class="filter-section">Zeitraum</span>
-                <input class="filter-checkbox" type="checkbox" id="7days-checkbox" name="filter[week]" value="7days">
-                <label class="filter-label" for="7days-checkbox">nächste 7 Tage</label>
-                <input class="filter-checkbox" type="checkbox" id="30days-checkbox" name="filter[month]" value="7days">
-                <label class="filter-label" for="30days-checkbox">nächste 30 Tage</label>
+                <input class="filter-checkbox" type="checkbox" id="days7-checkbox" name="filter[endDateTimeFilter]" value="7days">
+                <label class="filter-label" for="days7-checkbox">nächste 7 Tage</label>
+                <input class="filter-checkbox" type="checkbox" id="days30-checkbox" name="filter[endDateTimeFilter]" value="30days">
+                <label class="filter-label" for="days30-checkbox">nächste 30 Tage</label>
                 <span class="filter-section">Besonderheit</span>
                 <input class="filter-checkbox" type="checkbox" id="premiere-checkbox" name="filter[performanceType]" value="Premiere">
                 <label class="filter-label" for="premiere-checkbox">Premiere</label>
                 <input class="filter-checkbox" type="checkbox" id="trial-checkbox" name="filter[performanceType]" value="Offene Probe">
                 <label class="filter-label" for="trial-checkbox">Offene Probe</label>
                 <span class="filter-section">Sparte</span>
-                <input class="filter-checkbox" type="checkbox" id="musical-checkbox" name="filter[playType]" value="Musical">
+                <input class="filter-checkbox" type="checkbox" id="musical-checkbox" name="filter[kind]" value="Musical">
                 <label class="filter-label" for="musical-checkbox">Musical</label>
-                <input class="filter-checkbox" type="checkbox" id="oper-checkbox" name="filter[playType]" value="Oper">
+                <input class="filter-checkbox" type="checkbox" id="oper-checkbox" name="filter[kind]" value="Oper">
                 <label class="filter-label" for="oper-checkbox">Oper</label>
-                <input class="filter-checkbox" type="checkbox" id="schauspiel-checkbox" name="filter[playType]" value="Schauspiel">
+                <input class="filter-checkbox" type="checkbox" id="schauspiel-checkbox" name="filter[kind]" value="Schauspiel">
                 <label class="filter-label" for="schauspiel-checkbox">Schauspiel</label>
-                <input class="filter-checkbox" type="checkbox" id="tanz-checkbox" name="filter[playType]" value="Tanz">
+                <input class="filter-checkbox" type="checkbox" id="tanz-checkbox" name="filter[kind]" value="Tanz">
                 <label class="filter-label" for="tanz-checkbox">Tanz</label>
                 <button class="confirm-button" type="submit">Bestätigen</button>
             </form>
