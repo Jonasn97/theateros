@@ -1,10 +1,10 @@
-package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 
 import java.time.LocalDateTime;
 
-public class PerformanceEventDTO {
+public class OutgoingPerformanceEventDTOMobile {
     public long id;
     public String title;
     public String kind;
@@ -15,7 +15,7 @@ public class PerformanceEventDTO {
     public boolean isCancelled;
     public String performanceType;
 
-    public PerformanceEventDTO(long id, String title, String kind, String thumbnailPath, LocalDateTime datetime, boolean hasTime, boolean isCancelled, String performanceType) {
+    public OutgoingPerformanceEventDTOMobile(long id, String title, String kind, String thumbnailPath, LocalDateTime datetime, boolean hasTime, boolean isCancelled, String performanceType) {
         this.id = id;
         this.title = title;
         this.kind = kind;
@@ -29,8 +29,8 @@ public class PerformanceEventDTO {
         this.performanceType = performanceType;
     }
     public static class Converter {
-        public static PerformanceEventDTO toDTO(Performance performance) {
-            return new PerformanceEventDTO(performance.id, performance.event.title, performance.event.kind, performance.event.thumbnailPath, performance.datetime, performance.hasTime, performance.isCancelled, performance.performanceType);
+        public static OutgoingPerformanceEventDTOMobile toDTO(Performance performance) {
+            return new OutgoingPerformanceEventDTOMobile(performance.id, performance.event.title, performance.event.kind, performance.event.thumbnailPath, performance.datetime, performance.hasTime, performance.isCancelled, performance.performanceType);
         }
     }
 }

@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class OutgoingDetailEventDTO {
+public class OutgoingEventIdDTOMobile {
     public long id;
     public String title;
     public String kind;
@@ -19,7 +19,7 @@ public class OutgoingDetailEventDTO {
     public String thumbnailPath;
     public String duration;
     public String description;
-    public Collection<PerformanceDTO> performances;
+    public Collection<OutgoingPerformanceDTOMobile> performances;
     public String cast;
     public Set<String> imagePaths;
     public Set<String> videoUris;
@@ -32,8 +32,8 @@ public class OutgoingDetailEventDTO {
     }
 
     public static class Converter {
-        public static OutgoingDetailEventDTO toDTO(Event event) {
-            OutgoingDetailEventDTO dto = new OutgoingDetailEventDTO();
+        public static OutgoingEventIdDTOMobile toDTO(Event event) {
+            OutgoingEventIdDTOMobile dto = new OutgoingEventIdDTOMobile();
             dto.id = event.id;
             dto.title = event.title;
             dto.kind = event.kind;
@@ -45,7 +45,7 @@ public class OutgoingDetailEventDTO {
             List<Performance> sortedPerformances = event.performances.stream()
                     .sorted((p1, p2) -> p1.datetime.compareTo(p2.datetime)).toList();
             dto.performances = sortedPerformances.stream()
-                    .map(PerformanceDTO.Converter::toDTO)
+                    .map(OutgoingPerformanceDTOMobile.Converter::toDTO)
                     .collect(Collectors.toList());
             dto.cast = event.team;
             dto.imagePaths = event.imagePaths;

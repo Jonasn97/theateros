@@ -1,7 +1,7 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingEventDTO;
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingNextPerformanceDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile.OutgoingEventDTOMobile;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile.OutgoingEventNextPerformanceDTOMobile;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
@@ -54,21 +54,21 @@ public class EventResourceMobile {
         eventStates = eventOperations.getEventStatus(username, eventIds);
         }
         Map<Long, EventState> finalEventStates = eventStates;
-        List<OutgoingEventDTO> playDTOS = events.stream().map(play -> {
+        List<OutgoingEventDTOMobile> playDTOS = events.stream().map(play -> {
             LocalDateTime currentTime = LocalDateTime.now();
             //find next performance with date and time
             Optional<Performance> nextPerformance = play.performances.stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
                     .filter(performance -> performance.datetime != null) // Filtere Vorstellungen ohne datetime aus
                     .filter(performance -> performance.datetime.isAfter(currentTime)) // Filtere vergangene Vorstellungen aus
                     .min(Comparator.comparing(performance -> performance.datetime));
-            OutgoingEventDTO outgoingEventDTO = OutgoingEventDTO.Converter.toDTO(play);
+            OutgoingEventDTOMobile outgoingEventDTOMobile = OutgoingEventDTOMobile.Converter.toDTO(play);
             if(finalEventStates != null)
-                outgoingEventDTO.eventState = finalEventStates.get(play.id);
+                outgoingEventDTOMobile.eventState = finalEventStates.get(play.id);
             if (nextPerformance.isPresent()) {
                 Performance performance = nextPerformance.get();
-                outgoingEventDTO.nextPerformance = OutgoingNextPerformanceDTO.Converter.toDTO(performance);
+                outgoingEventDTOMobile.nextPerformance = OutgoingEventNextPerformanceDTOMobile.Converter.toDTO(performance);
             }
-            return outgoingEventDTO;
+            return outgoingEventDTOMobile;
         }).collect(Collectors.toList());
 
         int active = 1;

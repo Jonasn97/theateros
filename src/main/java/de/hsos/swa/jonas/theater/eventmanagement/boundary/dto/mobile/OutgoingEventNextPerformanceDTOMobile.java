@@ -1,11 +1,11 @@
-package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class OutgoingNextPerformanceDTO {
+public class OutgoingEventNextPerformanceDTOMobile {
     public String performanceType = null;
     public String startDate = null;
     public String startTime = null;
@@ -13,7 +13,7 @@ public class OutgoingNextPerformanceDTO {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
-    public OutgoingNextPerformanceDTO(String performanceType, LocalDateTime dateTime, boolean hasTime) {
+    public OutgoingEventNextPerformanceDTOMobile(String performanceType, LocalDateTime dateTime, boolean hasTime) {
         this.performanceType = performanceType;
         this.startDate = dateTime.format(DATE_FORMAT);
         this.hasTime = hasTime;
@@ -21,13 +21,13 @@ public class OutgoingNextPerformanceDTO {
             this.startTime = dateTime.format(TIME_FORMAT);
     }
 
-    public OutgoingNextPerformanceDTO() {
+    public OutgoingEventNextPerformanceDTOMobile() {
 
     }
 
     public static class Converter {
-        public static OutgoingNextPerformanceDTO toDTO(Performance nextPerformance) {
-            return new OutgoingNextPerformanceDTO(nextPerformance.performanceType, nextPerformance.datetime, nextPerformance.hasTime);
+        public static OutgoingEventNextPerformanceDTOMobile toDTO(Performance nextPerformance) {
+            return new OutgoingEventNextPerformanceDTOMobile(nextPerformance.performanceType, nextPerformance.datetime, nextPerformance.hasTime);
         }
     }
 }

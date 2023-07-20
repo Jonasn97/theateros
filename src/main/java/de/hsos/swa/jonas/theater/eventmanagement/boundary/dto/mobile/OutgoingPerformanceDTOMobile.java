@@ -1,10 +1,10 @@
-package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
+package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 
 import java.time.LocalDateTime;
 
-public class PerformanceDTO {
+public class OutgoingPerformanceDTOMobile {
     public long id;
     public String month;
     public String day;
@@ -16,10 +16,10 @@ public class PerformanceDTO {
 
     public String performanceType; // Letzte Vorstellung, Wiederaufnahme, offene Probe, Premiere, Zusatzvorstellung
 
-    public PerformanceDTO() {
+    public OutgoingPerformanceDTOMobile() {
     }
 
-    public PerformanceDTO(long id, LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
+    public OutgoingPerformanceDTOMobile(long id, LocalDateTime datetime, boolean hasTime, String bookingLink, boolean isCancelled, String performanceTypeString) {
         this.id = id;
         this.day = datetime.format(java.time.format.DateTimeFormatter.ofPattern("dd"));
         this.month = datetime.format(java.time.format.DateTimeFormatter.ofPattern("MMMM"));
@@ -31,8 +31,8 @@ public class PerformanceDTO {
         this.performanceType = performanceTypeString;
     }
     public static class Converter {
-        public static PerformanceDTO toDTO(Performance performance) {
-            return new PerformanceDTO(performance.id, performance.datetime, performance.hasTime, performance.bookingLink, performance.isCancelled, performance.performanceType);
+        public static OutgoingPerformanceDTOMobile toDTO(Performance performance) {
+            return new OutgoingPerformanceDTOMobile(performance.id, performance.datetime, performance.hasTime, performance.bookingLink, performance.isCancelled, performance.performanceType);
         }
     }
 }

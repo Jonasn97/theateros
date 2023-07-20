@@ -1,6 +1,6 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.PerformanceEventDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile.OutgoingPerformanceEventDTOMobile;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
@@ -40,9 +40,9 @@ public class PerformanceResourceMobile {
                                     @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Performance> performances = eventOperations.getPerformances(queryParametersDTO);
-        Collection<PerformanceEventDTO> performanceEventDTOS = performances.stream().map(PerformanceEventDTO.Converter::toDTO).collect(java.util.stream.Collectors.toList());
+        Collection<OutgoingPerformanceEventDTOMobile> outgoingPerformanceEventDTOMobiles = performances.stream().map(OutgoingPerformanceEventDTOMobile.Converter::toDTO).collect(java.util.stream.Collectors.toList());
         int active = 2;
-        String html = spielzeiten.data("performances", performanceEventDTOS, "queryParameters", queryParametersDTO, "active", active).render();
+        String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active).render();
         return Response.ok().entity(html).build();
     }
     @Path("/performances/{id}")

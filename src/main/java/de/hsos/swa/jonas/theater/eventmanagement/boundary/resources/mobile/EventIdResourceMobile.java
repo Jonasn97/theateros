@@ -1,6 +1,6 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingDetailEventDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile.OutgoingEventIdDTOMobile;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.shared.EventState;
@@ -36,11 +36,11 @@ public class EventIdResourceMobile {
         Map<Long, EventState> eventStates = null;
 
         if(play.isPresent()){
-            OutgoingDetailEventDTO outgoingDetailEventDTO = OutgoingDetailEventDTO.Converter.toDTO(play.get());
+            OutgoingEventIdDTOMobile outgoingEventIdDTOMobile = OutgoingEventIdDTOMobile.Converter.toDTO(play.get());
             if(securityContext.getUserPrincipal()!= null && securityContext.getUserPrincipal().getName()!= null) {
                 username = securityContext.getUserPrincipal().getName();
                 Optional<EventState> eventState = eventOperations.getEventStatus(username, play.get().id);
-                eventState.ifPresent(outgoingDetailEventDTO::setEventState);
+                eventState.ifPresent(outgoingEventIdDTOMobile::setEventState);
             }
             int active=1;
         if(referrer != null) {
@@ -51,7 +51,7 @@ public class EventIdResourceMobile {
             if(referrer.contains("performances"))
                 active = 2;
         }
-        TemplateInstance instance = details.data("event", outgoingDetailEventDTO, "referrer",referrer, "active", active);
+        TemplateInstance instance = details.data("event", outgoingEventIdDTOMobile, "referrer",referrer, "active", active);
         String html = instance.render();
         return Response.ok().entity(html).build();
         }
