@@ -65,7 +65,7 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
     }
 
     @Override
-    public Optional<Event> getEventsById(long playId) {
+    public Optional<Event> getEventById(long playId) {
         return Event.findByIdOptional(playId);
     }
 

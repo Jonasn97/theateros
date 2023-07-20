@@ -15,7 +15,7 @@ public interface EventOperations {
 
     long getEventsCount(QueryParametersDTO queryParametersDTO);
 
-    Optional<Event> getEventsById(long playId);
+    Optional<Event> getEventById(long playId);
     Map<Long, EventState> getEventStatus(String username, Set<Long> eventIds);
     Optional<EventState> getEventStatus(String username, Long eventId);
 

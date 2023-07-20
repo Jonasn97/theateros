@@ -83,15 +83,15 @@ public class PerformanceResourceApi {
 
 
 
-    public Response getEventsFallback(@QueryParam("filter[name]") String nameFilter,
+    public Response getPerformancesFallback(@QueryParam("filter[name]") String nameFilter,
                                       @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                       @QueryParam("filter[eventType]") ArrayList<String> playTypeFilter,
                                       @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                       @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                       @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                       @QueryParam("include") String include,
-                                      @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                                      @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
+                                            @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                                            @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
         responseWrapperDTO.errors.add(new ErrorDTO("500", "PERF:2","Internal Server Error", "Something went wrong while processing your request"));

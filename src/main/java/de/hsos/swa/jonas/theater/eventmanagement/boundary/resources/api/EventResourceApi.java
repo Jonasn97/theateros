@@ -59,9 +59,7 @@ public class EventResourceApi {
                               @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                               @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
-        if (include != null && include.contains("performance")) {
 
-        }
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(events.isEmpty()) {
@@ -94,8 +92,8 @@ public class EventResourceApi {
                                      @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                      @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                      @QueryParam("include") String include,
-                                     @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                                     @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
+                                      @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                                      @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
         responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));

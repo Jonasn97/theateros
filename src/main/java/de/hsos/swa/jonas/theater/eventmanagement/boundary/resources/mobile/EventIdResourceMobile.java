@@ -32,7 +32,7 @@ public class EventIdResourceMobile {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Response getEventById(@Positive @PathParam("eventId") long playId,
                                  @QueryParam("include") String include, @HeaderParam("Referer") String referrer, @Context SecurityContext securityContext){
-        Optional<Event> play = eventOperations.getEventsById(playId);
+        Optional<Event> play = eventOperations.getEventById(playId);
         String username;
         Map<Long, EventState> eventStates = null;
 

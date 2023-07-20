@@ -11,7 +11,7 @@ public interface EventCatalog {
 
     long getEventsCount(QueryParametersDTO queryParametersDTO);
 
-    Optional<Event> getEventsById(long playId);
+    Optional<Event> getEventById(long playId);
 
     Collection<Performance> getPerformancesByEventId(long id);
 }

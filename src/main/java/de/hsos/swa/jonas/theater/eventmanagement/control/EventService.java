@@ -32,8 +32,8 @@ public class EventService implements EventOperations {
     }
 
     @Override
-    public Optional<Event> getEventsById(long playId) {
-        return eventCatalog.getEventsById(playId);
+    public Optional<Event> getEventById(long playId) {
+        return eventCatalog.getEventById(playId);
     }
 
     @Override
