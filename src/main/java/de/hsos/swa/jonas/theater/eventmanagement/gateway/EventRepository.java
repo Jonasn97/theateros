@@ -69,6 +69,15 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         return Event.findByIdOptional(playId);
     }
 
+    @Override
+    public Collection<Performance> getPerformancesByEventId(long id) {
+        Optional<Event> event = Event.findByIdOptional(id);
+        if (event.isPresent()) {
+            return event.get().getPerformances();
+        }
+        return Collections.emptyList();
+    }
+
     private boolean isPerformanceWithinDateRange(Event event, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {
         return true;
     }

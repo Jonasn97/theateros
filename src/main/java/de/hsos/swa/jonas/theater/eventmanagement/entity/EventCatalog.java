@@ -13,4 +13,5 @@ public interface EventCatalog {
 
     Optional<Event> getEventsById(long playId);
 
+    Collection<Performance> getPerformancesByEventId(long id);
 }
