@@ -62,7 +62,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
-
+        <!--beanvalidation-->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-validator</artifactId>
+        </dependency>
         <!--CDI-->
         <dependency>
             <groupId>io.quarkus</groupId>

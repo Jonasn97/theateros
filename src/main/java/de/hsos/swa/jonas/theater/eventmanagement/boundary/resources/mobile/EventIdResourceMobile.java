@@ -9,6 +9,7 @@ import io.quarkus.qute.TemplateInstance;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Positive;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -29,7 +30,7 @@ public class EventIdResourceMobile {
     @Path("/{eventId}")
     @GET
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Response getEventById(@PathParam("eventId") long playId,
+    public Response getEventById(@Positive @PathParam("eventId") long playId,
                                  @QueryParam("include") String include, @HeaderParam("Referer") String referrer, @Context SecurityContext securityContext){
         Optional<Event> play = eventOperations.getEventsById(playId);
         String username;

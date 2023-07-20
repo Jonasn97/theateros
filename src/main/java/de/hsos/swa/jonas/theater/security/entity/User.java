@@ -10,12 +10,15 @@ import io.quarkus.security.jpa.Username;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
 @UserDefinition
 public class User extends PanacheEntity {
-    @Username
+    @Username @Size(min=3, max=25)
+    @Pattern(regexp = "^[a-zA-z ]*$")
     public String username;
     @Password
     public String password;

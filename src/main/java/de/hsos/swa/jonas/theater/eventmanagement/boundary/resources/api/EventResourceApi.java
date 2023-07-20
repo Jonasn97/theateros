@@ -15,6 +15,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.ArrayList;
@@ -53,8 +56,8 @@ public class EventResourceApi {
                               @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                               @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                               @QueryParam("include") String include,
-                              @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
+                              @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                              @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         if (include != null && include.contains("performance")) {
 

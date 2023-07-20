@@ -13,6 +13,9 @@ import io.vertx.core.eventbus.EventBus;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -42,8 +45,8 @@ public class EventResourceMobile {
                                @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                @QueryParam("include") String include,
-                               @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                               @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
+                               @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                               @Positive @Max(50) @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
                                @Context SecurityContext securityContext) {
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);

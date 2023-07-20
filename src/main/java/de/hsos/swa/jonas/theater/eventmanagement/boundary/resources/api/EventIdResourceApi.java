@@ -2,17 +2,20 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventIdDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.LinksDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Positive;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,7 +31,7 @@ public class EventIdResourceApi {
 
     @Path("{eventId}")
     @GET
-    public Response getEventsById(@PathParam("eventId") long eventId){
+    public Response getEventsById(@Positive @PathParam("eventId") long eventId){
         Optional<Event> play = eventOperations.getEventsById(eventId);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(play.isPresent()){
@@ -41,8 +44,9 @@ public class EventIdResourceApi {
             responseWrapperDTO.data=resourceObjectDTO;
             return Response.ok().entity(responseWrapperDTO).build();
         }
-        //TODO: Errorhandling
-        return null;
+        responseWrapperDTO.errors = new ArrayList<>();
+        responseWrapperDTO.errors.add(new ErrorDTO("404", "EVENTS:5","Event not found", "Couldn't find event with the given id"));
+        return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
     }
 
     private LinksDTO createSelfLink(String id) {

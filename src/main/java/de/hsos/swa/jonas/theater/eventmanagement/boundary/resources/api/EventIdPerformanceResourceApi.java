@@ -9,6 +9,7 @@ import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Positive;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,7 +27,7 @@ public class EventIdPerformanceResourceApi {
     UriInfo uriInfo;
     @GET
     @Path("/{id}/performances")
-    public Response getPerformancesByEventId(@PathParam("id") long id){
+    public Response getPerformancesByEventId(@Positive @PathParam("id") long id){
         Collection<Performance> performances = eventOperations.getPerformancesByEventId(id);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
         if(performances.isEmpty()){

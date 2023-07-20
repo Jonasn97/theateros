@@ -13,6 +13,9 @@ import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Location;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -39,8 +42,8 @@ public class PerformanceResourceMobile {
                                     @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                     @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                     @QueryParam("include") String include,
-                                    @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                                    @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
+                                    @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                                    @Positive @Max(50) @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
                                     @Context SecurityContext securityContext){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Performance> performances = performanceOperations.getPerformances(queryParametersDTO);
@@ -66,7 +69,7 @@ public class PerformanceResourceMobile {
     @Path("/performances/{id}")
     @GET
     @Produces("text/calendar")
-    public Response getCalenderFile(@PathParam("id") Long id){
+    public Response getCalenderFile(@Positive @PathParam("id") Long id){
         Calendar calenderFile = new Calendar();
         Optional<Performance> optionalPerformance = performanceOperations.getPerformance(id);
         if(optionalPerformance.isEmpty()){

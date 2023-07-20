@@ -16,6 +16,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -52,8 +55,8 @@ public class PerformanceResourceApi {
                               @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                               @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                               @QueryParam("include") String include,
-                              @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                              @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
+                                    @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                                    @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Performance> performances = performanceOperations.getPerformances(queryParametersDTO);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();

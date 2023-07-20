@@ -6,10 +6,14 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity(name = "userdata")
 public class Userdata extends PanacheEntity {
+    @Size(min=3, max=25)
+    @Pattern(regexp = "^[a-zA-z ]*$")
     public String username;
     @ElementCollection
     public Set<Long> commentIds;
