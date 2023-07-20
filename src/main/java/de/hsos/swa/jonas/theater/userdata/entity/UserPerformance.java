@@ -6,6 +6,6 @@ import javax.persistence.Entity;
 
 @Entity
 public class UserPerformance extends PanacheEntity {
-    public long eventId;
-    public PerformanceState state;
+    public long performanceId;
+    public PerformanceState performanceState;
 }

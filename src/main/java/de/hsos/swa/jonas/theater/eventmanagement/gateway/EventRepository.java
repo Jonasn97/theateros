@@ -69,26 +69,6 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         return Event.findByIdOptional(playId);
     }
 
-    @Override
-    public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
-        List<Performance> performances = Performance.listAll();
-        return performances.stream()
-                //.filter(performance -> performance.datetime == null || performance.datetime.isAfter(queryParametersDTO.startDateTimeFilter) && performance.datetime.isBefore(queryParametersDTO.endDateTimeFilter))
-                .filter(performance -> queryParametersDTO.nameFilter == null || performance.event.title.toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
-                .filter(performance -> queryParametersDTO.playTypeFilter == null || queryParametersDTO.playTypeFilter.isEmpty()|| queryParametersDTO.playTypeFilter.contains(performance.event.kind))
-                //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
-                //Sort by dates from now on
-                .sorted(Comparator.comparing(performance -> performance.datetime))
-                .skip(queryParametersDTO.pageNumber * queryParametersDTO.pageSize)
-                .limit(queryParametersDTO.pageSize)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<Performance> getPerformance(Long id) {
-        return Performance.findByIdOptional(id);
-    }
-
     private boolean isPerformanceWithinDateRange(Event event, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {
         return true;
     }

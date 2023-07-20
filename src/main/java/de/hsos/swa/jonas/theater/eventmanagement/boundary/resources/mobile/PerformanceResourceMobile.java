@@ -2,8 +2,10 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile.OutgoingPerformanceEventDTOMobile;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
+import de.hsos.swa.jonas.theater.eventmanagement.control.PerformanceOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
+import de.hsos.swa.jonas.theater.shared.EventState;
+import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
 import io.quarkus.qute.Template;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Date;
@@ -12,17 +14,18 @@ import net.fortuna.ical4j.model.property.Location;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import javax.ws.rs.core.SecurityContext;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("mobile")
 public class PerformanceResourceMobile {
 
     private final static String FIRSTPAGE_STRING = "0";
     @Inject
-    EventOperations eventOperations;
+    PerformanceOperations performanceOperations;
 
     @Inject
     Template spielzeiten;
@@ -37,10 +40,25 @@ public class PerformanceResourceMobile {
                                     @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                     @QueryParam("include") String include,
                                     @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                                    @DefaultValue("10")@QueryParam("page[size]") Long pageSize){
+                                    @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
+                                    @Context SecurityContext securityContext){
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
-        Collection<Performance> performances = eventOperations.getPerformances(queryParametersDTO);
-        Collection<OutgoingPerformanceEventDTOMobile> outgoingPerformanceEventDTOMobiles = performances.stream().map(OutgoingPerformanceEventDTOMobile.Converter::toDTO).collect(java.util.stream.Collectors.toList());
+        Collection<Performance> performances = performanceOperations.getPerformances(queryParametersDTO);
+        String username;
+        Map<Long, PerformanceState> performanceStates = null;
+        if(securityContext.getUserPrincipal()!= null && securityContext.getUserPrincipal().getName()!= null) {
+            username = securityContext.getUserPrincipal().getName();
+            Set<Long> eventIds = performances.stream().map(performance -> performance.id).collect(Collectors.toSet());
+            performanceStates = performanceOperations.getPerformanceStatus(username, eventIds);
+        }
+        Map<Long, PerformanceState> finalPerformanceStates = performanceStates;
+        Collection<OutgoingPerformanceEventDTOMobile> outgoingPerformanceEventDTOMobiles = performances.stream().map(performance-> {
+            OutgoingPerformanceEventDTOMobile outgoingPerformanceEventDTOMobile = OutgoingPerformanceEventDTOMobile.Converter.toDTO(performance);
+            if(finalPerformanceStates != null && finalPerformanceStates.containsKey(performance.id)){
+                outgoingPerformanceEventDTOMobile.setPerformanceState(finalPerformanceStates.get(performance.id));
+            }
+            return outgoingPerformanceEventDTOMobile;
+        }).collect(java.util.stream.Collectors.toList());
         int active = 2;
         String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active).render();
         return Response.ok().entity(html).build();
@@ -50,7 +68,7 @@ public class PerformanceResourceMobile {
     @Produces("text/calendar")
     public Response getCalenderFile(@PathParam("id") Long id){
         Calendar calenderFile = new Calendar();
-        Optional<Performance> optionalPerformance = eventOperations.getPerformance(id);
+        Optional<Performance> optionalPerformance = performanceOperations.getPerformance(id);
         if(optionalPerformance.isEmpty()){
             return Response.status(Response.Status.NOT_FOUND).build();
         }

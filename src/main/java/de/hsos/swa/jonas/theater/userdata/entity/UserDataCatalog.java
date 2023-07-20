@@ -9,4 +9,8 @@ import java.util.Set;
 public interface UserDataCatalog {
     Map<Long, EventState> getEventState(String username, Set<Long> eventIds);
     Optional<EventState> getEventState(String username, long eventId);
+
+    Map<Long, PerformanceState> getPerformanceState(String username, Set<Long> performanceIds);
+
+    Optional<PerformanceState> getPerformanceState(String username, Long performanceId);
 }

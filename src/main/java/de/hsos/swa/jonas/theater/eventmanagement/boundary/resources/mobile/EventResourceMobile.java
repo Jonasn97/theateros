@@ -43,7 +43,8 @@ public class EventResourceMobile {
                                @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                @QueryParam("include") String include,
                                @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
-                               @DefaultValue("10")@QueryParam("page[size]") Long pageSize,@Context SecurityContext securityContext) {
+                               @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
+                               @Context SecurityContext securityContext) {
         QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
         String username;
@@ -54,16 +55,16 @@ public class EventResourceMobile {
         eventStates = eventOperations.getEventStatus(username, eventIds);
         }
         Map<Long, EventState> finalEventStates = eventStates;
-        List<OutgoingEventDTOMobile> playDTOS = events.stream().map(play -> {
+        List<OutgoingEventDTOMobile> outgoingEventDTOMobiles = events.stream().map(event -> {
             LocalDateTime currentTime = LocalDateTime.now();
             //find next performance with date and time
-            Optional<Performance> nextPerformance = play.performances.stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
+            Optional<Performance> nextPerformance = event.performances.stream().filter(performance -> !performance.isCancelled) // Filtere abgesagte Vorstellungen aus
                     .filter(performance -> performance.datetime != null) // Filtere Vorstellungen ohne datetime aus
                     .filter(performance -> performance.datetime.isAfter(currentTime)) // Filtere vergangene Vorstellungen aus
                     .min(Comparator.comparing(performance -> performance.datetime));
-            OutgoingEventDTOMobile outgoingEventDTOMobile = OutgoingEventDTOMobile.Converter.toDTO(play);
-            if(finalEventStates != null)
-                outgoingEventDTOMobile.eventState = finalEventStates.get(play.id);
+            OutgoingEventDTOMobile outgoingEventDTOMobile = OutgoingEventDTOMobile.Converter.toDTO(event);
+            if(finalEventStates != null && finalEventStates.containsKey(event.id))
+                outgoingEventDTOMobile.eventState = finalEventStates.get(event.id);
             if (nextPerformance.isPresent()) {
                 Performance performance = nextPerformance.get();
                 outgoingEventDTOMobile.nextPerformance = OutgoingEventNextPerformanceDTOMobile.Converter.toDTO(performance);
@@ -72,7 +73,7 @@ public class EventResourceMobile {
         }).collect(Collectors.toList());
 
         int active = 1;
-        TemplateInstance templateInstance = stuecke.data("events", playDTOS, "queryParameters", queryParametersDTO, "active", active);
+        TemplateInstance templateInstance = stuecke.data("events", outgoingEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
     }

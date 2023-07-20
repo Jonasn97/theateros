@@ -45,14 +45,4 @@ public class EventService implements EventOperations {
     public Optional<EventState> getEventStatus(String username, Long eventId) {
         return userDataCatalog.getEventState(username, eventId);
     }
-
-    @Override
-    public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
-        return eventCatalog.getPerformances(queryParametersDTO);
-    }
-
-    @Override
-    public Optional<Performance> getPerformance(Long id) {
-        return eventCatalog.getPerformance(id);
-    }
 }

@@ -18,8 +18,4 @@ public interface EventOperations {
     Optional<Event> getEventsById(long playId);
     Map<Long, EventState> getEventStatus(String username, Set<Long> eventIds);
     Optional<EventState> getEventStatus(String username, Long eventId);
-
-    Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO);
-
-    Optional<Performance> getPerformance(Long id);
 }
