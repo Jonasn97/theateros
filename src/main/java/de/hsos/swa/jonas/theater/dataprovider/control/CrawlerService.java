@@ -1,8 +1,8 @@
 package de.hsos.swa.jonas.theater.dataprovider.control;
 
-import de.hsos.swa.jonas.theater.dataprovider.entity.CrawlerCatalog;
-import de.hsos.swa.jonas.theater.dataprovider.gateway.CalendarElementDTO;
-import de.hsos.swa.jonas.theater.dataprovider.gateway.EventElementDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.AddEventsCatalog;
+import de.hsos.swa.jonas.theater.shared.dto.internal.CalendarElementDTO;
+import de.hsos.swa.jonas.theater.shared.dto.internal.EventElementDTO;
 import io.quarkus.logging.Log;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,7 +39,7 @@ public class CrawlerService implements CrawlerOperations {
     private static final String HOSTURL = "https://www.theater-osnabrueck.de/";
 
     @Inject
-    CrawlerCatalog crawlerCatalog;
+    AddEventsCatalog addEventsCatalog;
     @Override
     public Set<String> updateCalendar(Document calendarDocument) {
         Elements calenderElements = calendarDocument.select(CALENDER_ELEMENTS_SELECTOR);
@@ -48,7 +48,7 @@ public class CrawlerService implements CrawlerOperations {
         for (Element calenderElement : calenderElements) {
             CalendarElementDTO calendarElementDTO = getDataFromCalenderEntryElement(calenderElement);
             updatedStids.add(calendarElementDTO.stid);
-            updatedElements+= crawlerCatalog.updateDatabase(calendarElementDTO);
+            updatedElements+= addEventsCatalog.updateDatabase(calendarElementDTO);
         }
     return updatedStids;
     }
@@ -58,7 +58,7 @@ public class CrawlerService implements CrawlerOperations {
         EventElementDTO eventElementDTO = getDataFromEventElement(eventDocument);
         eventElementDTO.stid = stid;
         int updatedElements=0;
-        updatedElements+= crawlerCatalog.updateDatabase(eventElementDTO);
+        updatedElements+= addEventsCatalog.updateDatabase(eventElementDTO);
 
         return updatedElements;
     }

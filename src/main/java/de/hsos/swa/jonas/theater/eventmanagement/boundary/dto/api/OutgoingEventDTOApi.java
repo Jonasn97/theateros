@@ -1,6 +1,6 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api;
 
-import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 
 public class OutgoingEventDTOApi {
     public String title;

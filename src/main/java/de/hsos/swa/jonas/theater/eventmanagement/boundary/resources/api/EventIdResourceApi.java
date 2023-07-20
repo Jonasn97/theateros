@@ -2,11 +2,10 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventIdDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
-import de.hsos.swa.jonas.theater.shared.dto.LinksDTO;
-import de.hsos.swa.jonas.theater.shared.Event;
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventDTOApi;
-import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
-import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.LinksDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

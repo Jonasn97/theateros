@@ -2,7 +2,7 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.OutgoingDetailEventDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
-import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.shared.EventState;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;

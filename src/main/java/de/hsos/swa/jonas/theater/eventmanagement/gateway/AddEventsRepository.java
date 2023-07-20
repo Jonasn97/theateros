@@ -1,8 +1,10 @@
-package de.hsos.swa.jonas.theater.dataprovider.gateway;
+package de.hsos.swa.jonas.theater.eventmanagement.gateway;
 
-import de.hsos.swa.jonas.theater.dataprovider.entity.CrawlerCatalog;
-import de.hsos.swa.jonas.theater.shared.Event;
-import de.hsos.swa.jonas.theater.shared.Performance;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.AddEventsCatalog;
+import de.hsos.swa.jonas.theater.shared.dto.internal.CalendarElementDTO;
+import de.hsos.swa.jonas.theater.shared.dto.internal.EventElementDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.logging.Log;
@@ -12,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.Objects;
 
 @ApplicationScoped
-public class WebsiteRepository implements CrawlerCatalog,PanacheRepositoryBase<Event, Long> {
+public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBase<Event, Long> {
 
     @Override
     @Transactional

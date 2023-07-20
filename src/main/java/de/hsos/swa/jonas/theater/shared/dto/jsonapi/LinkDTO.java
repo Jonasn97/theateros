@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.shared.dto;
+package de.hsos.swa.jonas.theater.shared.dto.jsonapi;
 
 public class LinkDTO {
     public String href;

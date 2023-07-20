@@ -1,8 +1,6 @@
 package de.hsos.swa.jonas.theater.eventmanagement.entity;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.shared.Event;
-import de.hsos.swa.jonas.theater.shared.Performance;
 
 import java.util.Collection;
 import java.util.Optional;

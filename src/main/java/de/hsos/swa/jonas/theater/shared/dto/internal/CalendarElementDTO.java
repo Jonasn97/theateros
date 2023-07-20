@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.dataprovider.gateway;
+package de.hsos.swa.jonas.theater.shared.dto.internal;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.shared;
+package de.hsos.swa.jonas.theater.eventmanagement.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,7 +7,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class Performance extends PanacheEntity {

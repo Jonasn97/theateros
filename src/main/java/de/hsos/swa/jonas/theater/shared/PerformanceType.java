@@ -1,4 +1,4 @@
-package de.hsos.swa.jonas.theater.dataprovider.entity;
+package de.hsos.swa.jonas.theater.shared;
 
 public enum PerformanceType {
     LAST_PERFORMANCE("Letzte Vorstellung"),

@@ -2,9 +2,9 @@ package de.hsos.swa.jonas.theater.dataprovider.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.dataprovider.control.CrawlerOperations;
 import de.hsos.swa.jonas.theater.dataprovider.control.WebsiteDownloader;
-import de.hsos.swa.jonas.theater.shared.dto.ErrorDTO;
-import de.hsos.swa.jonas.theater.shared.dto.ResourceObjectDTO;
-import de.hsos.swa.jonas.theater.shared.dto.ResponseWrapperDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 import io.quarkus.logging.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

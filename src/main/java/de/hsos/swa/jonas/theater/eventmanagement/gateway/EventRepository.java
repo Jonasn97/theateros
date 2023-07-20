@@ -1,9 +1,9 @@
 package de.hsos.swa.jonas.theater.eventmanagement.gateway;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
-import de.hsos.swa.jonas.theater.shared.Event;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.EventCatalog;
-import de.hsos.swa.jonas.theater.shared.Performance;
+import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;
