@@ -32,13 +32,13 @@ public class EventIdResourceApi {
     @Path("{eventId}")
     @GET
     public Response getEventsById(@Positive @PathParam("eventId") long eventId){
-        Optional<Event> play = eventOperations.getEventsById(eventId);
+        Optional<Event> event = eventOperations.getEventsById(eventId);
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
-        if(play.isPresent()){
-            OutgoingEventIdDTOApi outgoingEventIdDTOApi = OutgoingEventIdDTOApi.Converter.toDTO(play.get());
+        if(event.isPresent()){
+            OutgoingEventIdDTOApi outgoingEventIdDTOApi = OutgoingEventIdDTOApi.Converter.toDTO(event.get());
             ResourceObjectDTO<OutgoingEventIdDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
-            resourceObjectDTO.id = String.valueOf(play.get().id);
-            resourceObjectDTO.type = "play";
+            resourceObjectDTO.id = String.valueOf(event.get().id);
+            resourceObjectDTO.type = "event";
             resourceObjectDTO.links = createSelfLink(resourceObjectDTO.id);
             resourceObjectDTO.attributes = outgoingEventIdDTOApi;
             responseWrapperDTO.data=resourceObjectDTO;
