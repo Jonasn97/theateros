@@ -6,6 +6,10 @@ import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Location;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
@@ -19,6 +23,7 @@ import javax.validation.constraints.Positive;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -63,7 +68,28 @@ public class PerformanceIdResourceApi {
         responseWrapperDTO.errors.add(new ErrorDTO("404", "PERF:5","Performance not found", "Couldn't find Performance with the given id"));
         return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
     }
-
+    @Path("{performanceId}/calendar")
+    @GET
+    @Produces("text/calendar")
+    public Response getCalenderFile(@Positive @PathParam("performanceId") Long id){
+        Calendar calenderFile = new Calendar();
+        Optional<Performance> optionalPerformance = performanceOperations.getPerformance(id);
+        if(optionalPerformance.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        Performance performance = optionalPerformance.get();
+        String eventName = performance.getEvent().getTitle();
+        Location eventLocation =new Location(performance.getEvent().getLocation());
+        Date date = new Date(performance.getDatetime().toEpochSecond(java.time.ZoneOffset.UTC));
+        VEvent vEvent = new VEvent(date, eventName);
+        vEvent.getProperties().add(eventLocation);
+        calenderFile.getComponents().add(vEvent);
+        String fileName = eventName.replaceAll("\\s+", "_") + ".ics";
+        String calendarContent = calenderFile.toString();
+        return Response.ok(calendarContent)
+                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                .build();
+    }
     @Path("{performanceId}/fallback")
     public Response getPerformanceByIdFallback(@Positive @PathParam("performanceId") long performanceId){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();

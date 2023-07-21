@@ -18,7 +18,7 @@
                     <div>
                         <h2 class="white">{event.title} - {event.location}</h2>
                         <a href="/templates/states.html" require-session up-layer="new" up-mode="modal" id="chip"{#if event.eventState}
-                           { class="{event.eventState.cssClass} " > {event.eventState.getLabel}  {#else} class = "none-state">Nicht gesetzt {/if}</a>
+                            class="{event.eventState.cssClass} " > {event.eventState.getLabel}  {#else} class = "none-state">Nicht gesetzt {/if}</a>
                     </div>
                     <h3 class="white">{event.kind}</h3>
                     <h3 class="white">{#if event.duration}{event.duration}{/if}</h3>
@@ -65,7 +65,7 @@
 
             <div class="buttons">
                 <h2>{#if performance.performanceType}{performance.performanceType}{/if}</h2>
-                <a rel="noopener noreferrer" target="_blank" href="/mobile/performances/{performance.id}"> <button>zum Kalender</button></a> <!--geplant Status setzen-->
+                <a rel="noopener noreferrer" target="_blank" href="/api/performances/{performance.id}/calendar"> <button>zum Kalender</button></a> <!--geplant Status setzen-->
                 <button>als gesehen markieren</button> <!--als gesehen setzen-->
                 <button>als verpasst markieren</button> <!--als verpasst setzen-->
                 <a rel="noopener noreferrer" target="_blank" href="{#if performance.bookingLink}{performance.bookingLink}{/if}"> <button>zum Shop</button></a> <!--geplant Status setzen-->
