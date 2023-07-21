@@ -2,6 +2,7 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventIdDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
+import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.LinksDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
@@ -32,6 +33,8 @@ public class EventIdResourceApi {
 
     @Inject
     EventOperations eventOperations;
+    @Inject
+    LinkBuilder linkBuilder;
 
     @Context
     UriInfo uriInfo;
@@ -57,7 +60,7 @@ public class EventIdResourceApi {
             ResourceObjectDTO<OutgoingEventIdDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
             resourceObjectDTO.id = String.valueOf(event.get().id);
             resourceObjectDTO.type = "event";
-            resourceObjectDTO.links = createSelfLink(resourceObjectDTO.id);
+            resourceObjectDTO.links = linkBuilder.createSelfLink(EventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
             resourceObjectDTO.attributes = outgoingEventIdDTOApi;
             responseWrapperDTO.data=resourceObjectDTO;
             return Response.ok().entity(responseWrapperDTO).build();
@@ -72,15 +75,5 @@ public class EventIdResourceApi {
         responseWrapperDTO.errors = new ArrayList<>();
         responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
-    }
-
-    private LinksDTO createSelfLink(String id) {
-        LinksDTO linksDTO = new LinksDTO();
-        linksDTO.self = uriInfo.getBaseUriBuilder()
-                .path(EventResourceApi.class)
-                .path(id)
-                .build()
-                .toString();
-        return linksDTO;
     }
 }

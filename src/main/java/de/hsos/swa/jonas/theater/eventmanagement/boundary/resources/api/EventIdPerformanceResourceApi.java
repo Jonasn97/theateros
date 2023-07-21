@@ -3,6 +3,7 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingPerformanceDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
+import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.LinksDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
@@ -30,6 +31,8 @@ import java.util.Collection;
 public class EventIdPerformanceResourceApi {
     @Inject
     EventOperations eventOperations;
+    @Inject
+    LinkBuilder linkBuilder;
     @Context
     UriInfo uriInfo;
     @GET
@@ -57,7 +60,7 @@ public class EventIdPerformanceResourceApi {
                 .map(performance -> {
                     String performanceId = String.valueOf(performance.id);
                     String type = "performance";
-                    LinksDTO linksDTO = null;//TODO LinkBuilder.createSelfLink(uriInfo, PerformanceResourceApi.class, performanceId);
+                    LinksDTO linksDTO = linkBuilder.createSelfLink(PerformanceResourceApi.class, uriInfo, performanceId);
                     OutgoingPerformanceDTOApi outgoingPerformanceDTOApi = OutgoingPerformanceDTOApi.Converter.toDTO(performance);
                     return new ResourceObjectDTO<>(performanceId, type, outgoingPerformanceDTOApi, null, linksDTO);
                 }).toList();

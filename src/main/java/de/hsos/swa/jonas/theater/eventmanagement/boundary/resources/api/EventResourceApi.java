@@ -4,6 +4,7 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventD
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
+import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.*;
 import io.quarkus.logging.Log;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -34,6 +35,8 @@ public class EventResourceApi {
 
     @Inject
     EventOperations eventOperations;
+    @Inject
+    LinkBuilder linkBuilder;
     @Context
     UriInfo uriInfo;
 
@@ -76,13 +79,14 @@ public class EventResourceApi {
                     String id = String.valueOf(play.id);
                     String type = "play";
 
-                    LinksDTO linksDTO = createSelfLink(id);
+                    LinksDTO linksDTO = linkBuilder.createSelfLink(EventResourceApi.class, uriInfo, id);
                     OutgoingEventDTOApi outgoingEventDTOApi = OutgoingEventDTOApi.Converter.toDTO(play);
-                    RelationshipDTO<Object> relationshipDTO = addRelationship(play.id, "performances");
+                    RelationshipDTO<Object> relationshipDTO = linkBuilder.addRelationship(EventResourceApi.class, uriInfo, play.id, "performances");
                     return new ResourceObjectDTO<>(id, type, outgoingEventDTOApi, relationshipDTO, linksDTO);
                 })
                 .toList();
-        responseWrapperDTO.links = createPaginationLinks(queryParametersDTO);
+        long maxSize = eventOperations.getEventsCount(queryParametersDTO);
+        responseWrapperDTO.links = linkBuilder.createPaginationLinks(EventResourceApi.class, uriInfo, queryParametersDTO, maxSize);
         return Response.ok().entity(responseWrapperDTO).build();
     }
 
@@ -102,66 +106,4 @@ public class EventResourceApi {
         responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
-    private RelationshipDTO<Object> addRelationship(long id, String relationship) {
-        LinksDTO linksDTO = createRelationshipLink(String.valueOf(id),relationship);
-        RelationshipDTO<Object> relationshipDTO = new RelationshipDTO<>();
-        relationshipDTO.links = linksDTO;
-        return relationshipDTO;
-    }
-    private LinksDTO createSelfLink(String id) {
-        LinksDTO linksDTO = new LinksDTO();
-        linksDTO.self = uriInfo.getBaseUriBuilder()
-                .path(EventResourceApi.class)
-                .path(id)
-                .build()
-                .toString();
-        return linksDTO;
-    }
-    private LinksDTO createRelationshipLink(String id, String relationship) {
-        LinksDTO linksDTO = new LinksDTO();
-        linksDTO.related = uriInfo.getBaseUriBuilder()
-                .path(EventResourceApi.class)
-                .path(id)
-                .path(relationship)
-                .build()
-                .toString();
-        return linksDTO;
-    }
-    private LinksDTO createPaginationLinks(QueryParametersDTO queryParametersDTO) {
-        Log.info("PageNumber: " + queryParametersDTO.pageNumber);
-        Log.info("PageSize: " + queryParametersDTO.pageSize);
-        Long pageNumber = queryParametersDTO.pageNumber;
-        Long pageSize = queryParametersDTO.pageSize;
-        long maxSize = eventOperations.getEventsCount(queryParametersDTO);
-        Log.info("Size: " + maxSize);
-        LinksDTO linksDTO = new LinksDTO();
-        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder()
-                .path(EventResourceApi.class);
-        linksDTO.first = uriBuilder
-                .queryParam("page[number]", FIRSTPAGE)
-                .queryParam("page[size]", pageSize)
-                .build()
-                .toString();
-        if(pageNumber>FIRSTPAGE)
-            linksDTO.prev = uriBuilder
-                    .replaceQueryParam("page[number]", "{pageNumber}")
-                    .build(pageNumber-1)
-                    .toString();
-        else
-            linksDTO.prev = "";
-        if((pageNumber+1) * pageSize < maxSize)
-            linksDTO.next = uriBuilder
-                .replaceQueryParam("page[number]", "{pageNumber}")
-                .build(pageNumber+1)
-                .toString();
-        else
-            linksDTO.next = "";
-        linksDTO.last = uriBuilder
-                .replaceQueryParam("page[number]", (maxSize/pageSize))
-                .build()
-                .toString();
-        return linksDTO;
-    }
-
-
 }

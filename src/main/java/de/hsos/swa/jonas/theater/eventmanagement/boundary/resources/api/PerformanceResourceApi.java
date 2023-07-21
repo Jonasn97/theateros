@@ -4,6 +4,7 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingPerformanceDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.control.PerformanceOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
+import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.*;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
@@ -33,6 +34,8 @@ public class PerformanceResourceApi {
     private final static String FIRSTPAGE_STRING = "0";
     @Inject
     PerformanceOperations performanceOperations;
+    @Inject
+    LinkBuilder linkBuilder;
     @Context
     UriInfo uriInfo;
     @GET
@@ -70,13 +73,13 @@ public class PerformanceResourceApi {
                     String id = String.valueOf(performance.id);
                     String type = "performance";
 
-                    LinksDTO linksDTO = null; //TODO createSelfLink(id);
+                    LinksDTO linksDTO = linkBuilder.createSelfLink(PerformanceResourceApi.class, uriInfo, id);
                     OutgoingPerformanceDTOApi outgoingEventDTOApi = OutgoingPerformanceDTOApi.Converter.toDTO(performance);
-                    RelationshipDTO<Object> relationshipDTO = null;//TODO addRelationship(performance.id, "performances");
-                    return new ResourceObjectDTO<>(id, type, outgoingEventDTOApi, relationshipDTO, linksDTO);
+                    return new ResourceObjectDTO<>(id, type, outgoingEventDTOApi, null, linksDTO);
                 })
                 .toList();
-        responseWrapperDTO.links = null; //TODO createPaginationLinks(queryParametersDTO);
+        long maxSize = performanceOperations.getPerformancesCount(queryParametersDTO);
+        responseWrapperDTO.links = linkBuilder.createPaginationLinks(PerformanceResourceApi.class, uriInfo, queryParametersDTO, maxSize);
         return Response.ok().entity(responseWrapperDTO).build();
     }
 
