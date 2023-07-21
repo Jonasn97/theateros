@@ -96,8 +96,8 @@ public class EventResourceApi {
                                      @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                      @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                                      @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
-                                     @QueryParam("filter[startDateTime]") String startDateTimeFilter,
-                                     @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                                      @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") @QueryParam("filter[startDateTime]") String startDateTimeFilter,
+                                      @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                      @QueryParam("include") String include,
                                       @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                       @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {

@@ -16,6 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.DefaultValue;
@@ -53,8 +54,10 @@ public class PerformanceResourceApi {
     public Response getPerformances(@QueryParam("filter[name]") String nameFilter,
                               @QueryParam("filter[status]") ArrayList<String> statusFilter,
                               @QueryParam("filter[kind]") ArrayList<String> kindFilter,
-                              @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
-                              @QueryParam("filter[startDateTime]") String startDateTimeFilter,
+                                    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")
+                                        @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
+                                    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")
+                                        @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                               @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                               @QueryParam("include") String include,
                                     @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
@@ -89,8 +92,10 @@ public class PerformanceResourceApi {
                                       @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                       @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                                       @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
-                                      @QueryParam("filter[startDateTime]") String startDateTimeFilter,
-                                      @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                                            @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")
+                                                @QueryParam("filter[startDateTime]") String startDateTimeFilter,
+                                            @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")
+                                                @QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                       @QueryParam("include") String include,
                                             @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                             @Max(50) @Positive @DefaultValue("10")@QueryParam("page[size]") Long pageSize) {
