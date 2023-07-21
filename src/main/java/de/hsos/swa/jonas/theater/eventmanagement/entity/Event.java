@@ -4,10 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +48,7 @@ public class Event extends PanacheEntity {
 
     private String playtype; //Gastspiel, Sonderveranstaltung, Konzert, Sonstiges
 
-    @OneToMany
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Performance> performances = new ArrayList<>();
 
     public Event(String stid, String infoLink, String overline, String title, String sparte, String location) {
