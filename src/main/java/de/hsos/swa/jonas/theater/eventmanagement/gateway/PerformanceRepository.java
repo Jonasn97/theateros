@@ -32,4 +32,15 @@ public class PerformanceRepository implements PerformanceCatalog {
     public Optional<Performance> getPerformance(Long id) {
         return Performance.findByIdOptional(id);
     }
+
+    @Override
+    public long getPerformancesCount(QueryParametersDTO queryParametersDTO) {
+        List<Performance> performances = Performance.listAll();
+        return performances.stream()
+                .filter(performance -> queryParametersDTO.startDateTimeFilter == null && queryParametersDTO.endDateTimeFilter== null|| queryParametersDTO.startDateTimeFilter.isBefore(performance.getDatetime())&&queryParametersDTO.endDateTimeFilter.isAfter(performance.getDatetime()))
+                .filter(performance -> queryParametersDTO.nameFilter == null || performance.getEvent().getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
+                .filter(performance -> queryParametersDTO.kindFilter == null || queryParametersDTO.kindFilter.isEmpty()|| queryParametersDTO.kindFilter.contains(performance.getEvent().getKind()))
+                .filter(performance -> queryParametersDTO.performanceTypeFilter == null || queryParametersDTO.performanceTypeFilter.isEmpty() || queryParametersDTO.performanceTypeFilter.contains(performance.getPerformanceType()))
+                .count();
+    }
 }

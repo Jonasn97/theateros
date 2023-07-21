@@ -93,8 +93,12 @@ public class PerformanceResourceMobile {
             }
             return outgoingPerformanceEventDTOMobile;
         }).collect(java.util.stream.Collectors.toList());
+        long maxSize = performanceOperations.getPerformancesCount(queryParametersDTO);
+        boolean hasNextPage = false;
+        if((pageNumber+1) * pageSize < maxSize)
+            hasNextPage =true;
         int active = 2;
-        String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active).render();
+        String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active, "showMore", hasNextPage).render();
         return Response.ok().entity(html).build();
     }
     @Path("/performances/fallback")

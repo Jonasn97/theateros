@@ -44,16 +44,17 @@
 {#else}
         <h2>Keine Stücke gefunden</h2>
 {/for}
+{#if showMore}
 <form class="showMore" action="/mobile/events" method="GET" up-target="main">
     <button class="button" type="submit">Mehr anzeigen</button>
     <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
     <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
-    <input type="hidden" name="filter[startDateTime]" value="{queryParameters.startDateTimeFilter}">
-    <input type="hidden" name="filter[endDateTime]" value="{queryParameters.endDateTimeFilter}">
-    <input type="hidden" name="filter[name]" value="{queryParameters.nameFilter}">
-    <input type="hidden" name="filter[status]" value="{queryParameters.statusFilter}">
-    <input type="hidden" name="filter[kind]" value="{queryParameters.kindFilter}">
-    <input type="hidden" name="filter[performanceType]" value="{queryParameters.performanceTypeFilter}">
-    <input type="hidden" name="include" value="{queryParameters.include}">
-</form>
+    {#if queryParameters.startDateTimeFilter} <input type="hidden" name="filter[startDateTime]" value="{queryParameters.startDateTimeFilter}"> {/if}
+    {#if queryParameters.endDateTimeFilter} <input type="hidden" name="filter[endDateTime]" value="{queryParameters.endDateTimeFilter}"> {/if}
+    {#if queryParameters.nameFilter} <input type="hidden" name="filter[name]" value="{queryParameters.nameFilter}">{/if}
+    {#if queryParameters.statusFilter} <input type="hidden" name="filter[status]" value="{queryParameters.statusFilter?}">{/if}
+    {#if queryParameters.kindFilter} <input type="hidden" name="filter[kind]" value="{queryParameters.kindFilter}">{/if}
+    {#if queryParameters.performanceTypeFilter} <input type="hidden" name="filter[performanceType]" value="{queryParameters.performanceTypeFilter}">{/if}
+    {#if queryParameters.include} <input type="hidden" name="include" value="{queryParameters.include}">{/if}
+</form>{/if}
 {/include}

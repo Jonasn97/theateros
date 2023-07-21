@@ -16,4 +16,6 @@ public interface PerformanceOperations {
     Optional<Performance> getPerformance(Long id);
     Map<Long, PerformanceState> getPerformanceStatus(String username, Set<Long> performanceIds);
     Optional<PerformanceState> getPerformanceStatus(String username, Long performanceId);
+
+    long getPerformancesCount(QueryParametersDTO queryParametersDTO);
 }

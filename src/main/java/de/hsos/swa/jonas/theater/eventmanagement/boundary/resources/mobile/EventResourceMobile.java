@@ -85,11 +85,7 @@ public class EventResourceMobile {
         }
         Map<Long, EventState> finalEventStates = eventStates;
         List<OutgoingEventDTOMobile> outgoingEventDTOMobiles = events.stream().map(event -> {
-            LocalDateTime currentTime = LocalDateTime.now();
-            Optional<Performance> nextPerformance = event.getPerformances().stream().filter(performance -> !performance.isCancelled())
-                    .filter(performance -> performance.getDatetime() != null)
-                    .filter(performance -> performance.getDatetime().isAfter(currentTime))
-                    .min(Comparator.comparing(performance -> performance.getDatetime()));
+            Optional<Performance> nextPerformance = eventOperations.getNextPerformance(event);
             OutgoingEventDTOMobile outgoingEventDTOMobile = OutgoingEventDTOMobile.Converter.toDTO(event);
             if(finalEventStates != null && finalEventStates.containsKey(event.id))
                 outgoingEventDTOMobile.eventState = finalEventStates.get(event.id);
@@ -99,9 +95,12 @@ public class EventResourceMobile {
             }
             return outgoingEventDTOMobile;
         }).collect(Collectors.toList());
-
+        long maxSize = eventOperations.getEventsCount(queryParametersDTO);
+        boolean hasNextPage = false;
+        if((pageNumber+1) * pageSize < maxSize)
+            hasNextPage =true;
         int active = 1;
-        TemplateInstance templateInstance = stuecke.data("events", outgoingEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active);
+        TemplateInstance templateInstance = stuecke.data("events", outgoingEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active, "showMore", hasNextPage);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
     }

@@ -20,4 +20,6 @@ public interface EventOperations {
     Optional<EventState> getEventStatus(String username, Long eventId);
 
     Collection<Performance> getPerformancesByEventId(long id);
+
+    Optional<Performance> getNextPerformance(Event event);
 }

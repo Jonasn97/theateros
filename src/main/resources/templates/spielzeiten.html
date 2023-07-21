@@ -42,6 +42,7 @@
     </div>
 </a>
 {/for}
+{#if showMore}
 <form class="showMore" action="/mobile/performances" method="GET">
     <button class="button" type="submit">Mehr anzeigen</button>
     <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
@@ -54,4 +55,5 @@
     {#if queryParameters.performanceTypeFilter} <input type="hidden" name="filter[performanceType]" value="{queryParameters.performanceTypeFilter}">{/if}
     {#if queryParameters.include} <input type="hidden" name="include" value="{queryParameters.include}">{/if}
 </form>
+{/if}
 {/include}

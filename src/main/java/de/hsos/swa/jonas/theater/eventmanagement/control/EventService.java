@@ -9,10 +9,8 @@ import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @ApplicationScoped
 public class EventService implements EventOperations {
@@ -49,5 +47,14 @@ public class EventService implements EventOperations {
     @Override
     public Collection<Performance> getPerformancesByEventId(long id) {
         return eventCatalog.getPerformancesByEventId(id);
+    }
+
+    @Override
+    public Optional<Performance> getNextPerformance(Event event) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return event.getPerformances().stream().filter(performance -> !performance.isCancelled())
+                .filter(performance -> performance.getDatetime() != null)
+                .filter(performance -> performance.getDatetime().isAfter(currentTime))
+                .min(Comparator.comparing(performance -> performance.getDatetime()));
     }
 }

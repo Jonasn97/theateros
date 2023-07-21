@@ -42,4 +42,9 @@ public class PerformanceService implements PerformanceOperations {
         return userDataCatalog.getPerformanceState(username, performanceId);
     }
 
+    @Override
+    public long getPerformancesCount(QueryParametersDTO queryParametersDTO) {
+        return performanceCatalog.getPerformancesCount(queryParametersDTO);
+    }
+
 }

@@ -9,4 +9,6 @@ public interface PerformanceCatalog {
     Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO);
 
     Optional<Performance> getPerformance(Long id);
+
+    long getPerformancesCount(QueryParametersDTO queryParametersDTO);
 }
