@@ -7,9 +7,18 @@ import de.hsos.swa.jonas.theater.eventmanagement.control.EventOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.shared.EventState;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.Template;
 import io.vertx.core.eventbus.EventBus;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -19,6 +28,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +46,17 @@ public class EventResourceMobile {
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @GET
+    @Retry
+    @Timeout(5000)
+    @Fallback(fallbackMethod = "getEventsFallback")
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
+    @Operation(summary = "Get filtered Events", description = "Get filtered and paged Events")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Filtered Events are returned"),
+            @APIResponse(responseCode = "400", description = "Bad Request"),
+            @APIResponse(responseCode = "404", description = "No Events found for selected filter"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
     public Response listEvents(@QueryParam("filter[name]") String nameFilter,
                                @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                @QueryParam("filter[kind]") ArrayList<String> kindFilter,
@@ -83,5 +104,18 @@ public class EventResourceMobile {
         TemplateInstance templateInstance = stuecke.data("events", outgoingEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active);
     String html = templateInstance.render();
     return Response.ok().entity(html).build();
+    }
+    @Path("/fallback")
+    public Response getEventsFallback(@QueryParam("filter[name]") String nameFilter,
+                                      @QueryParam("filter[status]") ArrayList<String> statusFilter,
+                                      @QueryParam("filter[kind]") ArrayList<String> kindFilter,
+                                      @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
+                                      @QueryParam("filter[startDateTime]") String startDateTimeFilter,
+                                      @Pattern(regexp = "7days|30days") @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                                      @QueryParam("include") String include,
+                                      @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                                      @Positive @Max(50) @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
+                                      @Context SecurityContext securityContext) {
+        return Response.seeOther(URI.create("errors.html")).build();
     }
 }

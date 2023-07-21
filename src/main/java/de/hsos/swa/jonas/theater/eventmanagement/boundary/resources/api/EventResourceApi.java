@@ -87,7 +87,7 @@ public class EventResourceApi {
     }
 
 
-
+    @Path("/fallback")
     public Response getEventsFallback(@QueryParam("filter[name]") String nameFilter,
                                      @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                      @QueryParam("filter[kind]") ArrayList<String> kindFilter,

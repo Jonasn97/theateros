@@ -19,6 +19,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -26,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Path("/api/performances")
 public class PerformanceResourceApi {
     private final static long FIRSTPAGE = 0;
     private final static String FIRSTPAGE_STRING = "0";
@@ -79,7 +81,7 @@ public class PerformanceResourceApi {
     }
 
 
-
+    @Path("/fallback")
     public Response getPerformancesFallback(@QueryParam("filter[name]") String nameFilter,
                                       @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                       @QueryParam("filter[kind]") ArrayList<String> kindFilter,

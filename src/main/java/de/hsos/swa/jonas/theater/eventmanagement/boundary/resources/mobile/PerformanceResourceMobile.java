@@ -5,12 +5,21 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO
 import de.hsos.swa.jonas.theater.eventmanagement.control.PerformanceOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import de.hsos.swa.jonas.theater.shared.EventState;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
+import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
 import io.quarkus.qute.Template;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Location;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Max;
@@ -22,6 +31,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +48,17 @@ public class PerformanceResourceMobile {
 
     @Path("/performances")
     @GET
+    @Retry
+    @Timeout(5000)
+    @Fallback(fallbackMethod = "getPerformancesFallback")
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
+    @Operation(summary = "Get filtered Performances", description = "Get filtered and paged Performances")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Filtered Performances are returned"),
+            @APIResponse(responseCode = "400", description = "Bad Request"),
+            @APIResponse(responseCode = "404", description = "No Performances found for selected filter"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
     public Response getPerformances(@QueryParam("filter[name]") String nameFilter,
                                     @QueryParam("filter[status]") ArrayList<String> statusFilter,
                                     @QueryParam("filter[kind]") ArrayList<String> kindFilter,
@@ -75,5 +96,18 @@ public class PerformanceResourceMobile {
         int active = 2;
         String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active).render();
         return Response.ok().entity(html).build();
+    }
+    @Path("/performances/fallback")
+    public Response getPerformancesFallback(@QueryParam("filter[name]") String nameFilter,
+                                            @QueryParam("filter[status]") ArrayList<String> statusFilter,
+                                            @QueryParam("filter[kind]") ArrayList<String> kindFilter,
+                                            @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
+                                            @QueryParam("filter[startDateTime]") String startDateTimeFilter,
+                                            @Pattern(regexp = "7days|30days")@QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                                            @QueryParam("include") String include,
+                                            @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
+                                            @Positive @Max(50) @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
+                                            @Context SecurityContext securityContext) {
+        return Response.seeOther(URI.create("errors.html")).build();
     }
 }
