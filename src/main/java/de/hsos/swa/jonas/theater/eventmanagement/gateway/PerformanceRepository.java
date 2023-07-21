@@ -17,10 +17,10 @@ public class PerformanceRepository implements PerformanceCatalog {
     public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
         List<Performance> performances = Performance.listAll();
         return performances.stream()
-                //.filter(performance -> performance.datetime == null || performance.datetime.isAfter(queryParametersDTO.startDateTimeFilter) && performance.datetime.isBefore(queryParametersDTO.endDateTimeFilter))
+                .filter(performance -> queryParametersDTO.startDateTimeFilter == null && queryParametersDTO.endDateTimeFilter== null|| queryParametersDTO.startDateTimeFilter.isBefore(performance.getDatetime())&&queryParametersDTO.endDateTimeFilter.isAfter(performance.getDatetime()))
                 .filter(performance -> queryParametersDTO.nameFilter == null || performance.getEvent().getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
                 .filter(performance -> queryParametersDTO.kindFilter == null || queryParametersDTO.kindFilter.isEmpty()|| queryParametersDTO.kindFilter.contains(performance.getEvent().getKind()))
-                //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
+                .filter(performance -> queryParametersDTO.performanceTypeFilter == null || queryParametersDTO.performanceTypeFilter.isEmpty() || queryParametersDTO.performanceTypeFilter.contains(performance.getPerformanceType()))
                 //Sort by dates from now on
                 .sorted(Comparator.comparing(performance -> performance.getDatetime()))
                 .skip(queryParametersDTO.pageNumber * queryParametersDTO.pageSize)

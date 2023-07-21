@@ -14,12 +14,15 @@ import net.fortuna.ical4j.model.property.Location;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,15 +40,22 @@ public class PerformanceResourceMobile {
     @GET
     public Response getPerformances(@QueryParam("filter[name]") String nameFilter,
                                     @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                                    @QueryParam("filter[playType]") ArrayList<String> playTypeFilter,
+                                    @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                                     @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                     @QueryParam("filter[startDateTime]") String startDateTimeFilter,
-                                    @QueryParam("filter[endDateTime]") String endDateTimeFilter,
+                                    @Pattern(regexp = "7days|30days")@QueryParam("filter[endDateTime]") String endDateTimeFilter,
                                     @QueryParam("include") String include,
                                     @PositiveOrZero @DefaultValue(FIRSTPAGE_STRING)@QueryParam("page[number]") Long pageNumber,
                                     @Positive @Max(50) @DefaultValue("10")@QueryParam("page[size]") Long pageSize,
                                     @Context SecurityContext securityContext){
-        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
+        if(endDateTimeFilter!=null &&endDateTimeFilter.equals("7days")) {
+            endDateTimeFilter = String.valueOf(LocalDateTime.now().plusDays(7));
+            startDateTimeFilter = String.valueOf(LocalDateTime.now());
+        } else if(endDateTimeFilter!=null &&endDateTimeFilter.equals("30days")) {
+            endDateTimeFilter = String.valueOf(LocalDateTime.now().plusDays(30));
+            startDateTimeFilter = String.valueOf(LocalDateTime.now());
+        }
+        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, kindFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Performance> performances = performanceOperations.getPerformances(queryParametersDTO);
         String username;
         Map<Long, PerformanceState> performanceStates = null;
@@ -65,27 +75,5 @@ public class PerformanceResourceMobile {
         int active = 2;
         String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active).render();
         return Response.ok().entity(html).build();
-    }
-    @Path("/performances/{id}")
-    @GET
-    @Produces("text/calendar")
-    public Response getCalenderFile(@Positive @PathParam("id") Long id){
-        Calendar calenderFile = new Calendar();
-        Optional<Performance> optionalPerformance = performanceOperations.getPerformance(id);
-        if(optionalPerformance.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        Performance performance = optionalPerformance.get();
-        String eventName = performance.getEvent().getTitle();
-        Location eventLocation =new Location(performance.getEvent().getLocation());
-        Date date = new Date(performance.getDatetime().toEpochSecond(java.time.ZoneOffset.UTC));
-        VEvent vEvent = new VEvent(date, eventName);
-        vEvent.getProperties().add(eventLocation);
-        calenderFile.getComponents().add(vEvent);
-        String fileName = eventName.replaceAll("\\s+", "_") + ".ics";
-        String calendarContent = calenderFile.toString();
-        return Response.ok(calendarContent)
-                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
-                .build();
     }
 }

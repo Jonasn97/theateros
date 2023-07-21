@@ -18,10 +18,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,7 +38,7 @@ public class EventResourceMobile {
     @GET
     public Response listEvents(@QueryParam("filter[name]") String nameFilter,
                                @QueryParam("filter[status]") ArrayList<String> statusFilter,
-                               @QueryParam("filter[playType]") ArrayList<String> playTypeFilter,
+                               @QueryParam("filter[kind]") ArrayList<String> kindFilter,
                                @QueryParam("filter[performanceType]") ArrayList<String> performanceTypeFilter,
                                @QueryParam("filter[startDateTime]") String startDateTimeFilter,
                                @Pattern(regexp = "7days|30days") @QueryParam("filter[endDateTime]") String endDateTimeFilter,
@@ -56,7 +53,7 @@ public class EventResourceMobile {
             endDateTimeFilter = String.valueOf(LocalDateTime.now().plusDays(30));
             startDateTimeFilter = String.valueOf(LocalDateTime.now());
         }
-        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, playTypeFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
+        QueryParametersDTO queryParametersDTO = new QueryParametersDTO(nameFilter, statusFilter, kindFilter, performanceTypeFilter, startDateTimeFilter, endDateTimeFilter, include, pageNumber, pageSize);
         Collection<Event> events = eventOperations.getEvents(queryParametersDTO);
         String username;
         Map<Long, EventState> eventStates = null;

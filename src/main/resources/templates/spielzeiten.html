@@ -11,7 +11,7 @@
         </svg>
     </a>
     <h1>{#insert title}Default Title{/}</h1>
-    <a href="/filters.html" up-layer="new" up-mode="modal">
+    <a href="/pfilters.html" up-layer="new" up-mode="modal">
         <svg id="filterIcon" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
             <path d="M23.8269 0H1.17324C0.132319 0 -0.392925 1.26299 0.344624 2.00054L9.37499 11.0323V21.0937C9.37499 21.4761 9.56156 21.8345 9.87485 22.0538L13.7811 24.7872C14.5517 25.3267 15.625 24.7799 15.625 23.8271V11.0323L24.6556 2.00054C25.3916 1.26445 24.87 0 23.8269 0Z"/>
         </svg>
@@ -46,12 +46,12 @@
     <button class="button" type="submit">Mehr anzeigen</button>
     <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
     <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
-    <input type="hidden" name="filter[startDateTime]" value="{queryParameters.startDateTimeFilter}">
-    <input type="hidden" name="filter[endDateTime]" value="{queryParameters.endDateTimeFilter}">
-    <input type="hidden" name="filter[name]" value="{queryParameters.nameFilter}">
-    <input type="hidden" name="filter[status]" value="{queryParameters.statusFilter}">
-    <input type="hidden" name="filter[kind]" value="{queryParameters.kindFilter}">
-    <input type="hidden" name="filter[performanceType]" value="{queryParameters.performanceTypeFilter}">
-    <input type="hidden" name="include" value="{queryParameters.include}">
+    {#if queryParameters.startDateTimeFilter} <input type="hidden" name="filter[startDateTime]" value="{queryParameters.startDateTimeFilter}"> {/if}
+    {#if queryParameters.endDateTimeFilter} <input type="hidden" name="filter[endDateTime]" value="{queryParameters.endDateTimeFilter}"> {/if}
+    {#if queryParameters.nameFilter} <input type="hidden" name="filter[name]" value="{queryParameters.nameFilter}">{/if}
+    {#if queryParameters.statusFilter} <input type="hidden" name="filter[status]" value="{queryParameters.statusFilter?}">{/if}
+    {#if queryParameters.kindFilter} <input type="hidden" name="filter[kind]" value="{queryParameters.kindFilter}">{/if}
+    {#if queryParameters.performanceTypeFilter} <input type="hidden" name="filter[performanceType]" value="{queryParameters.performanceTypeFilter}">{/if}
+    {#if queryParameters.include} <input type="hidden" name="include" value="{queryParameters.include}">{/if}
 </form>
 {/include}

@@ -21,9 +21,7 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         try(Stream<Event> plays = playlist.stream()) {
             return plays
                     .filter(play -> queryParametersDTO.nameFilter == null || play.getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
-                    //.filter(play -> statusFilter == null|| statusFilter.contains(play.status))
                     .filter(play -> queryParametersDTO.kindFilter == null || queryParametersDTO.kindFilter.isEmpty()|| queryParametersDTO.kindFilter.contains(play.getKind()))
-                    //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
                     .filter(play -> {
                         if (queryParametersDTO.startDateTimeFilter == null || queryParametersDTO.endDateTimeFilter == null) {
                             return true;
@@ -46,9 +44,7 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         try(Stream<Event> plays = playlist.stream()) {
             return plays
                     .filter(play -> queryParametersDTO.nameFilter == null || play.getTitle().toLowerCase().contains(queryParametersDTO.nameFilter.toLowerCase()))
-                    //.filter(play -> statusFilter == null|| statusFilter.contains(play.status))
                     .filter(play -> queryParametersDTO.kindFilter == null || queryParametersDTO.kindFilter.isEmpty()|| queryParametersDTO.kindFilter.contains(play.getKind()))
-                    //.filter(play -> performanceTypeFilter == null || performanceTypeFilter.isEmpty() || performanceTypeFilter.contains(play.performances.contains(performanceTypeFilter)))
                     .filter(play -> {
                         if (queryParametersDTO.startDateTimeFilter == null || queryParametersDTO.endDateTimeFilter == null) {
                             return true;
