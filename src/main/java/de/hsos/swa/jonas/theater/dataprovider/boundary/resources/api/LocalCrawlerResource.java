@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-@Path("/local/crawler")
+@Path("/crawler/local")
 public class LocalCrawlerResource {
     Document calendarDocument = null;
     @Inject

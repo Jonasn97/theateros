@@ -30,7 +30,7 @@ import java.util.Set;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/crawler")
+@Path("/crawler/web")
 public class CrawlerResource {
     Document calendarDocument = null;
     private static final String CALENDAR_URL = "https://www.theater-osnabrueck.de/kalender";
