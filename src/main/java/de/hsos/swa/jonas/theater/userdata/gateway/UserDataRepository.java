@@ -19,15 +19,17 @@ public class UserDataRepository implements UserDataCatalog {
     public Map<Long, EventState> getEventState(String username, Set<Long> eventIds) {
 
         HashMap<Long, EventState> eventStates = new HashMap<>();
-        Userdata user = Userdata.find("username", username).firstResult();
-        user.userEvents.stream().filter(userEvent -> eventIds.contains(userEvent.eventId)).forEach(userEvent -> eventStates.put(userEvent.eventId, userEvent.eventState));
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return eventStates;
+        user.get().userEvents.stream().filter(userEvent -> eventIds.contains(userEvent.eventId)).forEach(userEvent -> eventStates.put(userEvent.eventId, userEvent.eventState));
         return eventStates;
     }
 
     @Override
     public Optional<EventState> getEventState(String username, long eventId) {
-        Userdata user = Userdata.find("username", username).firstResult();
-        return user.userEvents.stream().filter(userEvent -> userEvent.eventId == eventId).findFirst().map(userEvent -> userEvent.eventState);
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        return user.get().userEvents.stream().filter(userEvent -> userEvent.eventId == eventId).findFirst().map(userEvent -> userEvent.eventState);
     }
 
     @Override

@@ -6,10 +6,17 @@ import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 import io.quarkus.logging.Log;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -25,6 +32,17 @@ public class LocalCrawlerResource {
     @Inject
     WebsiteDownloader websiteDownloader;
     @GET
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Fallback(fallbackMethod = "crawlEventsLocallyFallback")
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
+    @Operation(summary = "Crawl Events from website", description = "Crawl Events from Website and update Database")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "A message of how many events were updated is returned"),
+            @APIResponse(responseCode = "400", description = "Bad Request"),
+            @APIResponse(responseCode = "204", description = "No changes found on website"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error"),
+            @APIResponse(responseCode = "502", description = "Error while connecting to website")
+    })
     public Response crawlPlaysLocally() {
         //Step 1 - Update Entries from WEBSITE_URL
         //Step 2 - Update Plays from infolinks
@@ -84,5 +102,12 @@ public class LocalCrawlerResource {
             e.printStackTrace();
             throw e;
         }
+    }
+    @Path("/fallback")
+    public Response crawlEventsLocallyFallback() {
+        ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
+        responseWrapperDTO.errors = new ArrayList<>();
+        responseWrapperDTO.errors.add(new ErrorDTO("500", "CRAWL:2","Internal Server Error", "Something went wrong while processing your request"));
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
 }

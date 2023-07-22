@@ -15,6 +15,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
@@ -40,6 +41,7 @@ public class PerformanceResourceApi {
     @Context
     UriInfo uriInfo;
     @GET
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Retry
     @Timeout(5000)
     @Fallback(fallbackMethod = "getPerformancesFallback")

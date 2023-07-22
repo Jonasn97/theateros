@@ -17,7 +17,7 @@ import java.util.Objects;
 public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBase<Event, Long> {
 
     @Override
-    @Transactional
+    @Transactional(Transactional.TxType.MANDATORY)
     public int updateDatabase(CalendarElementDTO calendarElementDTO) {
         int updatedElements = 0;
         Event event = Event.find("stid", calendarElementDTO.stid).firstResult();
@@ -53,7 +53,7 @@ public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBa
     }
 
     @Override
-    @Transactional
+    @Transactional(Transactional.TxType.MANDATORY)
     public int updateDatabase(EventElementDTO eventElementDTO) {
         Event event = Event.find("stid", eventElementDTO.stid).firstResult();
         if (event == null) {

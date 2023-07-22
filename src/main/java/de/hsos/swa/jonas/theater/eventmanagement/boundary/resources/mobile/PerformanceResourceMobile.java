@@ -22,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
@@ -47,10 +48,11 @@ public class PerformanceResourceMobile {
     Template spielzeiten;
 
     @Path("/performances")
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     @GET
     @Retry
     @Timeout(5000)
-    @Fallback(fallbackMethod = "getPerformancesFallback")
+    //@Fallback(fallbackMethod = "getPerformancesFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
     @Operation(summary = "Get filtered Performances", description = "Get filtered and paged Performances")
     @APIResponses(value = {
@@ -94,13 +96,12 @@ public class PerformanceResourceMobile {
             return outgoingPerformanceEventDTOMobile;
         }).collect(java.util.stream.Collectors.toList());
         long maxSize = performanceOperations.getPerformancesCount(queryParametersDTO);
-        boolean hasNextPage = false;
-        if((pageNumber+1) * pageSize < maxSize)
-            hasNextPage =true;
+        boolean hasNextPage = (pageNumber + 1) * pageSize < maxSize;
         int active = 2;
         String html = spielzeiten.data("performances", outgoingPerformanceEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active, "showMore", hasNextPage).render();
         return Response.ok().entity(html).build();
     }
+
     @Path("/performances/fallback")
     public Response getPerformancesFallback(@QueryParam("filter[name]") String nameFilter,
                                             @QueryParam("filter[status]") ArrayList<String> statusFilter,

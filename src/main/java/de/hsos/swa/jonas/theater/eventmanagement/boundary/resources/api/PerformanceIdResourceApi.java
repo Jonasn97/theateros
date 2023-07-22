@@ -20,6 +20,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Positive;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -42,6 +43,7 @@ public class PerformanceIdResourceApi {
 
     @Path("{performanceId}")
     @GET
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Retry
     @Timeout(5000)
     @Fallback(fallbackMethod = "getPerformanceByIdFallback")
@@ -72,8 +74,20 @@ public class PerformanceIdResourceApi {
     }
     @Path("{performanceId}/calendar")
     @GET
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Retry
+    @Timeout(5000)
+    @Fallback(fallbackMethod = "getCalendarFileFallback")
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
+    @Operation(summary = "Get Calendarentry by id", description = "Get mime: text/calendar for performanceId")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Mimetype text/calendar for performanceId is returned"),
+            @APIResponse(responseCode = "400", description = "Bad Request"),
+            @APIResponse(responseCode = "404", description = "No Performance found for id to create Calendarentry"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @Produces("text/calendar")
-    public Response getCalenderFile(@Positive @PathParam("performanceId") Long id){
+    public Response getCalendarFile(@Positive @PathParam("performanceId") Long id){
         Calendar calenderFile = new Calendar();
         Optional<Performance> optionalPerformance = performanceOperations.getPerformance(id);
         if(optionalPerformance.isEmpty()){
@@ -96,7 +110,14 @@ public class PerformanceIdResourceApi {
     public Response getPerformanceByIdFallback(@Positive @PathParam("performanceId") long performanceId){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
-        responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));
+        responseWrapperDTO.errors.add(new ErrorDTO("500", "PERF:2","Internal Server Error", "Something went wrong while processing your request"));
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
+    }
+    @Path("{performanceId}/calendar/fallback")
+    public Response getCalendarFileFallback(@Positive @PathParam("performanceId") Long performanceId){
+        ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
+        responseWrapperDTO.errors = new ArrayList<>();
+        responseWrapperDTO.errors.add(new ErrorDTO("500", "PERF:3","Internal Server Error", "Something went wrong while processing your request"));
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
 }

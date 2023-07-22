@@ -17,6 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Positive;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -37,6 +38,7 @@ public class EventIdPerformanceResourceApi {
     UriInfo uriInfo;
     @GET
     @Retry
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Timeout(5000)
     @Fallback(fallbackMethod = "getPerformancesByEventIdFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)

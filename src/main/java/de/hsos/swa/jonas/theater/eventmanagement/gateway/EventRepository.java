@@ -7,6 +7,7 @@ import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 public class EventRepository implements EventCatalog, PanacheRepository<Performance> {
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public Collection<Event> getEvents(QueryParametersDTO queryParametersDTO) {
         List<Event> playlist = Event.listAll();
         try(Stream<Event> plays = playlist.stream()) {
@@ -39,6 +41,7 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
     }
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public long getEventsCount(QueryParametersDTO queryParametersDTO) {
         List<Event> playlist = Event.listAll();
         try(Stream<Event> plays = playlist.stream()) {
@@ -61,20 +64,18 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
     }
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public Optional<Event> getEventById(long playId) {
         return Event.findByIdOptional(playId);
     }
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public Collection<Performance> getPerformancesByEventId(long id) {
         Optional<Event> event = Event.findByIdOptional(id);
         if (event.isPresent()) {
             return event.get().getPerformances();
         }
         return Collections.emptyList();
-    }
-
-    private boolean isPerformanceWithinDateRange(Event event, LocalDateTime startDateTimeFilter, LocalDateTime endDateTimeFilter) {
-        return true;
     }
 }

@@ -5,6 +5,7 @@ import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.PerformanceCatalog;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class PerformanceRepository implements PerformanceCatalog {
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
         List<Performance> performances = Performance.listAll();
         return performances.stream()
@@ -29,11 +31,13 @@ public class PerformanceRepository implements PerformanceCatalog {
     }
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public Optional<Performance> getPerformance(Long id) {
         return Performance.findByIdOptional(id);
     }
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public long getPerformancesCount(QueryParametersDTO queryParametersDTO) {
         List<Performance> performances = Performance.listAll();
         return performances.stream()

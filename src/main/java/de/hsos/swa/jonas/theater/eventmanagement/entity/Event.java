@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,15 +28,15 @@ public class Event extends PanacheEntity {
     private String bannerPath;
 
     @ElementCollection
-    private Set<String> imagePaths;
+    private Set<String> imagePaths = new HashSet<>();
     @ElementCollection
-    private Set<String> videoUris;
+    private Set<String> videoUris = new HashSet<>();
     @ElementCollection
-    private Set<String> spotifyUris;
+    private Set<String> spotifyUris = new HashSet<>();
     @ElementCollection
-    private Set<String> vimeoUris;
+    private Set<String> vimeoUris = new HashSet<>();
     @ElementCollection
-    private Set<String> soundcloudUris;
+    private Set<String> soundcloudUris = new HashSet<>();
     @Column(length = 10000)
     private String team;
     @Column(length = 10000)

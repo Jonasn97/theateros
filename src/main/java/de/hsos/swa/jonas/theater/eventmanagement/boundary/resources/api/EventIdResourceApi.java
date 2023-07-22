@@ -17,6 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Positive;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -41,6 +42,7 @@ public class EventIdResourceApi {
 
     @Path("{eventId}")
     @GET
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Retry
     @Timeout(5000)
     @Fallback(fallbackMethod = "getEventByIdFallback")

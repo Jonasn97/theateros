@@ -48,7 +48,7 @@ public class EventResourceMobile {
     @GET
     @Retry
     @Timeout(5000)
-    @Fallback(fallbackMethod = "getEventsFallback")
+    //@Fallback(fallbackMethod = "getEventsFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
     @Operation(summary = "Get filtered Events", description = "Get filtered and paged Events")
     @APIResponses(value = {
@@ -96,9 +96,7 @@ public class EventResourceMobile {
             return outgoingEventDTOMobile;
         }).collect(Collectors.toList());
         long maxSize = eventOperations.getEventsCount(queryParametersDTO);
-        boolean hasNextPage = false;
-        if((pageNumber+1) * pageSize < maxSize)
-            hasNextPage =true;
+        boolean hasNextPage = (pageNumber + 1) * pageSize < maxSize;
         int active = 1;
         TemplateInstance templateInstance = stuecke.data("events", outgoingEventDTOMobiles, "queryParameters", queryParametersDTO, "active", active, "showMore", hasNextPage);
     String html = templateInstance.render();
