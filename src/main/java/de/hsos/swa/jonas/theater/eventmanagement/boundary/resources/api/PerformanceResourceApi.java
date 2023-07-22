@@ -84,7 +84,7 @@ public class PerformanceResourceApi {
                 })
                 .toList();
         long maxSize = performanceOperations.getPerformancesCount(queryParametersDTO);
-        responseWrapperDTO.links = linkBuilder.createPaginationLinks(PerformanceResourceApi.class, uriInfo, queryParametersDTO, maxSize);
+        responseWrapperDTO.links = linkBuilder.createPaginationLinks(PerformanceResourceApi.class, uriInfo, pageNumber, pageSize, maxSize);
         return Response.ok().entity(responseWrapperDTO).build();
     }
 

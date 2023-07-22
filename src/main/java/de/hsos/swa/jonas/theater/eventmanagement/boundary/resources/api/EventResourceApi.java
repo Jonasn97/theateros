@@ -88,7 +88,7 @@ public class EventResourceApi {
                 })
                 .toList();
         long maxSize = eventOperations.getEventsCount(queryParametersDTO);
-        responseWrapperDTO.links = linkBuilder.createPaginationLinks(EventResourceApi.class, uriInfo, queryParametersDTO, maxSize);
+        responseWrapperDTO.links = linkBuilder.createPaginationLinks(EventResourceApi.class, uriInfo, pageNumber, pageSize, maxSize);
         return Response.ok().entity(responseWrapperDTO).build();
     }
 

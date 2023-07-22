@@ -1,7 +1,9 @@
 package de.hsos.swa.jonas.theater.userdata.entity;
 
 import de.hsos.swa.jonas.theater.shared.EventState;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -13,4 +15,8 @@ public interface UserDataCatalog {
     Map<Long, PerformanceState> getPerformanceState(String username, Set<Long> performanceIds);
 
     Optional<PerformanceState> getPerformanceState(String username, Long performanceId);
+
+    Collection<UserEvent> getUserEventsForUser(UserParametersDTO userParametersDTO);
+
+    long getUserEventsForUserCount(UserParametersDTO userParametersDTO);
 }

@@ -22,12 +22,7 @@ public class LinkBuilder {
                 .toString();
         return linksDTO;
     }
-    public LinksDTO createPaginationLinks(Class<?> resourceClass, UriInfo uriInfo, QueryParametersDTO queryParametersDTO, long maxSize) {
-        Log.info("PageNumber: " + queryParametersDTO.pageNumber);
-        Log.info("PageSize: " + queryParametersDTO.pageSize);
-        Long pageNumber = queryParametersDTO.pageNumber;
-        Long pageSize = queryParametersDTO.pageSize;
-        Log.info("Size: " + maxSize);
+    public LinksDTO createPaginationLinks(Class<?> resourceClass, UriInfo uriInfo, long pageNumber, long pageSize, long maxSize) {
         LinksDTO linksDTO = new LinksDTO();
         UriBuilder uriBuilder = uriInfo.getBaseUriBuilder()
                 .path(resourceClass);
