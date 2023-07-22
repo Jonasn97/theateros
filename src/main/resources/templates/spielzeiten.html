@@ -43,7 +43,7 @@
 </a>
 {/for}
 {#if showMore}
-<form class="showMore" action="/mobile/performances" method="GET">
+<form class="showMore" action="/mobile/performances" method="GET" up-target="main">
     <button class="button" type="submit">Mehr anzeigen</button>
     <input type="hidden" name="page[number]" value="{queryParameters.pageNumber + 1}">
     <input type="hidden" name="page[size]" value="{queryParameters.pageSize}">
