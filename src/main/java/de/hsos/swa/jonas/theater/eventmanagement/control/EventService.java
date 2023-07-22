@@ -57,4 +57,9 @@ public class EventService implements EventOperations {
                 .filter(performance -> performance.getDatetime().isAfter(currentTime))
                 .min(Comparator.comparing(performance -> performance.getDatetime()));
     }
+
+    @Override
+    public boolean isFavorite(String username, Long id) {
+        return userDataCatalog.isFavorite(username, id);
+    }
 }

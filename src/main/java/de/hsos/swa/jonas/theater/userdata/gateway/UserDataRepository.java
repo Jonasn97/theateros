@@ -2,6 +2,8 @@ package de.hsos.swa.jonas.theater.userdata.gateway;
 
 import de.hsos.swa.jonas.theater.shared.EventState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
 import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
 import de.hsos.swa.jonas.theater.userdata.entity.UserEvent;
@@ -62,4 +64,123 @@ public class UserDataRepository implements UserDataCatalog {
                 .size();
     }
 
+    @Override
+    public Optional<UserEvent> getUserEventByIdForUser(long id, String username) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        return user.get().userEvents.stream().filter(userEvent -> userEvent.id == id).findFirst();
+    }
+
+    @Override
+    public Optional<UserEvent> createUserEvent(String username, IncomingUserEventDTO incomingUserEventDTO) {
+Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        UserEvent userEvent = new UserEvent();
+        userEvent.eventId = incomingUserEventDTO.eventId;
+        userEvent.eventState = incomingUserEventDTO.eventState;
+        userEvent.isFavorite = incomingUserEventDTO.isFavorite;
+        user.get().userEvents.add(userEvent);
+        userEvent.persist();
+        user.get().persist();
+        return Optional.of(userEvent);
+    }
+
+    @Override
+    public Optional<UserEvent> updateUserEvent(String username, long userEventId, IncomingUpdateUserEventDTO incomingUserEventDTO) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
+        if(userEvent.isEmpty()) return Optional.empty();
+        userEvent.get().eventState = incomingUserEventDTO.eventState;
+        userEvent.get().isFavorite = incomingUserEventDTO.isFavorite;
+        userEvent.get().persist();
+        user.get().persist();
+        return Optional.of(userEvent.get());
+    }
+
+    @Override
+    public boolean deleteUserEvent(String username, long userEventId) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return false;
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
+        if(userEvent.isEmpty()) return false;
+        user.get().userEvents.remove(userEvent.get());
+        userEvent.get().persist();
+        user.get().persist();
+        return true;
+    }
+
+    @Override
+    public Optional<UserEvent> patchUserEvent(String username, long userEventId, EventState eventState) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
+        if(userEvent.isEmpty()) return Optional.empty();
+        userEvent.get().eventState = eventState;
+        userEvent.get().persist();
+        user.get().persist();
+        return Optional.of(userEvent.get());
+    }
+
+    @Override
+    public Optional<UserEvent> patchUserEvent(String username, long userEventId, Boolean isFavorite) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
+        if(userEvent.isEmpty()) return Optional.empty();
+        userEvent.get().isFavorite = isFavorite;
+        userEvent.get().persist();
+        user.get().persist();
+        return Optional.of(userEvent.get());
+    }
+
+    @Override
+    public EventState updateEventStatebyEventIdOfUser(long eventId, EventState eventState, String username) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return null;
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == eventId).findFirst();
+        if(userEvent.isEmpty()) {
+            UserEvent newUserEvent = new UserEvent();
+            newUserEvent.eventId = eventId;
+            newUserEvent.eventState = eventState;
+            newUserEvent.isFavorite = false;
+            user.get().userEvents.add(newUserEvent);
+            newUserEvent.persist();
+            user.get().persist();
+            return eventState;
+        }
+        userEvent.get().eventState = eventState;
+        userEvent.get().persist();
+        user.get().persist();
+        return eventState;
+    }
+
+    @Override
+    public void updateIsFavoritebyEventIdOfUser(long eventId, boolean isFavorite, String username) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return;
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == eventId).findFirst();
+        if(userEvent.isEmpty()) {
+            UserEvent newUserEvent = new UserEvent();
+            newUserEvent.eventId = eventId;
+            newUserEvent.eventState = EventState.NONE;
+            newUserEvent.isFavorite = isFavorite;
+            user.get().userEvents.add(newUserEvent);
+            newUserEvent.persist();
+            user.get().persist();
+            return;
+        }
+        userEvent.get().isFavorite = isFavorite;
+        userEvent.get().persist();
+        user.get().persist();
+    }
+
+    @Override
+    public boolean isFavorite(String username, Long id) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return false;
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == id).findFirst();
+        if(userEvent.isEmpty()) return false;
+        return userEvent.get().isFavorite;
+    }
 }

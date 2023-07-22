@@ -263,3 +263,8 @@ nav a .dot {
 footer nav a.active svg {
     fill: #9D8276;
 }
+#unset {
+    all: unset;
+    cursor: pointer;
+    height: 22px;
+}

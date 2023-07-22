@@ -16,6 +16,7 @@ public class OutgoingEventIdDTOMobile {
     public String kind;
     public String location;
     public EventState eventState;
+    public boolean isFavorite = false;
     public String thumbnailPath;
     public String duration;
     public String description;
@@ -29,6 +30,10 @@ public class OutgoingEventIdDTOMobile {
 
     public void setEventState(EventState eventState) {
         this.eventState = eventState;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     public static class Converter {

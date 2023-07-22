@@ -1,0 +1,14 @@
+{#include base}
+{#title}Statusupdate{/title}
+
+  <form action="/mobile/user/userevents/{eventId}" method="POST" class="modal-content">
+    <h2>Wähle einen Status aus</h2>
+    <button name="eventState" value="SEEN" class="state-button seen-state">Gesehen</button>
+    <button name="eventState" value="INTERESTED" class="state-button interested-state">Interessiert</button>
+    <button name="eventState" value="NOT_INTERESTED" class="state-button not-interested-state">Nicht interessiert</button>
+    <button name="eventState" value="UNSURE" class="state-button unsure-state">Unsicher</button>
+    <button name="eventState" value="MISS_OUT" class="state-button miss-out-state">Verpasst</button>
+    <button name="eventState" value="NONE" class="state-button none-state">Kein Status</button>
+  </form>
+
+{/include}

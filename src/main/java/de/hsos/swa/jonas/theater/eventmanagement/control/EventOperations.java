@@ -22,4 +22,6 @@ public interface EventOperations {
     Collection<Performance> getPerformancesByEventId(long id);
 
     Optional<Performance> getNextPerformance(Event event);
+
+    boolean isFavorite(String username, Long id);
 }

@@ -63,7 +63,9 @@ public class EventIdResourceMobile {
             if(securityContext.getUserPrincipal()!= null && securityContext.getUserPrincipal().getName()!= null) {
                 username = securityContext.getUserPrincipal().getName();
                 Optional<EventState> eventState = eventOperations.getEventStatus(username, play.get().id);
+                boolean isFavorite = eventOperations.isFavorite(username, play.get().id);
                 eventState.ifPresent(outgoingEventIdDTOMobile::setEventState);
+                outgoingEventIdDTOMobile.setFavorite(isFavorite);
             }
             int active=1;
         if(referrer != null) {
