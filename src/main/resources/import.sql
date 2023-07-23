@@ -26,3 +26,15 @@ INSERT INTO userdata_userevent (userdata_id, userevents_id) VALUES (999, 16);
 INSERT INTO userdata_userevent (userdata_id, userevents_id) VALUES (999, 17);
 INSERT INTO userdata_userevent (userdata_id, userevents_id) VALUES (999, 18);
 INSERT INTO userdata_userevent (userdata_id, userevents_id) VALUES (999, 19);
+-- add 10 userperformances
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (20, 134, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (21, 95, 'IS_BOOKED');
+
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (22, 149, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (23, 25, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (24, 46, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (25, 41, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (26, 43, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (27, 70, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (28, 66, 'IS_BOOKED');
+INSERT INTO userperformance (id, performanceid, performancestate) VALUES (29, 122, 'IS_BOOKED');

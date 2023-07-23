@@ -4,6 +4,7 @@ import de.hsos.swa.jonas.theater.shared.EventState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
 
 import java.util.Collection;
 import java.util.Map;
@@ -39,4 +40,10 @@ public interface UserDataCatalog {
     void updateIsFavoritebyEventIdOfUser(long eventId, boolean isFavorite, String username);
 
     boolean isFavorite(String username, Long id);
+
+    Collection<UserPerformance> getUserPerformancesForUser(UserParametersDTO userParametersDTO);
+
+    long getUserPerformancesForUserCount(UserParametersDTO userParametersDTO);
+
+    Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO);
 }

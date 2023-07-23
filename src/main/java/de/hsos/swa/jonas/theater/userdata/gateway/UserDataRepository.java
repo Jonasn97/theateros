@@ -4,10 +4,8 @@ import de.hsos.swa.jonas.theater.shared.EventState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
-import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
-import de.hsos.swa.jonas.theater.userdata.entity.UserEvent;
-import de.hsos.swa.jonas.theater.userdata.entity.Userdata;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
+import de.hsos.swa.jonas.theater.userdata.entity.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -42,7 +40,7 @@ public class UserDataRepository implements UserDataCatalog {
     @Override
     public Optional<PerformanceState> getPerformanceState(String username, Long performanceId) {
         Userdata user = Userdata.find("username", username).firstResult();
-        return user.userPerformances.stream().filter(userPerformance -> userPerformance.performanceId == performanceId).findFirst().map(userPerformance -> userPerformance.performanceState);
+        return user.userPerformances.stream().filter(userPerformance -> userPerformance.getPerformanceId() == performanceId).findFirst().map(UserPerformance::getPerformanceState);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class UserDataRepository implements UserDataCatalog {
 
     @Override
     public Optional<UserEvent> createUserEvent(String username, IncomingUserEventDTO incomingUserEventDTO) {
-Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return Optional.empty();
         UserEvent userEvent = new UserEvent();
         userEvent.eventId = incomingUserEventDTO.eventId;
@@ -182,5 +180,36 @@ Optional<Userdata> user = Userdata.find("username", username).firstResultOptiona
         Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == id).findFirst();
         if(userEvent.isEmpty()) return false;
         return userEvent.get().isFavorite;
+    }
+
+    @Override
+    public Collection<UserPerformance> getUserPerformancesForUser(UserParametersDTO userParametersDTO) {
+        Optional<Userdata> user = Userdata.find("username", userParametersDTO.username).firstResultOptional();
+        if(user.isEmpty()) return Collections.emptyList();
+        return user.get().userPerformances
+                .stream()
+                .skip(userParametersDTO.pageNumber * userParametersDTO.pageSize)
+                .limit(userParametersDTO.pageSize)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public long getUserPerformancesForUserCount(UserParametersDTO userParametersDTO) {
+        Optional<Userdata> user = Userdata.find("username", userParametersDTO.username).firstResultOptional();
+        if(user.isEmpty()) return 0;
+        return user.get().userPerformances.size();
+    }
+
+    @Override
+    public Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        UserPerformance userPerformance = new UserPerformance();
+        userPerformance.setPerformanceId(incomingUserPerformanceDTO.performanceId);
+        userPerformance.setPerformanceState(incomingUserPerformanceDTO.performanceState);
+        user.get().userPerformances.add(userPerformance);
+        userPerformance.persist();
+        user.get().persist();
+        return Optional.of(userPerformance);
     }
 }

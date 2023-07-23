@@ -8,7 +8,26 @@ import javax.persistence.Enumerated;
 
 @Entity
 public class UserPerformance extends PanacheEntity {
-    public long performanceId;
+    private long performanceId;
+
     @Enumerated(EnumType.STRING)
-    public PerformanceState performanceState;
+    private PerformanceState performanceState;
+
+    public long getPerformanceId() {
+        return performanceId;
+    }
+
+    public void setPerformanceId(long performanceId) {
+        this.performanceId = performanceId;
+    }
+
+    public PerformanceState getPerformanceState() {
+        return performanceState;
+    }
+
+    public void setPerformanceState(PerformanceState performanceState) {
+        this.performanceState = performanceState;
+    }
+
+
 }

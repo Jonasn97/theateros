@@ -4,8 +4,10 @@ import de.hsos.swa.jonas.theater.shared.EventState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
 import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
 import de.hsos.swa.jonas.theater.userdata.entity.UserEvent;
+import de.hsos.swa.jonas.theater.userdata.entity.UserPerformance;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -72,5 +74,20 @@ public class UserDataService implements UserDataOperations {
     @Override
     public void updateIsFavoritebyEventIdOfUser(long eventId, boolean isFavorite, String username) {
         userDataCatalog.updateIsFavoritebyEventIdOfUser(eventId, isFavorite, username);
+    }
+
+    @Override
+    public Collection<UserPerformance> getUserPerformancesForUser(UserParametersDTO userParametersDTO) {
+        return userDataCatalog.getUserPerformancesForUser(userParametersDTO);
+    }
+
+    @Override
+    public long getUserPerformancesForUserCount(UserParametersDTO userParametersDTO) {
+        return userDataCatalog.getUserPerformancesForUserCount(userParametersDTO);
+    }
+
+    @Override
+    public Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
+        return userDataCatalog.createUserPerformance(username, incomingUserPerformanceDTO);
     }
 }
