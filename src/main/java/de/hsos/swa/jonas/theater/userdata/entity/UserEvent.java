@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+/**
+ * Entity for UserEvent
+ */
 @Entity
 public class UserEvent extends PanacheEntity {
     private long eventId;

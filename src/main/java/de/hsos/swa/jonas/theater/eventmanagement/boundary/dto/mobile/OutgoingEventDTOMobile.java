@@ -3,6 +3,9 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.shared.EventState;
 
+/**
+ * DTO with needed data for events list which may contain the next performance of an event
+ */
 public class OutgoingEventDTOMobile {
     public long id;
     public String title;

@@ -13,9 +13,19 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.util.Objects;
 
+/**
+ * Repository for adding events to the database from the dataprovider
+ */
 @ApplicationScoped
 public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBase<Event, Long> {
 
+    /** Tries to find existing event in the database and updates it if necessary
+     * if no event is found, a new one is created
+     * Then the event is persisted
+     * and the performance is also updated
+     * @param calendarElementDTO CalendarElementDTO
+     * @return count of updated elements
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public int updateDatabase(CalendarElementDTO calendarElementDTO) {
@@ -52,6 +62,10 @@ public class AddEventsRepository implements AddEventsCatalog,PanacheRepositoryBa
         return updatedElements;
     }
 
+    /** Tries to find existing event in the database and updates it if necessary
+     * @param eventElementDTO EventElementDTO
+     * @return 1 if element is updated, throws exception if event doesn't exist
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public int updateDatabase(EventElementDTO eventElementDTO) {

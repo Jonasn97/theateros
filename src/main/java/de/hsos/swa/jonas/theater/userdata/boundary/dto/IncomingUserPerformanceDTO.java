@@ -1,11 +1,13 @@
-package de.hsos.swa.jonas.theater.userdata.boundary.dto.api;
+package de.hsos.swa.jonas.theater.userdata.boundary.dto;
 
-import de.hsos.swa.jonas.theater.shared.EventState;
-import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
+import de.hsos.swa.jonas.theater.shared.PerformanceState;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+/**
+ * DTO for changing the state of a performance for user via api
+ */
 public class IncomingUserPerformanceDTO {
     @Positive public long performanceId;
     @Valid public PerformanceState performanceState;

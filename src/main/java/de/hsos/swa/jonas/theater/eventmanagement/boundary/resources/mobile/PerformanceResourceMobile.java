@@ -4,15 +4,8 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile.OutgoingPer
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.control.PerformanceOperations;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
-import de.hsos.swa.jonas.theater.shared.EventState;
-import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
-import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
-import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
+import de.hsos.swa.jonas.theater.shared.PerformanceState;
 import io.quarkus.qute.Template;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.Location;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
@@ -31,12 +24,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Resource for performances view
+ *
+ */
 @Path("mobile")
 public class PerformanceResourceMobile {
 
@@ -47,12 +43,25 @@ public class PerformanceResourceMobile {
     @Inject
     Template spielzeiten;
 
+    /**
+     * @param nameFilter Filter for title of event
+     * @param statusFilter Filter for status of event
+     * @param kindFilter Filter for kind of event
+     * @param performanceTypeFilter Filter for type of performance
+     * @param startDateTimeFilter Filter for start date of performance of a event.
+     * @param endDateTimeFilter Filter for end date of performance of a event. Is either for the next 7days or 30days
+     * @param include Filter for included relations
+     * @param pageNumber Page number of the page
+     * @param pageSize Size of the page
+     * @param securityContext needed for showing a performance state of a user
+     * @return Response with all filtered performances as a page
+     */
     @Path("/performances")
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     @GET
     @Retry
     @Timeout(5000)
-    //@Fallback(fallbackMethod = "getPerformancesFallback")
+    @Fallback(fallbackMethod = "getPerformancesFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
     @Operation(summary = "Get filtered Performances", description = "Get filtered and paged Performances")
     @APIResponses(value = {

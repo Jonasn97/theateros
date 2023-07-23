@@ -2,6 +2,10 @@ package de.hsos.swa.jonas.theater.shared.dto.jsonapi;
 
 import java.util.List;
 
+/** The ResponseWrapperDTO is used to wrap the response of the REST-API to accomodate the JSON-API specification.
+ * @param <T> Data Type of the Response contains either a single object or a list of objects
+ *
+ */
 public class ResponseWrapperDTO<T> {
     public T data;
     public List<ErrorDTO> errors;

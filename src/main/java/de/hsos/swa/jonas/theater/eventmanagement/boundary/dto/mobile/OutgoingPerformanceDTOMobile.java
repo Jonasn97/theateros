@@ -4,6 +4,9 @@ import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO for outgoing performances for adapted for html
+ */
 public class OutgoingPerformanceDTOMobile {
     public long id;
     public String month;

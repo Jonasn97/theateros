@@ -3,6 +3,9 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * DTO for QueryParameters for performances and events resources
+ */
 public class QueryParametersDTO {
     public String nameFilter;
     public ArrayList<String> statusFilter;

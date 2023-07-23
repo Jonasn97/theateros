@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * Resource for crawling the websites from the theater osnabrück
+ */
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/crawler/web")
@@ -40,6 +43,9 @@ public class CrawlerResource {
     @Inject
     WebsiteDownloader websiteDownloader;
 
+    /** Crawls the seperate event pages and updates the database with the new events
+     * @return a set of stids that were updated
+     */
     @GET
     @Fallback(fallbackMethod = "crawlEventsFromWebsiteFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
@@ -83,6 +89,12 @@ public class CrawlerResource {
         }
         //TODO Check Document structure for changes. If changed, log alert, throw Exception and send 500
     }
+
+    /**
+     * @return a set of stids that were updated
+     * Downloads the calendardocument from the website
+     * @throws IOException if the connection to the website fails
+     */
     Set<String> updateCalendarFromWebsite() throws IOException {
         try {
             Document newCalendarDocument = Jsoup.connect(CALENDAR_URL).timeout(3000).get();
@@ -98,6 +110,11 @@ public class CrawlerResource {
             throw e;
         }
     }
+
+    /**Downloads the event pages from the website
+     * @param updatedStids a set of stids that were updated
+     * @return a set of stids that were updated
+     */
     Set<String> updateEventsFromWebsite(Set<String> updatedStids) {
         int updatedEvents = 0;
         String updatedLink;
@@ -115,6 +132,11 @@ public class CrawlerResource {
         }
         return null;
     }
+
+    /**
+     * @return a response with a 500 status code
+     * if the fallback method is called
+     */
     @Path("/fallback")
     public Response crawlEventsFromWebsiteFallback() {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();

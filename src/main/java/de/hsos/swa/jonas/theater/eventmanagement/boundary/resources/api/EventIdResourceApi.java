@@ -29,6 +29,9 @@ import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Resource for requesting a event by id
+ */
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Transactional(Transactional.TxType.REQUIRES_NEW)

@@ -12,8 +12,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Repository for Performances
+ */
 @ApplicationScoped
 public class PerformanceRepository implements PerformanceCatalog {
+    /**
+     * @param queryParametersDTO with filters and pagination
+     * @return filtered and paginated performances
+     * filters by name, kind, startDateTime, endDateTime, performanceType
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public Collection<Performance> getPerformances(QueryParametersDTO queryParametersDTO) {
@@ -30,12 +38,20 @@ public class PerformanceRepository implements PerformanceCatalog {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param id of performance
+     * @return performance with given id
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public Optional<Performance> getPerformance(Long id) {
         return Performance.findByIdOptional(id);
     }
 
+    /**
+     * @param queryParametersDTO with filters and pagination
+     * @return count of filtered performances for pagination
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public long getPerformancesCount(QueryParametersDTO queryParametersDTO) {

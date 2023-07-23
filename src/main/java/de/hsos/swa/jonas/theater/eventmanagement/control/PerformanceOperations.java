@@ -2,8 +2,7 @@ package de.hsos.swa.jonas.theater.eventmanagement.control;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
-import de.hsos.swa.jonas.theater.shared.EventState;
-import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
+import de.hsos.swa.jonas.theater.shared.PerformanceState;
 
 import java.util.Collection;
 import java.util.Map;

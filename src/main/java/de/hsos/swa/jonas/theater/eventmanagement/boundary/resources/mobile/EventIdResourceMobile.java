@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Contains the page for showing details of a event on /mobile/events/{eventId}
+ */
 @Produces(MediaType.TEXT_HTML)
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 @Path("mobile/events/")
@@ -38,6 +41,14 @@ public class EventIdResourceMobile {
 
     @Inject
     Template details;
+
+    /**
+     * @param playId Id of the event
+     * @param include Include parameter for the request
+     * @param referrer Referrer of the request needed to link back to the correct page and to set the correct active tab
+     * @param securityContext SecurityContext of the request to show and update the correct eventState
+     * @return Response with the details page of the event
+     */
     @Path("{eventId}")
     @GET
     @Retry

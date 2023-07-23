@@ -1,5 +1,8 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api;
 
+/**
+ * DTO for incoming events for admin changes in @see EventIdAdminResource
+ */
 public class IncomingEventIdDTOApi {
     public String title;
     public String description;

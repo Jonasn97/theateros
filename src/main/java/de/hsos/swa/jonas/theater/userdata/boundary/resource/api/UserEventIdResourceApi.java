@@ -1,14 +1,10 @@
 package de.hsos.swa.jonas.theater.userdata.boundary.resource.api;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventIdDTOApi;
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api.EventResourceApi;
 import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.*;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingPatchUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.OutgoingUserEventDTOApi;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingPatchUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUpdateUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.OutgoingUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.control.UserDataOperations;
 import de.hsos.swa.jonas.theater.userdata.entity.UserEvent;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -27,9 +23,12 @@ import javax.validation.constraints.Positive;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * REST Resource for UserEvent with PathParam userEventId
+ * Offers all CRUD-Operations for UserEvent for a specific user.
+ */
 @Path("api/user/userevents")
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @RolesAllowed("user")
@@ -41,6 +40,13 @@ public class UserEventIdResourceApi {
     UserDataOperations userDataOperations;
     @Inject
     LinkBuilder linkBuilder;
+
+    /**
+     * @param userEventId id of UserEvent
+     * @param securityContext SecurityContext of the request
+     * @param uriInfo UriInfo of the request
+     * @return ResponseWrapper with the request userevent
+     */
     @Path("{userEventId}")
     @GET
     @Retry
@@ -70,8 +76,8 @@ public class UserEventIdResourceApi {
             responseWrapperDTO.errors.add(new ErrorDTO("404", "USER_ES:4","No userevents found", "Couldn't find any event with the given id"));
             return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
         }
-        OutgoingUserEventDTOApi outgoingUserEventIdDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEvent.get());
-        ResourceObjectDTO<OutgoingUserEventDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
+        OutgoingUserEventDTO outgoingUserEventIdDTOApi = OutgoingUserEventDTO.Converter.toDTO(userEvent.get());
+        ResourceObjectDTO<OutgoingUserEventDTO> resourceObjectDTO = new ResourceObjectDTO<>();
         resourceObjectDTO.id = String.valueOf(userEvent.get().id);
         resourceObjectDTO.type = "userevent";
         resourceObjectDTO.links = linkBuilder.createSelfLink(UserEventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
@@ -108,12 +114,12 @@ public class UserEventIdResourceApi {
             responseWrapperDTO.errors.add(new ErrorDTO("500", "USER_ES:7", "Internal Server Error", "UserEvent could not be updated"));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
         }
-        OutgoingUserEventDTOApi outgoingUserEventDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEventUpdated.get());
-        ResourceObjectDTO<OutgoingUserEventDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
+        OutgoingUserEventDTO outgoingUserEventDTO = OutgoingUserEventDTO.Converter.toDTO(userEventUpdated.get());
+        ResourceObjectDTO<OutgoingUserEventDTO> resourceObjectDTO = new ResourceObjectDTO<>();
         resourceObjectDTO.id = String.valueOf(userEventUpdated.get().id);
         resourceObjectDTO.type = "userevent";
         resourceObjectDTO.links = linkBuilder.createSelfLink(UserEventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
-        resourceObjectDTO.attributes = outgoingUserEventDTOApi;
+        resourceObjectDTO.attributes = outgoingUserEventDTO;
         responseWrapperDTO.data = resourceObjectDTO;
         return Response.ok().entity(responseWrapperDTO).build();
     }
@@ -150,13 +156,13 @@ public class UserEventIdResourceApi {
             responseWrapperDTO.errors.add(new ErrorDTO("500", "USER_ES:7", "Internal Server Error", "UserEvent could not be patched"));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
         }
-        OutgoingUserEventDTOApi outgoingUserEventDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEventPatched.get());
+        OutgoingUserEventDTO outgoingUserEventDTO = OutgoingUserEventDTO.Converter.toDTO(userEventPatched.get());
         responseWrapperDTO.data = userEventPatched.get();
-        ResourceObjectDTO<OutgoingUserEventDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
+        ResourceObjectDTO<OutgoingUserEventDTO> resourceObjectDTO = new ResourceObjectDTO<>();
         resourceObjectDTO.id = String.valueOf(userEventPatched.get().id);
         resourceObjectDTO.type = "userevent";
         resourceObjectDTO.links = linkBuilder.createSelfLink(UserEventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
-        resourceObjectDTO.attributes = outgoingUserEventDTOApi;
+        resourceObjectDTO.attributes = outgoingUserEventDTO;
         return Response.ok().entity(responseWrapperDTO).build();
     }
 

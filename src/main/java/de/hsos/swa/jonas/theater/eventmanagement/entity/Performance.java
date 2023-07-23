@@ -8,6 +8,10 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * Entity for Performances
+ * Contains all necessary information for a Performance of the theater-osnabrueck.de website
+ */
 @Entity
 public class Performance extends PanacheEntity {
 

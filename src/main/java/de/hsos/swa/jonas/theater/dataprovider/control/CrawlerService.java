@@ -28,6 +28,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is responsible for crawling the website of the theater osnabrück
+ */
 @ApplicationScoped
 public class CrawlerService implements CrawlerOperations {
     private static final String CALENDER_ELEMENTS_SELECTOR = "div.container.mod-teaser--kalender";
@@ -40,6 +43,12 @@ public class CrawlerService implements CrawlerOperations {
 
     @Inject
     AddEventsCatalog addEventsCatalog;
+
+    /**
+     * @param calendarDocument The document of the calendar page
+     * loops through all calendar elements in the document and calls updateDatabase for each element
+     * @return a set of all updated stids
+     */
     @Override
     public Set<String> updateCalendar(Document calendarDocument) {
         Elements calenderElements = calendarDocument.select(CALENDER_ELEMENTS_SELECTOR);
@@ -53,6 +62,13 @@ public class CrawlerService implements CrawlerOperations {
     return updatedStids;
     }
 
+    /**
+     * @param stid The stid of the event
+     * @param eventDocument The document of the event page
+     *                      calls getDataFromEventElement to get the data from the event page
+     *                      calls updateDatabase to update the database
+     * @return              the number of updated elements
+     */
     @Override
     public int updateEvent(String stid, Document eventDocument) {
         EventElementDTO eventElementDTO = getDataFromEventElement(eventDocument);
@@ -63,6 +79,12 @@ public class CrawlerService implements CrawlerOperations {
         return updatedElements;
     }
 
+    /**
+     * @param eventDocument The document of the event page
+     *                    analyzes the whole document for the data of the event
+     *
+     * @return             an EventElementDTO with the data of the event
+     */
     private EventElementDTO getDataFromEventElement(Document eventDocument) {
         Elements divElements = eventDocument.select("div.container.mod.mod-content");
         EventElementDTO eventElementDTO = new EventElementDTO();
@@ -106,9 +128,6 @@ public class CrawlerService implements CrawlerOperations {
                     }
                 }
             }
-        }
-        else {
-            Log.info("Keine Beschreibung gefunden");
         }
         Element bannerElement = eventDocument.selectFirst("div.mod.mod-teaser--top");
         //Get url from div: <div class="mod mod-teaser mod-teaser--top" style="background-image: url(/media/1400px_der_weg_zurueck_0411.jpg)"></div>
@@ -158,7 +177,12 @@ public class CrawlerService implements CrawlerOperations {
         return eventElementDTO;
     }
 
-    private String saveImage(String imageUrl) { //TODO should be in Boundary
+    /**
+     * Saves the image from the given url in the media folder
+     * @param imageUrl The url of the image
+     * @return        the path of the image
+     */
+    private String saveImage(String imageUrl) {
         String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         imageName = imageName.replaceAll("[<>:\"/\\\\|?*]", "_");
         //store image in META-INF/resources/media
@@ -179,6 +203,11 @@ public class CrawlerService implements CrawlerOperations {
         }
     }
 
+    /**
+     * @param imageElements The image elements
+     *        loops through image elements and calls saveImage for each image
+     * @return Set of image paths
+     */
     private Set<String> saveImages(Elements imageElements) {
         Set<String> imagePaths = new HashSet<>();
         String imagePath;
@@ -191,6 +220,12 @@ public class CrawlerService implements CrawlerOperations {
         return imagePaths;
     }
 
+    /**
+     * @param calendarEntryElement The calendar entry element
+     *                             Extracts the data from the calendar entry element
+     *                             saves all the data it can fetch in a CalendarElementDTO
+     * @return CalendarElementDTO
+     */
     private CalendarElementDTO getDataFromCalenderEntryElement(Element calendarEntryElement) {
         //Extract basic playinfos: overline, title, infolink, sparte, location
         CalendarElementDTO calendarElementDTO = new CalendarElementDTO();
@@ -241,6 +276,11 @@ public class CrawlerService implements CrawlerOperations {
         return calendarElementDTO;
     }
 
+    /**
+     * @param timeString of time from calendar entry element
+     *               parses the time string to a LocalTime object
+     * @return LocalTime
+     */
     private LocalTime parseTime(String timeString) {
 
         if(timeString == null) return null;
@@ -255,6 +295,11 @@ public class CrawlerService implements CrawlerOperations {
         return null;
     }
 
+    /**
+     * @param dateString of date from calendar entry element
+     *                   parses the date string to a LocalDate object
+     * @return LocalDate
+     */
     private LocalDate parseDate(String dateString) {
         if(dateString == null) return null;
         try {

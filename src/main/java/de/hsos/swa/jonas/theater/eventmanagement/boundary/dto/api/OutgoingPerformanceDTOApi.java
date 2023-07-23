@@ -4,6 +4,9 @@ import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO for outgoing performances in JSON format
+ */
 public class OutgoingPerformanceDTOApi {
     public String bookingLink;
     public String auid;

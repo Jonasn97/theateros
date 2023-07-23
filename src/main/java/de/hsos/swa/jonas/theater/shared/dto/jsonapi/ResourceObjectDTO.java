@@ -1,5 +1,8 @@
 package de.hsos.swa.jonas.theater.shared.dto.jsonapi;
 
+/**
+ * @param <T> Data Type of the Response contains either a single object or a list of objects
+ */
 public class ResourceObjectDTO<T> {
     public String id;
     public String type;

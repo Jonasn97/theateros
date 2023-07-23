@@ -10,6 +10,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+/**
+ * LinkBuilder generates links for the REST API
+ * creates self links, pagination links and relationship links
+ */
 @ApplicationScoped
 public class LinkBuilder {
     private final static long FIRSTPAGE = 0;

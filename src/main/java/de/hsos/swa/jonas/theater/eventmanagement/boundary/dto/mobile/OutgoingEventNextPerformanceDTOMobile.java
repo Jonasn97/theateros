@@ -5,6 +5,10 @@ import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * DTO containing the next performance of an event
+ * Used for mobile
+ */
 public class OutgoingEventNextPerformanceDTOMobile {
     public String performanceType = null;
     public String startDate = null;

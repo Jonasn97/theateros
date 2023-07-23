@@ -31,6 +31,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Optional;
+
+/**
+ * Resource for requesting performances by id
+ * also provides a calendar file for the performance if requested
+ */
 @Path("api/performances/")
 public class PerformanceIdResourceApi {
 
@@ -41,6 +46,10 @@ public class PerformanceIdResourceApi {
     @Context
     UriInfo uriInfo;
 
+    /**
+     * @param eventId id of the performance
+     * @return Response of a performance with a jsonapi conform list of events
+     */
     @Path("{performanceId}")
     @GET
     @Transactional(Transactional.TxType.REQUIRES_NEW)
@@ -72,6 +81,13 @@ public class PerformanceIdResourceApi {
         responseWrapperDTO.errors.add(new ErrorDTO("404", "PERF:5","Performance not found", "Couldn't find Performance with the given id"));
         return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
     }
+
+    /**
+     * @param id id of the performance
+     * @return Response with the calendar file for the performance
+     * Uses ical4j to create a calendar file
+     * changes header of response to send a calendarfile with a filename instead of an id
+     */
     @Path("{performanceId}/calendar")
     @GET
     @Transactional(Transactional.TxType.REQUIRES_NEW)

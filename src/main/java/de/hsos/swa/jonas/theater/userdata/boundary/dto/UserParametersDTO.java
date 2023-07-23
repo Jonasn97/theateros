@@ -1,5 +1,8 @@
 package de.hsos.swa.jonas.theater.userdata.boundary.dto;
 
+/**
+ * DTO for pagingParameters in resources of userdata
+ */
 public class UserParametersDTO {
     public long pageNumber;
     public long pageSize;

@@ -13,6 +13,10 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * User Entity for the database
+ * UserDefinition is used for the security
+ */
 @Entity
 @Table(name = "users")
 @UserDefinition
@@ -25,6 +29,11 @@ public class User extends PanacheEntity {
     @Roles
     public String role;
 
+    /**
+     * @param username username
+     * @param password password which will be hashed
+     * @param role role of the user
+     */
     @Transactional(Transactional.TxType.MANDATORY)
     public static void add(String username, String password, String role) {
         User.find("username", username).firstResultOptional().ifPresentOrElse(

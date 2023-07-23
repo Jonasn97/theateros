@@ -32,6 +32,12 @@ public class UserEventResourceMobile {
     @Inject
     UserDataOperations userDataOperations;
 
+    /** Method return a eventstates page to let the user update the eventstate of a event with id eventId
+     * @param eventId The ID of the Event
+     * @param securityContext SecurityContext of the request
+     * @param referrer Referrer of the request
+     * @return Response with the eventstates page
+     */
     @GET
     @Retry
     @Timeout(5000)
@@ -54,6 +60,13 @@ public class UserEventResourceMobile {
         return Response.seeOther(URI.create(referrer)).build();
     }
 
+    /** Updates the eventstate of a event with id eventId from the user of the eventstates page and redirects to the page where the user came from
+     * @param eventId The ID of the Event
+     * @param isFavorite The isFavorite of the Event
+     * @param eventState The EventState of the Event
+     * @param securityContext SecurityContext of the request
+     * @return Response with the page where the user came from
+     */
     @POST
     @Retry
     @Timeout(5000)

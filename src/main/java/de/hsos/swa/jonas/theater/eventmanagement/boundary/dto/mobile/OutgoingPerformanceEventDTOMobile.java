@@ -1,7 +1,7 @@
 package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.mobile;
 
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
-import de.hsos.swa.jonas.theater.userdata.entity.PerformanceState;
+import de.hsos.swa.jonas.theater.shared.PerformanceState;
 
 import java.time.LocalDateTime;
 

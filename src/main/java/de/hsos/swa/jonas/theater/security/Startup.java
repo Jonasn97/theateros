@@ -9,6 +9,10 @@ import javax.transaction.Transactional;
 
 @Singleton
 public class Startup {
+    /**
+     * @param event the startup event
+     *              deletes all users and adds the default users
+     */
     @Transactional
     public void init(@Observes StartupEvent event){
         User.deleteAll();

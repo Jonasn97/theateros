@@ -24,6 +24,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.net.URI;
 
+/**
+ * Returns the yours.html page
+ * when user is logged in
+ */
 @Path("/mobile")
 public class UserResourceMobile {
     @Inject

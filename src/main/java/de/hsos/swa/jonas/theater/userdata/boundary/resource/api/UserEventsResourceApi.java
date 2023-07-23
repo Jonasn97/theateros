@@ -4,11 +4,10 @@ import de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api.EventRes
 import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.*;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.OutgoingUserEventDTOApi;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.OutgoingUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.control.UserDataOperations;
 import de.hsos.swa.jonas.theater.userdata.entity.UserEvent;
-import io.quarkus.logging.Log;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
@@ -30,6 +29,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * REST Resource for UserEvents
+ * POST a new UserEvent for a User
+ * GET all UserEvents for a User
+ */
 @Path("api/user/userevents")
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Produces(MediaType.APPLICATION_JSON)
@@ -78,7 +82,7 @@ public class UserEventsResourceApi {
                     String type = "userevent";
 
                     LinksDTO linksDTO = linkBuilder.createSelfLink(EventResourceApi.class, uriInfo, id);
-                    OutgoingUserEventDTOApi outgoingEventDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEvent);
+                    OutgoingUserEventDTO outgoingEventDTOApi = OutgoingUserEventDTO.Converter.toDTO(userEvent);
                     RelationshipDTO<Object> relationshipDTO = linkBuilder.addRelationship(EventResourceApi.class, uriInfo, userEvent.id, "userevent");
                     return new ResourceObjectDTO<>(id, type, outgoingEventDTOApi, null, linksDTO);
                 })
@@ -117,7 +121,7 @@ public class UserEventsResourceApi {
         String id = String.valueOf(userEventAdded.get().id);
         String type = "userevent";
         LinksDTO linksDTO = linkBuilder.createSelfLink(UserEventsResourceApi.class, uriInfo, id);
-        OutgoingUserEventDTOApi outgoingEventDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEventAdded.get());
+        OutgoingUserEventDTO outgoingEventDTOApi = OutgoingUserEventDTO.Converter.toDTO(userEventAdded.get());
         responseWrapperDTO.data = new ResourceObjectDTO<Object>(id, type, outgoingEventDTOApi, null, linksDTO);
         return Response.status(Response.Status.CREATED).entity(responseWrapperDTO).build();
     }

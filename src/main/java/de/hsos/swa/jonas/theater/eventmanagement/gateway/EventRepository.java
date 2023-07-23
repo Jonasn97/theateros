@@ -14,9 +14,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Repository for Events
+ */
 @ApplicationScoped
 public class EventRepository implements EventCatalog, PanacheRepository<Performance> {
 
+    /**
+     * @param queryParametersDTO with filters and pagination
+     * @return filtered and paginated events
+     * filters by title, kind, startDateTime, endDateTime
+     * startDateTime and endDateTime are filtered by performances and returns all events that have at least one performance in the given time frame
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public Collection<Event> getEvents(QueryParametersDTO queryParametersDTO) {
@@ -41,6 +50,10 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         }
     }
 
+    /**
+     * @param queryParametersDTO with filters and pagination
+     * @return count of filtered events for pagination
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public long getEventsCount(QueryParametersDTO queryParametersDTO) {
@@ -64,12 +77,20 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         }
     }
 
+    /**
+     * @param playId id of event
+     * @return event with given id
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public Optional<Event> getEventById(long playId) {
         return Event.findByIdOptional(playId);
     }
 
+    /**
+     * @param id id of event
+     * @return performances of event with given id
+     */
     @Override
     @Transactional(Transactional.TxType.MANDATORY)
     public Collection<Performance> getPerformancesByEventId(long id) {
@@ -80,11 +101,20 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
         return Collections.emptyList();
     }
 
+    /** Deletes event with given id
+     * @param eventId id of event
+     * @return true if event was deleted
+     */
     @Override
     public boolean deleteEventById(long eventId) {
         return Event.deleteById(eventId);
     }
 
+    /** Updates event with given id
+     * @param eventId id of event
+     * @param incomingEventIdDTOApi updated event
+     * @return updated event
+     */
     @Override
     public Optional<Event> updateEventById(long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi) {
         Optional<Event> event = Event.findByIdOptional(eventId);

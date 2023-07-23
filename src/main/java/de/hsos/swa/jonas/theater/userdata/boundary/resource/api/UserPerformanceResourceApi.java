@@ -6,8 +6,8 @@ import de.hsos.swa.jonas.theater.shared.dto.jsonapi.LinksDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.OutgoingUserPerformanceDTOApi;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserPerformanceDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.OutgoingUserPerformanceDTO;
 import de.hsos.swa.jonas.theater.userdata.control.UserDataOperations;
 import de.hsos.swa.jonas.theater.userdata.entity.UserPerformance;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -30,6 +30,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * Resource for UserPerformance
+ * GET: Get all UserPerformances for a User
+ * POST: Add a UserPerformance for a User
+ */
 @Path("/api/user/userperformance")
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @RolesAllowed("user")
@@ -79,8 +84,8 @@ public class UserPerformanceResourceApi {
                     String type = "userperformance";
 
                     LinksDTO linksDTO = linkBuilder.createSelfLink(UserPerformanceResourceApi.class, uriInfo, id);
-                    OutgoingUserPerformanceDTOApi outgoingUserPerformanceDTOApi = OutgoingUserPerformanceDTOApi.Converter.toDTO(userPerformance);
-                    return new ResourceObjectDTO<>(id, type, outgoingUserPerformanceDTOApi, null, linksDTO);
+                    OutgoingUserPerformanceDTO outgoingUserPerformanceDTO = OutgoingUserPerformanceDTO.Converter.toDTO(userPerformance);
+                    return new ResourceObjectDTO<>(id, type, outgoingUserPerformanceDTO, null, linksDTO);
                 }).toList();
         long maxSize = userDataOperations.getUserPerformancesForUserCount(userParametersDTO);
         responseWrapperDTO.links = linkBuilder.createPaginationLinks(UserPerformanceResourceApi.class, uriInfo, pageNumber, pageSize, maxSize);
@@ -128,8 +133,8 @@ public class UserPerformanceResourceApi {
         String id = String.valueOf(userPerformance.get().id);
         String type = "userperformance";
         LinksDTO linksDTO = linkBuilder.createSelfLink(UserPerformanceResourceApi.class, uriInfo, id);
-        OutgoingUserPerformanceDTOApi outgoingUserPerformanceDTOApi = OutgoingUserPerformanceDTOApi.Converter.toDTO(userPerformance.get());
-        responseWrapperDTO.data = new ResourceObjectDTO<>(id, type, outgoingUserPerformanceDTOApi, null, linksDTO);
+        OutgoingUserPerformanceDTO outgoingUserPerformanceDTO = OutgoingUserPerformanceDTO.Converter.toDTO(userPerformance.get());
+        responseWrapperDTO.data = new ResourceObjectDTO<>(id, type, outgoingUserPerformanceDTO, null, linksDTO);
         return Response.status(Response.Status.CREATED).entity(responseWrapperDTO).build();
     }
     @Path("/fallback")

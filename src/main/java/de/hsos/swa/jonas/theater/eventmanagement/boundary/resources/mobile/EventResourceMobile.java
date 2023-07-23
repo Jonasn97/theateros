@@ -33,6 +33,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Contains the page for listing all filtered events on /mobile/events
+ *
+ */
 @Path("mobile/events")
 public class EventResourceMobile {
     private final static String FIRSTPAGE_STRING = "0";
@@ -42,6 +46,20 @@ public class EventResourceMobile {
     Template stuecke;
     @Inject
     EventBus eventBus;
+
+    /**
+     * @param nameFilter Title of the event
+     * @param statusFilter Status of the event
+     * @param kindFilter Kind of the event
+     * @param performanceTypeFilter Type of the performance
+     * @param startDateTimeFilter Start date of the performance
+     * @param endDateTimeFilter End date of the performance
+     * @param include Include
+     * @param pageNumber Page number of the page
+     * @param pageSize Size of the page
+     * @param securityContext is needed for showing the eventstate of a event
+     * @return Returns a page with alist of the filtered events containing the next performance of the event
+     */
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

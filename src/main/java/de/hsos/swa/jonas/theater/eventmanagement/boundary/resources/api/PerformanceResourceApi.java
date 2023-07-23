@@ -30,6 +30,9 @@ import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Resource for requesting filtered and paginated performances
+ */
 @Path("/api/performances")
 public class PerformanceResourceApi {
     private final static long FIRSTPAGE = 0;
@@ -40,6 +43,19 @@ public class PerformanceResourceApi {
     LinkBuilder linkBuilder;
     @Context
     UriInfo uriInfo;
+
+    /**
+     * @param nameFilter title of the event of the performance
+     * @param statusFilter status of the performance
+     * @param kindFilter kind of the performance
+     * @param performanceTypeFilter type of the performance
+     * @param startDateTimeFilter start date and time of the performance requiring a specific format
+     * @param endDateTimeFilter end date and time of the performance requiring a specific format
+     * @param include include relationships
+     * @param pageNumber page number
+     * @param pageSize page size
+     * @return Response with a jsonapi conform list of paginated performances
+     */
     @GET
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Retry

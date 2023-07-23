@@ -50,6 +50,10 @@ public class EventService implements EventOperations {
         return eventCatalog.getPerformancesByEventId(id);
     }
 
+    /**
+     * @param event the event to get the next performance from
+     * @return Optional<Performance> the next performance of the event
+     */
     @Override
     public Optional<Performance> getNextPerformance(Event event) {
         LocalDateTime currentTime = LocalDateTime.now();

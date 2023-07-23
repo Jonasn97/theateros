@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * Resource for crawling the websites from the local storage
+ */
 @Path("/crawler/local")
 public class LocalCrawlerResource {
     Document calendarDocument = null;
@@ -31,6 +34,12 @@ public class LocalCrawlerResource {
     CrawlerOperations crawlerOperations;
     @Inject
     WebsiteDownloader websiteDownloader;
+
+    /**
+     * Crawls the stored websites in /src/main/resources/crawledPages and updates the database
+     * @return Response with status 200 and a message of how many events were updated
+     *
+     */
     @GET
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Fallback(fallbackMethod = "crawlEventsLocallyFallback")
@@ -72,6 +81,11 @@ public class LocalCrawlerResource {
         }
         //TODO Check Document structure for changes. If changed, log alert, throw Exception and send 500
     }
+
+    /**
+     * @param updatedStids Set of updated stids
+     *                     Parses the downloaded eventDocuments and updates the database
+     */
     void updateEventsLocally(Set<String> updatedStids) {
         int updatedEvents = 0;
         for (String updatedStid : updatedStids)
@@ -88,6 +102,10 @@ public class LocalCrawlerResource {
         }
     }
 
+    /**
+     * @return Set of updated stids
+     * @throws IOException if the calendarDocument could not be read
+     */
     Set<String> updateCalendarLocally() throws IOException {
         try {
             String calendarPath = websiteDownloader.getCalendarPath();
@@ -103,6 +121,11 @@ public class LocalCrawlerResource {
             throw e;
         }
     }
+
+    /**
+     * @return Response with status 500 and a message that something went wrong while processing the request
+     *         if the fallback method is called
+     */
     @Path("/fallback")
     public Response crawlEventsLocallyFallback() {
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();

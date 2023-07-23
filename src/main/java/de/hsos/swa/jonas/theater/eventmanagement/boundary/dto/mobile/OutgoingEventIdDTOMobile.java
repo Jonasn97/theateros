@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * DTO containing the event data for a detailpage
+ */
 public class OutgoingEventIdDTOMobile {
     public long id;
     public String title;

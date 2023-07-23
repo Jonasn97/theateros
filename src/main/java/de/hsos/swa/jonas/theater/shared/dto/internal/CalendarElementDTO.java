@@ -2,6 +2,10 @@ package de.hsos.swa.jonas.theater.shared.dto.internal;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO for CalendarElement
+ * Contains all necessary information for a CalendarElement of the theater-osnabrueck.de website
+ */
 public class CalendarElementDTO {
     public String infolink;
     public String stid;

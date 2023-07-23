@@ -2,6 +2,9 @@ package de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api;
 
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 
+/**
+ * DTO for outgoing events in JSON format
+ */
 public class OutgoingEventDTOApi {
     public String title;
     public String kind;

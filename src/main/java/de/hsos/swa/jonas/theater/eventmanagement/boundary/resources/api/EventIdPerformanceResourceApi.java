@@ -28,6 +28,9 @@ import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Resource for requesting the performances of a specific event
+ */
 @Path("/api/events")
 public class EventIdPerformanceResourceApi {
     @Inject

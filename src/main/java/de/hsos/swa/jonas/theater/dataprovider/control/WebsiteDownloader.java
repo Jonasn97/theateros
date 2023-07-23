@@ -11,6 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.net.URL;
 
+/**
+ * Downloads the websites from the given urls and saves them in the given path
+ * Class allows faster testing by downloading the websites locally
+ */
 @ApplicationScoped
 public class WebsiteDownloader {
     private static final String OUTPUTFOLDER = "src/main/resources/crawledPages/";
@@ -19,6 +23,10 @@ public class WebsiteDownloader {
     private static final String CALENDAR_URL = "https://www.theater-osnabrueck.de/kalender";
     private static final String CALENDAR_PATH = "calendar.html";
 
+    /**
+     * @param stids the stids of the events to download
+     *              Downloads all websites from the given stids
+     */
     public void downloadAllWebsites(Set<String> stids) {
         for (String stid : stids) {
             String path = OUTPUTFOLDER + EVENTPATH + stid +".html";
@@ -31,6 +39,11 @@ public class WebsiteDownloader {
         }
     }
 
+    /**
+     * @param websiteURL the url of the website to download
+     * @param path the path to save the website
+     * @throws IOException if the website could not be downloaded
+     */
     public void downloadWebsite(String websiteURL, String path) throws IOException {
             URL url = new URL(websiteURL);
 
@@ -47,6 +60,10 @@ public class WebsiteDownloader {
                     }
             }
         }
+
+    /**
+     * Downloads the calendar website and saves it in the given path
+     */
     public void downloadCalendar() {
         try {
             downloadWebsite(CALENDAR_URL, OUTPUTFOLDER + CALENDAR_PATH);
@@ -54,6 +71,12 @@ public class WebsiteDownloader {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * @param in the input stream to read from
+     * @return the website content as a string
+     * @throws IOException if the website content could not be read
+     */
     private String readWebsiteContent(BufferedInputStream in) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -63,6 +86,11 @@ public class WebsiteDownloader {
         }
         return byteArrayOutputStream.toString(StandardCharsets.UTF_8);
     }
+
+    /**
+     * @param websiteContent the website content to modify
+     * @return modified website content without unwanted parts
+     */
     private String removeUnwantedParts(String websiteContent) {
         Document document = Jsoup.parse(websiteContent);
 
@@ -92,19 +120,35 @@ public class WebsiteDownloader {
 
         return document.html();
         }
+
+    /**
+     * @param filePath the path to the file to read
+     * @return the file
+     */
         public File readFile(String filePath) {
         return new File(filePath);
         }
 
+    /**
+     * @param stid the stid of the event
+     * @return the path to the event file
+     */
     public String getPath(String stid) {
         return OUTPUTFOLDER + EVENTPATH + stid +".html";
 
     }
 
+    /**
+     * @param stid the stid of the event
+     * @return the url to the event
+     */
     public String getUrlFromStid(String stid) {
         return EVENT_URL + "?stid=" + stid;
     }
 
+    /**
+     * @return the path to the calendar file
+     */
     public String getCalendarPath() {
         return OUTPUTFOLDER + CALENDAR_PATH;
     }

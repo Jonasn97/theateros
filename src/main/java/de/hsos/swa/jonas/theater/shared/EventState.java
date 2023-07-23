@@ -1,5 +1,9 @@
 package de.hsos.swa.jonas.theater.shared;
 
+/**
+ * Enum for the different states of an userevent
+ *
+ */
 public enum EventState {
     INTERESTED("Interessiert"),
     NOT_INTERESTED("Kein Interesse"),
@@ -13,9 +17,17 @@ public enum EventState {
     EventState(String germanLabel) {
         this.germanLabel = germanLabel;
     }
+
+    /**
+     * @return the german label of the state
+     */
     public String getLabel() {
         return germanLabel;
     }
+
+    /**
+     * @return the css class of the state
+     */
     public String getCssClass() {
         switch (this) {
             case SEEN:

@@ -10,6 +10,11 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
+/**
+ * Entity for Userdata
+ * Contains the username, the ids of the comments
+ * the userEvents and userPerformances
+ */
 @Entity(name = "userdata")
 public class Userdata extends PanacheEntity {
     @Size(min=3, max=25)

@@ -25,6 +25,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.Collection;
+
+/**
+ * Resource for requesting filtered and paginated events as json
+ */
 //2023-07-01T10:15:30
 //2023-06-27T10:15:30
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,6 +46,18 @@ public class EventResourceApi {
     UriInfo uriInfo;
 
 
+    /**
+     * @param nameFilter  title of the event
+     * @param statusFilter status of the event
+     * @param kindFilter kind of the event
+     * @param performanceTypeFilter type of the performance
+     * @param startDateTimeFilter start date and time of the performance requiring a specific format
+     * @param endDateTimeFilter end date and time of the performance requiring a specific format
+     * @param include include performances
+     * @param pageNumber starts with 0
+     * @param pageSize max 50
+     * @return Response with a jsonapi conform list of events
+     */
     @GET
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Retry

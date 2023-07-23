@@ -1,21 +1,29 @@
 package de.hsos.swa.jonas.theater.userdata.gateway;
 
 import de.hsos.swa.jonas.theater.shared.EventState;
+import de.hsos.swa.jonas.theater.shared.PerformanceState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUpdateUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserPerformanceDTO;
 import de.hsos.swa.jonas.theater.userdata.entity.*;
-import io.quarkus.logging.Log;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implements all the necessary methods for userdata
+ */
 @Transactional(Transactional.TxType.MANDATORY)
 @ApplicationScoped
 public class UserDataRepository implements UserDataCatalog {
+    /** Returns a map of all event states for a given user for the mobile/event endpoint
+     * @param username username of the user
+     * @param eventIds ids of the events
+     * @return Map<Long, EventState>
+     */
     @Override
     public Map<Long, EventState> getEventState(String username, Set<Long> eventIds) {
 
@@ -26,6 +34,11 @@ public class UserDataRepository implements UserDataCatalog {
         return eventStates;
     }
 
+    /** Return the event state for a given user for the mobile/event/{id} endpoint
+     * @param username username of the user
+     * @param eventId id of the event
+     * @return Optional<EventState>
+     */
     @Override
     public Optional<EventState> getEventState(String username, long eventId) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -33,17 +46,35 @@ public class UserDataRepository implements UserDataCatalog {
         return user.get().userEvents.stream().filter(userEvent -> userEvent.getEventId() == eventId).findFirst().map(UserEvent::getEventState);
     }
 
+    /** Returns a map of all performance states for a given user for the mobile/performance endpoint
+     * @param username username of the user
+     * @param performanceIds ids of the performances
+     * @return Map<Long, PerformanceState>
+     */
     @Override
     public Map<Long, PerformanceState> getPerformanceState(String username, Set<Long> performanceIds) {
-        return null;
+        HashMap<Long, PerformanceState> performanceStates = new HashMap<>();
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return performanceStates;
+        user.get().userPerformances.stream().filter(userPerformance -> performanceIds.contains(userPerformance.getPerformanceId())).forEach(userPerformance -> performanceStates.put(userPerformance.getPerformanceId(), userPerformance.getPerformanceState()));
+        return performanceStates;
     }
 
+    /** Returns the performance state for a given user
+     * @param username username of the user
+     * @param performanceId id of the performance
+     * @return Optional<PerformanceState>
+     */
     @Override
     public Optional<PerformanceState> getPerformanceState(String username, long performanceId) {
         Userdata user = Userdata.find("username", username).firstResult();
         return user.userPerformances.stream().filter(userPerformance -> userPerformance.getPerformanceId() == performanceId).findFirst().map(UserPerformance::getPerformanceState);
     }
 
+    /** Returns a collection of UserEvents for a given user For UserEventsResourceAPI
+     * @param userParametersDTO userParametersDTO
+     * @return Collection<UserEvent>
+     */
     @Override
     public Collection<UserEvent> getUserEventsForUser(UserParametersDTO userParametersDTO) {
         Optional<Userdata> user = Userdata.find("username", userParametersDTO.username).firstResultOptional();
@@ -55,6 +86,10 @@ public class UserDataRepository implements UserDataCatalog {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param userParametersDTO userParametersDTO
+     * @return long size of UserEvents for pagination
+     */
     @Override
     public long getUserEventsForUserCount(UserParametersDTO userParametersDTO) {
         Optional<Userdata> user = Userdata.find("username", userParametersDTO.username).firstResultOptional();
@@ -63,6 +98,11 @@ public class UserDataRepository implements UserDataCatalog {
                 .size();
     }
 
+    /**
+     * @param id id of the UserEvent
+     * @param username username of the user
+     * @return Optional<UserEvent> for a given user
+     */
     @Override
     public Optional<UserEvent> getUserEventByIdForUser(long id, String username) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -70,6 +110,11 @@ public class UserDataRepository implements UserDataCatalog {
         return user.get().userEvents.stream().filter(userEvent -> userEvent.id == id).findFirst();
     }
 
+    /** Creates userEvent for a given user
+     * @param username username of the user
+     * @param incomingUserEventDTO incomingUserEventDTO
+     * @return Optional<UserEvent> returns the created UserEvent
+     */
     @Override
     public Optional<UserEvent> createUserEvent(String username, IncomingUserEventDTO incomingUserEventDTO) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -84,6 +129,12 @@ public class UserDataRepository implements UserDataCatalog {
         return Optional.of(userEvent);
     }
 
+    /**
+     * @param username username of the user
+     * @param userEventId id of the UserEvent
+     * @param incomingUserEventDTO incomingUserEventDTO
+     * @return Optional<UserEvent> for a given user after updating it
+     */
     @Override
     public Optional<UserEvent> updateUserEvent(String username, long userEventId, IncomingUpdateUserEventDTO incomingUserEventDTO) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -97,6 +148,11 @@ public class UserDataRepository implements UserDataCatalog {
         return Optional.of(userEvent.get());
     }
 
+    /**
+     * @param username username of the user
+     * @param userEventId id of the UserEvent
+     * @return boolean if the deletion was successful
+     */
     @Override
     public boolean deleteUserEvent(String username, long userEventId) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -109,6 +165,12 @@ public class UserDataRepository implements UserDataCatalog {
         return true;
     }
 
+    /**
+     * @param username username of the user
+     * @param userEventId id of the UserEvent
+     * @param eventState eventState
+     * @return Optional<UserEvent> for a given user after patching it with eventState
+     */
     @Override
     public Optional<UserEvent> patchUserEvent(String username, long userEventId, EventState eventState) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -121,6 +183,12 @@ public class UserDataRepository implements UserDataCatalog {
         return Optional.of(userEvent.get());
     }
 
+    /**
+     * @param username username of the user
+     * @param userEventId id of the UserEvent
+     * @param isFavorite isFavorite
+     * @return Optional<UserEvent> for a given user after patching it with isFavorite
+     */
     @Override
     public Optional<UserEvent> patchUserEvent(String username, long userEventId, Boolean isFavorite) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -133,6 +201,12 @@ public class UserDataRepository implements UserDataCatalog {
         return Optional.of(userEvent.get());
     }
 
+    /** updates EventState for a given user
+     * @param eventId id of the event
+     * @param eventState eventState
+     * @param username username of the user
+     * @return EventState for a given user after updating it
+     */
     @Override
     public EventState updateEventStatebyEventIdOfUser(long eventId, EventState eventState, String username) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -154,6 +228,11 @@ public class UserDataRepository implements UserDataCatalog {
         return eventState;
     }
 
+    /** updates isFavorite for a given user
+     * @param eventId id of the event
+     * @param isFavorite isFavorite
+     * @param username username of the user
+     */
     @Override
     public void updateIsFavoritebyEventIdOfUser(long eventId, boolean isFavorite, String username) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -174,6 +253,11 @@ public class UserDataRepository implements UserDataCatalog {
         user.get().persist();
     }
 
+    /**
+     * @param username username of the user
+     * @param id id of the event
+     * @return boolean if the event is favorite for a given user
+     */
     @Override
     public boolean isFavorite(String username, long id) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -183,6 +267,10 @@ public class UserDataRepository implements UserDataCatalog {
         return userEvent.get().isFavorite();
     }
 
+    /**
+     * @param userParametersDTO userParametersDTO
+     * @return Collection<UserPerformance> for a given user with pagination
+     */
     @Override
     public Collection<UserPerformance> getUserPerformancesForUser(UserParametersDTO userParametersDTO) {
         Optional<Userdata> user = Userdata.find("username", userParametersDTO.username).firstResultOptional();
@@ -194,6 +282,10 @@ public class UserDataRepository implements UserDataCatalog {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param userParametersDTO userParametersDTO
+     * @return long count of UserPerformances for a given user for pagination
+     */
     @Override
     public long getUserPerformancesForUserCount(UserParametersDTO userParametersDTO) {
         Optional<Userdata> user = Userdata.find("username", userParametersDTO.username).firstResultOptional();
@@ -201,6 +293,11 @@ public class UserDataRepository implements UserDataCatalog {
         return user.get().userPerformances.size();
     }
 
+    /** creates UserPerformance for a given user
+     * @param username username of the user
+     * @param incomingUserPerformanceDTO incomingUserPerformanceDTO
+     * @return Optional<UserPerformance> for a given user after creating it
+     */
     @Override
     public Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -214,6 +311,11 @@ public class UserDataRepository implements UserDataCatalog {
         return Optional.of(userPerformance);
     }
 
+    /**
+     * @param userPerformanceId id of the UserPerformance
+     * @param username  username of the user
+     * @return Optional<UserPerformance> for a given user
+     */
     @Override
     public Optional<UserPerformance> getUserPerformanceByIdForUser(long userPerformanceId, String username) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -221,6 +323,11 @@ public class UserDataRepository implements UserDataCatalog {
         return user.get().userPerformances.stream().filter(userPerformance -> userPerformance.id == userPerformanceId).findFirst();
     }
 
+    /**
+     * @param username  username of the user
+     * @param userEventId id of the UserEvent
+     * @return boolean if the UserPerformance was deleted for a given user
+     */
     @Override
     public boolean deleteUserPerformance(String username, long userEventId) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -235,6 +342,12 @@ public class UserDataRepository implements UserDataCatalog {
 
     }
 
+    /** updates UserPerformance for a given user
+     * @param username username of the user
+     * @param userPerformanceId id of the UserPerformance
+     * @param incomingUserPerformanceDTO incomingUserPerformanceDTO
+     * @return Optional<UserPerformance> for a given user after updating it
+     */
     @Override
     public Optional<UserPerformance> updateUserPerformance(String username, long userPerformanceId, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
@@ -245,5 +358,17 @@ public class UserDataRepository implements UserDataCatalog {
         userPerformance.get().persist();
         user.get().persist();
         return Optional.of(userPerformance.get());
+    }
+
+    /**
+     * @param username username of the user
+     * @param eventIds set of eventIds
+     * @return Map<Long, EventState> for a given user and a set of eventIds
+     */
+    @Override
+    public Map<Long, EventState> getEventStatesByEventIdsForUser(String username, Set<Long> eventIds) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Collections.emptyMap();
+        return user.get().userEvents.stream().filter(userEvent -> eventIds.contains(userEvent.getEventId())).collect(Collectors.toMap(UserEvent::getEventId, UserEvent::getEventState));
     }
 }

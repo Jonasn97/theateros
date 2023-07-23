@@ -2,16 +2,15 @@ package de.hsos.swa.jonas.theater.userdata.control;
 
 import de.hsos.swa.jonas.theater.shared.EventState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUpdateUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserPerformanceDTO;
 import de.hsos.swa.jonas.theater.userdata.entity.UserDataCatalog;
 import de.hsos.swa.jonas.theater.userdata.entity.UserEvent;
 import de.hsos.swa.jonas.theater.userdata.entity.UserPerformance;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class UserDataService implements UserDataOperations {
 
     @Override
     public Map<Long, EventState> getEventStatesByEventIdsForUser(String username, Set<Long> eventIds) {
-        return null;
+        return userDataCatalog.getEventStatesByEventIdsForUser(username, eventIds);
     }
 
     @Override

@@ -5,8 +5,8 @@ import de.hsos.swa.jonas.theater.shared.LinkBuilder;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ErrorDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResourceObjectDTO;
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.OutgoingUserPerformanceDTOApi;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserPerformanceDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.OutgoingUserPerformanceDTO;
 import de.hsos.swa.jonas.theater.userdata.control.UserDataOperations;
 import de.hsos.swa.jonas.theater.userdata.entity.UserPerformance;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -27,6 +27,12 @@ import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * REST Resource for UserPerformances for User
+ * GET all UserPerformances for a User
+ * PUT updates a UserPerformance for a User
+ * DELETE deletes a UserPerformance for a User
+ */
 @Path("/api/user/userperformance")
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @RolesAllowed("user")
@@ -68,9 +74,9 @@ public class UserPerformanceIdResourceApi {
             responseWrapperDTO.errors.add(new ErrorDTO("404", "USER_ES:2", "UserPerformance not found", "No UserPerformance found for User"));
             return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
         }
-        OutgoingUserPerformanceDTOApi outgoingUserPerformanceDTOApi = OutgoingUserPerformanceDTOApi.Converter.toDTO(userPerformance.get());
-        ResourceObjectDTO<OutgoingUserPerformanceDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
-        resourceObjectDTO.attributes = outgoingUserPerformanceDTOApi;
+        OutgoingUserPerformanceDTO outgoingUserPerformanceDTO = OutgoingUserPerformanceDTO.Converter.toDTO(userPerformance.get());
+        ResourceObjectDTO<OutgoingUserPerformanceDTO> resourceObjectDTO = new ResourceObjectDTO<>();
+        resourceObjectDTO.attributes = outgoingUserPerformanceDTO;
         resourceObjectDTO.type = "Userperformance";
         resourceObjectDTO.id = userPerformance.get().id.toString();
         resourceObjectDTO.links = linkBuilder.createSelfLink(UserPerformanceIdResourceApi.class, uriInfo, resourceObjectDTO.id);
@@ -162,8 +168,8 @@ public class UserPerformanceIdResourceApi {
             responseWrapperDTO.errors.add(new ErrorDTO("404", "USER_ES:8", "UserPerformance not found", "No UserPerformance found for User"));
             return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
         }
-        OutgoingUserPerformanceDTOApi updatedUserPerformanceDTO = OutgoingUserPerformanceDTOApi.Converter.toDTO(updatedUserPerformance.get());
-        ResourceObjectDTO<OutgoingUserPerformanceDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
+        OutgoingUserPerformanceDTO updatedUserPerformanceDTO = OutgoingUserPerformanceDTO.Converter.toDTO(updatedUserPerformance.get());
+        ResourceObjectDTO<OutgoingUserPerformanceDTO> resourceObjectDTO = new ResourceObjectDTO<>();
         resourceObjectDTO.id = String.valueOf(updatedUserPerformance.get().id);
         resourceObjectDTO.type = "userevent";
         resourceObjectDTO.links = linkBuilder.createSelfLink(UserPerformanceIdResourceApi.class, uriInfo, resourceObjectDTO.id);

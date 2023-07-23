@@ -11,6 +11,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity for Events
+ * Contains all necessary information for a Event of the theater-osnabrueck.de website
+ * Extends PanacheEntity for easy CRUD operations
+ * @see PanacheEntity
+ *
+ */
 @Entity
 public class Event extends PanacheEntity {
     private String infolink;

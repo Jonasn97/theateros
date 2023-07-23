@@ -8,6 +8,9 @@ import javax.enterprise.event.ObservesAsync;
 import javax.transaction.Transactional;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Event for creating a user in userdata observed from @see RegisterResourceMobile
+ */
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 public class CreateUserEvent {
 

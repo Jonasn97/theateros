@@ -1,10 +1,11 @@
 package de.hsos.swa.jonas.theater.userdata.entity;
 
 import de.hsos.swa.jonas.theater.shared.EventState;
+import de.hsos.swa.jonas.theater.shared.PerformanceState;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.UserParametersDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
-import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUpdateUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserEventDTO;
+import de.hsos.swa.jonas.theater.userdata.boundary.dto.IncomingUserPerformanceDTO;
 
 import java.util.Collection;
 import java.util.Map;
@@ -52,4 +53,6 @@ public interface UserDataCatalog {
     boolean deleteUserPerformance(String username, long userEventId);
 
     Optional<UserPerformance> updateUserPerformance(String username, long userPerformanceId, IncomingUserPerformanceDTO incomingUserPerformanceDTO);
+
+    Map<Long, EventState> getEventStatesByEventIdsForUser(String username, Set<Long> eventIds);
 }

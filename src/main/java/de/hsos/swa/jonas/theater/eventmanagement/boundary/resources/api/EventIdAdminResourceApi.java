@@ -39,6 +39,11 @@ public class EventIdAdminResourceApi {
     @Inject
     EventOperations eventOperations;
 
+    /**
+     * @param eventId id of the event to get
+     * @param uriInfo uriInfo
+     * @return Response with responseWrapper containing the event with the given id or an error
+     */
     @Path("{eventId}")
     @DELETE
     @Retry
@@ -73,6 +78,12 @@ public class EventIdAdminResourceApi {
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
     }
 
+    /**
+     * @param eventId id of the event to update
+     * @param incomingEventIdDTOApi new data for the event
+     * @param uriInfo uriInfo
+     * @return Response with responseWrapper containing the updated event or an error
+     */
     @Path("{eventId}")
     @PUT
     @Retry
