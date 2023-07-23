@@ -21,7 +21,7 @@ public class UserDataRepository implements UserDataCatalog {
         HashMap<Long, EventState> eventStates = new HashMap<>();
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return eventStates;
-        user.get().userEvents.stream().filter(userEvent -> eventIds.contains(userEvent.eventId)).forEach(userEvent -> eventStates.put(userEvent.eventId, userEvent.eventState));
+        user.get().userEvents.stream().filter(userEvent -> eventIds.contains(userEvent.getEventId())).forEach(userEvent -> eventStates.put(userEvent.getEventId(), userEvent.getEventState()));
         return eventStates;
     }
 
@@ -29,7 +29,7 @@ public class UserDataRepository implements UserDataCatalog {
     public Optional<EventState> getEventState(String username, long eventId) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return Optional.empty();
-        return user.get().userEvents.stream().filter(userEvent -> userEvent.eventId == eventId).findFirst().map(userEvent -> userEvent.eventState);
+        return user.get().userEvents.stream().filter(userEvent -> userEvent.getEventId() == eventId).findFirst().map(userEvent -> userEvent.getEventState());
     }
 
     @Override
@@ -74,9 +74,9 @@ public class UserDataRepository implements UserDataCatalog {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return Optional.empty();
         UserEvent userEvent = new UserEvent();
-        userEvent.eventId = incomingUserEventDTO.eventId;
-        userEvent.eventState = incomingUserEventDTO.eventState;
-        userEvent.isFavorite = incomingUserEventDTO.isFavorite;
+        userEvent.setEventId(incomingUserEventDTO.eventId);
+        userEvent.setEventState(incomingUserEventDTO.eventState);
+        userEvent.setFavorite(incomingUserEventDTO.isFavorite);
         user.get().userEvents.add(userEvent);
         userEvent.persist();
         user.get().persist();
@@ -89,8 +89,8 @@ public class UserDataRepository implements UserDataCatalog {
         if(user.isEmpty()) return Optional.empty();
         Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
         if(userEvent.isEmpty()) return Optional.empty();
-        userEvent.get().eventState = incomingUserEventDTO.eventState;
-        userEvent.get().isFavorite = incomingUserEventDTO.isFavorite;
+        userEvent.get().setEventState(incomingUserEventDTO.eventState);
+        userEvent.get().setFavorite(incomingUserEventDTO.isFavorite);
         userEvent.get().persist();
         user.get().persist();
         return Optional.of(userEvent.get());
@@ -114,7 +114,7 @@ public class UserDataRepository implements UserDataCatalog {
         if(user.isEmpty()) return Optional.empty();
         Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
         if(userEvent.isEmpty()) return Optional.empty();
-        userEvent.get().eventState = eventState;
+        userEvent.get().setEventState(eventState);
         userEvent.get().persist();
         user.get().persist();
         return Optional.of(userEvent.get());
@@ -126,7 +126,7 @@ public class UserDataRepository implements UserDataCatalog {
         if(user.isEmpty()) return Optional.empty();
         Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.id == userEventId).findFirst();
         if(userEvent.isEmpty()) return Optional.empty();
-        userEvent.get().isFavorite = isFavorite;
+        userEvent.get().setFavorite(isFavorite);
         userEvent.get().persist();
         user.get().persist();
         return Optional.of(userEvent.get());
@@ -136,18 +136,18 @@ public class UserDataRepository implements UserDataCatalog {
     public EventState updateEventStatebyEventIdOfUser(long eventId, EventState eventState, String username) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return null;
-        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == eventId).findFirst();
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.getEventId() == eventId).findFirst();
         if(userEvent.isEmpty()) {
             UserEvent newUserEvent = new UserEvent();
-            newUserEvent.eventId = eventId;
-            newUserEvent.eventState = eventState;
-            newUserEvent.isFavorite = false;
+            newUserEvent.setEventId(eventId);
+            newUserEvent.setEventState(eventState);
+            newUserEvent.setFavorite(false);
             user.get().userEvents.add(newUserEvent);
             newUserEvent.persist();
             user.get().persist();
             return eventState;
         }
-        userEvent.get().eventState = eventState;
+        userEvent.get().setEventState(eventState);
         userEvent.get().persist();
         user.get().persist();
         return eventState;
@@ -157,18 +157,18 @@ public class UserDataRepository implements UserDataCatalog {
     public void updateIsFavoritebyEventIdOfUser(long eventId, boolean isFavorite, String username) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return;
-        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == eventId).findFirst();
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.getEventId() == eventId).findFirst();
         if(userEvent.isEmpty()) {
             UserEvent newUserEvent = new UserEvent();
-            newUserEvent.eventId = eventId;
-            newUserEvent.eventState = EventState.NONE;
-            newUserEvent.isFavorite = isFavorite;
+            newUserEvent.setEventId(eventId);
+            newUserEvent.setEventState(EventState.NONE);
+            newUserEvent.setFavorite(isFavorite);
             user.get().userEvents.add(newUserEvent);
             newUserEvent.persist();
             user.get().persist();
             return;
         }
-        userEvent.get().isFavorite = isFavorite;
+        userEvent.get().setFavorite(isFavorite);
         userEvent.get().persist();
         user.get().persist();
     }
@@ -177,9 +177,9 @@ public class UserDataRepository implements UserDataCatalog {
     public boolean isFavorite(String username, Long id) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return false;
-        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.eventId == id).findFirst();
+        Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.getEventId() == id).findFirst();
         if(userEvent.isEmpty()) return false;
-        return userEvent.get().isFavorite;
+        return userEvent.get().isFavorite();
     }
 
     @Override

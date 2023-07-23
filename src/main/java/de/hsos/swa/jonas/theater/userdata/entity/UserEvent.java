@@ -9,9 +9,32 @@ import javax.persistence.Enumerated;
 
 @Entity
 public class UserEvent extends PanacheEntity {
-    public long eventId;
-    public boolean isFavorite;
+    private long eventId;
+    private boolean isFavorite;
     @Enumerated(EnumType.STRING)
-    public EventState eventState;
+    private EventState eventState;
 
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public EventState getEventState() {
+        return eventState;
+    }
+
+    public void setEventState(EventState eventState) {
+        this.eventState = eventState;
+    }
 }
