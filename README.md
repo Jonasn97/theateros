@@ -31,9 +31,9 @@ git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 ```shell script
 ./mvnw compile quarkus:dev
 ```
-## Angebotene REST-Schnittstellen:
+## 📱 Angebotene REST-Schnittstellen:
 
-## 🌐 Angebotene Webseiten:
+## 🌐 Angebotene Websites:
 | Pfad                                                                                     | Zweck                                                                                                                                                                                                                                                        |
 |------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [mobile/deins](http://localhost:8080/mobile/deins)                                       | persönliche Startseite (noch nicht implementiert)                                                                                                                                                                                                            |
@@ -44,6 +44,12 @@ git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 | [mobile/veranstaltungen/{id}/kalender](http://localhost:8080/mobile/performances/{id}/kalender) | Performance als Kalenderdatei exportieren                                                                                                                                                                                                                    |
 | [mobile/performances](http://localhost:8080/mobile/performances)                                | Spielzeiten anzeigen und über die Buttons im header filtern und suchen.                                                                                                                                                                                      |
 
+## 📱 Angebotene Dev-Pages:
+| Pfad                                                                                     | Zweck                                                                                                                                                                                                                                                        |
+|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Dev UI](http://localhost:8080/theateros/api/dev/)                                       | Dev UI                                                                                                                                                                                                                                                       |
+| [Swagger UI](http://localhost:8080/theateros/api/swagger-ui/)                                       | Swagger UI                                                                                                                                                                                                                                                       |
+| [OpenAPI](http://localhost:8080/swagger)                                       | OpenAPI                                                                                                                                                                                                                                                       |
                                                                                                                                |
 ## ⚙️ verwendete Technologien
 
