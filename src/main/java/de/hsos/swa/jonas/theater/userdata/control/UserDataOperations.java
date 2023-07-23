@@ -42,4 +42,10 @@ public interface UserDataOperations {
     long getUserPerformancesForUserCount(UserParametersDTO userParametersDTO);
 
     Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO);
+
+    Optional<UserPerformance> getUserPerformanceByIdForUser(long userPerformanceId, String username);
+
+    boolean deleteUserPerformance(String username, long userEventId);
+
+    Optional<UserPerformance> updateUserPerformance(String username, long userPerformanceId, IncomingUserPerformanceDTO incomingUserPerformanceDTO);
 }

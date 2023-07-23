@@ -17,11 +17,11 @@ public interface EventOperations {
 
     Optional<Event> getEventById(long playId);
     Map<Long, EventState> getEventStatus(String username, Set<Long> eventIds);
-    Optional<EventState> getEventStatus(String username, Long eventId);
+    Optional<EventState> getEventStatus(String username, long eventId);
 
     Collection<Performance> getPerformancesByEventId(long id);
 
     Optional<Performance> getNextPerformance(Event event);
 
-    boolean isFavorite(String username, Long id);
+    boolean isFavorite(String username, long id);
 }

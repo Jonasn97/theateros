@@ -17,7 +17,7 @@ public interface UserDataCatalog {
 
     Map<Long, PerformanceState> getPerformanceState(String username, Set<Long> performanceIds);
 
-    Optional<PerformanceState> getPerformanceState(String username, Long performanceId);
+    Optional<PerformanceState> getPerformanceState(String username, long performanceId);
 
     Collection<UserEvent> getUserEventsForUser(UserParametersDTO userParametersDTO);
 
@@ -39,11 +39,17 @@ public interface UserDataCatalog {
 
     void updateIsFavoritebyEventIdOfUser(long eventId, boolean isFavorite, String username);
 
-    boolean isFavorite(String username, Long id);
+    boolean isFavorite(String username, long id);
 
     Collection<UserPerformance> getUserPerformancesForUser(UserParametersDTO userParametersDTO);
 
     long getUserPerformancesForUserCount(UserParametersDTO userParametersDTO);
 
     Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO);
+
+    Optional<UserPerformance> getUserPerformanceByIdForUser(long userPerformanceId, String username);
+
+    boolean deleteUserPerformance(String username, long userEventId);
+
+    Optional<UserPerformance> updateUserPerformance(String username, long userPerformanceId, IncomingUserPerformanceDTO incomingUserPerformanceDTO);
 }

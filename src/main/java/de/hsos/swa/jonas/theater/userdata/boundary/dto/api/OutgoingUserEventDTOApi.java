@@ -18,7 +18,7 @@ public class OutgoingUserEventDTOApi {
 
     public static class Converter {
         public static OutgoingUserEventDTOApi toDTO(UserEvent userEvent) {
-            return new OutgoingUserEventDTOApi(String.valueOf(userEvent.eventId), String.valueOf(userEvent.isFavorite), String.valueOf(userEvent.eventState));
+            return new OutgoingUserEventDTOApi(String.valueOf(userEvent.getEventId()), String.valueOf(userEvent.isFavorite()), String.valueOf(userEvent.getEventState()));
         }
     }
 }

@@ -6,6 +6,7 @@ import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUpdateUserEve
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserEventDTO;
 import de.hsos.swa.jonas.theater.userdata.boundary.dto.api.IncomingUserPerformanceDTO;
 import de.hsos.swa.jonas.theater.userdata.entity.*;
+import io.quarkus.logging.Log;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -29,7 +30,7 @@ public class UserDataRepository implements UserDataCatalog {
     public Optional<EventState> getEventState(String username, long eventId) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return Optional.empty();
-        return user.get().userEvents.stream().filter(userEvent -> userEvent.getEventId() == eventId).findFirst().map(userEvent -> userEvent.getEventState());
+        return user.get().userEvents.stream().filter(userEvent -> userEvent.getEventId() == eventId).findFirst().map(UserEvent::getEventState);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class UserDataRepository implements UserDataCatalog {
     }
 
     @Override
-    public Optional<PerformanceState> getPerformanceState(String username, Long performanceId) {
+    public Optional<PerformanceState> getPerformanceState(String username, long performanceId) {
         Userdata user = Userdata.find("username", username).firstResult();
         return user.userPerformances.stream().filter(userPerformance -> userPerformance.getPerformanceId() == performanceId).findFirst().map(UserPerformance::getPerformanceState);
     }
@@ -174,7 +175,7 @@ public class UserDataRepository implements UserDataCatalog {
     }
 
     @Override
-    public boolean isFavorite(String username, Long id) {
+    public boolean isFavorite(String username, long id) {
         Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
         if(user.isEmpty()) return false;
         Optional<UserEvent> userEvent = user.get().userEvents.stream().filter(userEvent1 -> userEvent1.getEventId() == id).findFirst();
@@ -211,5 +212,38 @@ public class UserDataRepository implements UserDataCatalog {
         userPerformance.persist();
         user.get().persist();
         return Optional.of(userPerformance);
+    }
+
+    @Override
+    public Optional<UserPerformance> getUserPerformanceByIdForUser(long userPerformanceId, String username) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        return user.get().userPerformances.stream().filter(userPerformance -> userPerformance.id == userPerformanceId).findFirst();
+    }
+
+    @Override
+    public boolean deleteUserPerformance(String username, long userEventId) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return false;
+        Optional<UserPerformance> userPerformance = user.get().userPerformances.stream().filter(userPerformance1 -> userPerformance1.id == userEventId).findFirst();
+        if(userPerformance.isEmpty()) return false;
+        user.get().userPerformances.remove(userPerformance.get());
+        userPerformance.get().persist();
+        user.get().persist();
+        return true;
+
+
+    }
+
+    @Override
+    public Optional<UserPerformance> updateUserPerformance(String username, long userPerformanceId, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
+        Optional<Userdata> user = Userdata.find("username", username).firstResultOptional();
+        if(user.isEmpty()) return Optional.empty();
+        Optional<UserPerformance> userPerformance = user.get().userPerformances.stream().filter(userPerformance1 -> userPerformance1.id == userPerformanceId).findFirst();
+        if(userPerformance.isEmpty()) return Optional.empty();
+        userPerformance.get().setPerformanceState(incomingUserPerformanceDTO.performanceState);
+        userPerformance.get().persist();
+        user.get().persist();
+        return Optional.of(userPerformance.get());
     }
 }

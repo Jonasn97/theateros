@@ -71,12 +71,12 @@ public class UserEventIdResourceApi {
             return Response.status(Response.Status.NOT_FOUND).entity(responseWrapperDTO).build();
         }
         OutgoingUserEventDTOApi outgoingUserEventIdDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEvent.get());
-        responseWrapperDTO.data = userEvent.get();
         ResourceObjectDTO<OutgoingUserEventDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
         resourceObjectDTO.id = String.valueOf(userEvent.get().id);
-                    resourceObjectDTO.type = "userevent";
-                    resourceObjectDTO.links = linkBuilder.createSelfLink(UserEventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
-                    resourceObjectDTO.attributes=outgoingUserEventIdDTOApi;
+        resourceObjectDTO.type = "userevent";
+        resourceObjectDTO.links = linkBuilder.createSelfLink(UserEventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
+        resourceObjectDTO.attributes=outgoingUserEventIdDTOApi;
+        responseWrapperDTO.data = resourceObjectDTO;
         return Response.ok().entity(responseWrapperDTO).build();
     }
     @PUT
@@ -109,12 +109,12 @@ public class UserEventIdResourceApi {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseWrapperDTO).build();
         }
         OutgoingUserEventDTOApi outgoingUserEventDTOApi = OutgoingUserEventDTOApi.Converter.toDTO(userEventUpdated.get());
-        responseWrapperDTO.data = userEventUpdated.get();
         ResourceObjectDTO<OutgoingUserEventDTOApi> resourceObjectDTO = new ResourceObjectDTO<>();
         resourceObjectDTO.id = String.valueOf(userEventUpdated.get().id);
         resourceObjectDTO.type = "userevent";
         resourceObjectDTO.links = linkBuilder.createSelfLink(UserEventIdResourceApi.class, uriInfo, resourceObjectDTO.id);
         resourceObjectDTO.attributes = outgoingUserEventDTOApi;
+        responseWrapperDTO.data = resourceObjectDTO;
         return Response.ok().entity(responseWrapperDTO).build();
     }
     @PATCH

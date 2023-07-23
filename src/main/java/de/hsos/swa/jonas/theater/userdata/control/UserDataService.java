@@ -90,4 +90,19 @@ public class UserDataService implements UserDataOperations {
     public Optional<UserPerformance> createUserPerformance(String username, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
         return userDataCatalog.createUserPerformance(username, incomingUserPerformanceDTO);
     }
+
+    @Override
+    public Optional<UserPerformance> getUserPerformanceByIdForUser(long userPerformanceId, String username) {
+        return userDataCatalog.getUserPerformanceByIdForUser(userPerformanceId, username);
+    }
+
+    @Override
+    public boolean deleteUserPerformance(String username, long userEventId) {
+        return userDataCatalog.deleteUserPerformance(username, userEventId);
+    }
+
+    @Override
+    public Optional<UserPerformance> updateUserPerformance(String username, long userPerformanceId, IncomingUserPerformanceDTO incomingUserPerformanceDTO) {
+        return userDataCatalog.updateUserPerformance(username, userPerformanceId, incomingUserPerformanceDTO);
+    }
 }

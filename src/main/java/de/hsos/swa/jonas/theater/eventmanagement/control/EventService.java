@@ -40,7 +40,7 @@ public class EventService implements EventOperations {
     }
 
     @Override
-    public Optional<EventState> getEventStatus(String username, Long eventId) {
+    public Optional<EventState> getEventStatus(String username, long eventId) {
         return userDataCatalog.getEventState(username, eventId);
     }
 
@@ -55,11 +55,11 @@ public class EventService implements EventOperations {
         return event.getPerformances().stream().filter(performance -> !performance.isCancelled())
                 .filter(performance -> performance.getDatetime() != null)
                 .filter(performance -> performance.getDatetime().isAfter(currentTime))
-                .min(Comparator.comparing(performance -> performance.getDatetime()));
+                .min(Comparator.comparing(Performance::getDatetime));
     }
 
     @Override
-    public boolean isFavorite(String username, Long id) {
+    public boolean isFavorite(String username, long id) {
         return userDataCatalog.isFavorite(username, id);
     }
 }

@@ -17,4 +17,10 @@ public class IncomingUserPerformanceDTO {
 
     public IncomingUserPerformanceDTO() {
     }
+
+    public static class Converter{
+        public static IncomingUserPerformanceDTO convert(long performanceId, PerformanceState performanceState){
+            return new IncomingUserPerformanceDTO(performanceId, performanceState);
+        }
+    }
 }
