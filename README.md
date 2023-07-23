@@ -7,6 +7,16 @@ Bietet eine Übersicht über die Veranstaltungen des Theaters Osnabrück und erm
 Weiterhin kann man für die einzelnen Veranstaltungen einen Status setzen.\
 Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
 
+## Clone
+### mit https
+```shell script
+git clone https://gitlab.hs-osnabrueck.de/swa_mi_sose23/projekt29/theateros.git
+```
+### mit ssh
+```shell script
+git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
+```
+
 ## 🚀 Ausführen der Anwendung
 ### 🏗 Bauen:
 ```shell script
