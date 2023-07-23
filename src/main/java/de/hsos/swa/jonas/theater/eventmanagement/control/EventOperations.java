@@ -1,6 +1,7 @@
 package de.hsos.swa.jonas.theater.eventmanagement.control;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.IncomingEventIdDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
 import de.hsos.swa.jonas.theater.shared.EventState;
@@ -24,4 +25,8 @@ public interface EventOperations {
     Optional<Performance> getNextPerformance(Event event);
 
     boolean isFavorite(String username, long id);
+
+    boolean deleteEventById(long eventId);
+
+    Optional<Event> updateEventById(long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi);
 }

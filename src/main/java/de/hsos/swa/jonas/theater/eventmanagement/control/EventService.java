@@ -1,6 +1,7 @@
 package de.hsos.swa.jonas.theater.eventmanagement.control;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.IncomingEventIdDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.EventCatalog;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
@@ -61,5 +62,15 @@ public class EventService implements EventOperations {
     @Override
     public boolean isFavorite(String username, long id) {
         return userDataCatalog.isFavorite(username, id);
+    }
+
+    @Override
+    public boolean deleteEventById(long eventId) {
+        return eventCatalog.deleteEventById(eventId);
+    }
+
+    @Override
+    public Optional<Event> updateEventById(long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi) {
+        return eventCatalog.updateEventById(eventId, incomingEventIdDTOApi);
     }
 }

@@ -1,6 +1,7 @@
 package de.hsos.swa.jonas.theater.eventmanagement.gateway;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.IncomingEventIdDTOApi;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.EventCatalog;
 import de.hsos.swa.jonas.theater.eventmanagement.entity.Performance;
@@ -77,5 +78,30 @@ public class EventRepository implements EventCatalog, PanacheRepository<Performa
             return event.get().getPerformances();
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean deleteEventById(long eventId) {
+        return Event.deleteById(eventId);
+    }
+
+    @Override
+    public Optional<Event> updateEventById(long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi) {
+        Optional<Event> event = Event.findByIdOptional(eventId);
+        if (event.isPresent()) {
+            Event event1 = event.get();
+            event1.setTitle(incomingEventIdDTOApi.title);
+            event1.setKind(incomingEventIdDTOApi.kind);
+            event1.setDescription(incomingEventIdDTOApi.description);
+            event1.setDuration(incomingEventIdDTOApi.duration);
+            event1.setBannerPath(incomingEventIdDTOApi.bannerPath);
+            event1.setThumbnailPath(incomingEventIdDTOApi.thumbnailPath);
+            event1.setTeam(incomingEventIdDTOApi.team);
+            event1.setPress(incomingEventIdDTOApi.press);
+            event1.setPlaytype(incomingEventIdDTOApi.playtype);
+            event1.persist();
+            return Optional.of(event1);
+        }
+        return Optional.empty();
     }
 }

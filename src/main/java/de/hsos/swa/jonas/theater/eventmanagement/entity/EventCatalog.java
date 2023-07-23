@@ -1,6 +1,7 @@
 package de.hsos.swa.jonas.theater.eventmanagement.entity;
 
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
+import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.IncomingEventIdDTOApi;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -14,4 +15,8 @@ public interface EventCatalog {
     Optional<Event> getEventById(long playId);
 
     Collection<Performance> getPerformancesByEventId(long id);
+
+    boolean deleteEventById(long eventId);
+
+    Optional<Event> updateEventById(long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi);
 }
