@@ -1,80 +1,79 @@
-# theateros
+# 👋 About
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Dieses Projekt ist das Ergebnis der Projektarbeit Entwicklung eines Theaterplaners unter Anwendung des Domain-Driven-Designs mit Quarkus REST-APIs, Webcrawling und Serverseitigem Rendering" im Rahmen des Moduls Software-Architektur – Konzepte und Anwendungen des Studiengangs Informatik - Medieninformatik.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Inhalt
+Bietet eine Übersicht über die Veranstaltungen des Theaters Osnabrück und ermöglicht es, diese zu filtern, zu suchen und zu favorisieren.\
+Weiterhin kann man für die einzelnen Veranstaltungen einen Status setzen.\
+Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
 
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
+## Ausführen der Anwendung
+Bauen:
+```shell script
+./mvnw compile
+```
+Testen:
+```shell script
+./mvnw test
+```
+Ausführen im DevMode:
 
 ```shell script
 ./mvnw compile quarkus:dev
 ```
+## Angebotene REST-Schnittstellen:
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+## Angebotene Webseiten:
+| Pfad                                                                                     | Zweck                                                                                                                                                                                                                                                        |
+|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [mobile/deins](http://localhost:8080/mobile/deins)                                       | persönliche Startseite (noch nicht implementiert)                                                                                                                                                                                                            |
+| [mobile/login](http://localhost:8080/mobile/login)                                              | Login-Seite                                                                                                                                                                                                                                                  |
+| [mobile/register](http://localhost:8080/mobile/register)                                        | Erstellen eines Accounts                                                                                                                                                                                                                                     |
+| [mobile/events](http://localhost:8080/mobile/events)                                            | Veranstaltungen anzeigen, klick auf Veranstaltung öffnet die Detailseite, über die Buttons im header kann man filtern und suchen.                                                                                                                            |
+| [mobile/events/{id}](http://localhost:8080/mobile/events/{id})                                  | Veranstaltungsdetails anzeigen, mit Klick auf den Chip kann man einen Status setzen, mit Klick auf das Herz ein Stück favorisieren. Mit Klick auf zum Shop gelangt man zur Website vom Theater. Mit Klick auf zum Kalender wird eine Kalenderdatei erstellt. |
+| [mobile/veranstaltungen/{id}/kalender](http://localhost:8080/mobile/performances/{id}/kalender) | Performance als Kalenderdatei exportieren                                                                                                                                                                                                                    |
+| [mobile/performances](http://localhost:8080/mobile/performances)                                | Spielzeiten anzeigen und über die Buttons im header filtern und suchen.                                                                                                                                                                                      |
 
-## Packaging and running the application
+                                                                                                                               |
+## ⚙️ verwendete Technologien
 
-The application can be packaged using:
+### Allgemein
 
-```shell script
-./mvnw package
-```
+| Technologie                                                  | Zweck                                                                                                                                                   |
+|--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Quarkus](https://quarkus.io/)                               | Quarkus, welches in der Version 2.17 verwendet wird, ist ein leichgewichtiges Framework, mit dem Java speziell für Containerplattformen optimiert wird. |
+| [JUnit 5](https://quarkus.io/guides/getting-started-testing) | Unit tests creation                                                                                                                                     |
+| [Mockito](https://quarkus.io/blog/mocking/)                  | Adds mockito framework for testing purposes                                                                                                             |
+| [CDI](https://quarkus.io/guides/cdi-reference)               | Contexts and Dependency Injection                                                                                                                       |
+| [Security](https://quarkus.io/guides/security-authentication-mechanisms#form-auth)           | Authentifizierung                                                                                                                                       |
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+### Datenbank
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+| Technologie                                                          | Zweck             |
+|----------------------------------------------------------------------|-------------------|
+| [Hibernate panache](https://quarkus.io/guides/hibernate-orm-panache) | Datenbank Zugriff |
+| [Postgre SQL](https://jdbc.postgresql.org/)                          | Postgre SQL       |
 
-If you want to build an _über-jar_, execute the following command:
+### REST adapter
 
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
+| Technologie | Zweck                                                                                                            |
+| ---------- |------------------------------------------------------------------------------------------------------------------|
+| [Resteasy](https://quarkus.io/guides/rest-json) | Annotation based Rest controllers with JSON serialization / desearialization                                     |
+| [rest-assured](https://rest-assured.io/) | Testen und validieren der REST services                                                                          |
+| [smallrye-openapi](https://github.com/smallrye/smallrye-open-api) | Fügt dem Projekt Openapi Spezifikationen hinzu und unterstützt bei der Implementierung des Schema und Swagger UI |
+| [OpenAPI](https://github.com/OAI/OpenAPI-Specification) | Die OpenAPI Spezifikation                                                                                        |
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+### Web
 
-## Creating a native executable
+| Technologie | Zweck                                                                                                            |
+| ---------- |------------------------------------------------------------------------------------------------------------------|
+| [Qute](https://quarkus.io/guides/qute) | Serverseitiges Rendering von HTML Seiten                                                                          |
+| [Unpoly](https://unpoly.com/) | Unpoly ist ein JavaScript Framework, welches das serverseitige Rendering von HTML Seiten unterstützt.            |
+### Weiteres
 
-You can create a native executable using:
+| Technologie | Zweck                                    |
+|------------|------------------------------------------|
+| [jsoup](https://jsoup.org/)  | Crawling der Daten vom Theater Osnabrück |
+| [iCal4j](https://www.ical4j.org/) | Erstellen von Kalenderdateien im MIME-type text/calendar zum export von Veranstaltungen. |
 
-```shell script
-./mvnw package -Pnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/theateros-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- RESTEasy Classic JSON-B ([guide](https://quarkus.io/guides/rest-json)): JSON-B serialization support for RESTEasy
-  Classic
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes
-  with Swagger UI
-- RESTEasy Classic ([guide](https://quarkus.io/guides/resteasy)): REST endpoint framework implementing JAX-RS and more
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code
-  for Hibernate ORM via the active record or the repository pattern
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-### RESTEasy JAX-RS
-
-Easily start your RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+## 📚 Guides
