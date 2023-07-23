@@ -52,7 +52,7 @@ public class EventIdAdminResourceApi {
             @APIResponse(responseCode = "404", description = "No Event found for eventId"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Response deleteEventById(@Positive @PathParam("eventId") long eventId){
+    public Response deleteEventById(@Positive @PathParam("eventId") long eventId, @Context UriInfo uriInfo){
         ResponseWrapperDTO<Object> responseWrapperDTO = new ResponseWrapperDTO<>();
 
         if(eventOperations.deleteEventById(eventId))
@@ -66,7 +66,7 @@ public class EventIdAdminResourceApi {
     }
 
     @Path("{eventId}/fallback")
-    public Response deleteEventByIdFallback(@Positive @PathParam("eventId") long eventId){
+    public Response deleteEventByIdFallback(@Positive @PathParam("eventId") long eventId, @Context UriInfo uriInfo){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
         responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));
@@ -105,7 +105,7 @@ public class EventIdAdminResourceApi {
     }
 
     @Path("{eventId}/fallback")
-    public Response updateEventByIdFallback(@Positive @PathParam("eventId") long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi){
+    public Response updateEventByIdFallback(@Positive @PathParam("eventId") long eventId, IncomingEventIdDTOApi incomingEventIdDTOApi, @Context UriInfo uriInfo){
         ResponseWrapperDTO<ErrorDTO> responseWrapperDTO = new ResponseWrapperDTO<>();
         responseWrapperDTO.errors = new ArrayList<>();
         responseWrapperDTO.errors.add(new ErrorDTO("500", "EVENTS:2","Internal Server Error", "Something went wrong while processing your request"));
