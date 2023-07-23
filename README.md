@@ -2,28 +2,28 @@
 
 Dieses Projekt ist das Ergebnis der Projektarbeit Entwicklung eines Theaterplaners unter Anwendung des Domain-Driven-Designs mit Quarkus REST-APIs, Webcrawling und Serverseitigem Rendering" im Rahmen des Moduls Software-Architektur – Konzepte und Anwendungen des Studiengangs Informatik - Medieninformatik.
 
-## Inhalt
+## 📄 Inhalt
 Bietet eine Übersicht über die Veranstaltungen des Theaters Osnabrück und ermöglicht es, diese zu filtern, zu suchen und zu favorisieren.\
 Weiterhin kann man für die einzelnen Veranstaltungen einen Status setzen.\
 Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
 
-## Ausführen der Anwendung
-Bauen:
+## 🚀 Ausführen der Anwendung
+### 🏗 Bauen:
 ```shell script
 ./mvnw compile
 ```
-Testen:
+### 🧪 Testen:
 ```shell script
 ./mvnw test
 ```
-Ausführen im DevMode:
+### 🛠️ Ausführen im DevMode:
 
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 ## Angebotene REST-Schnittstellen:
 
-## Angebotene Webseiten:
+## 🌐 Angebotene Webseiten:
 | Pfad                                                                                     | Zweck                                                                                                                                                                                                                                                        |
 |------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [mobile/deins](http://localhost:8080/mobile/deins)                                       | persönliche Startseite (noch nicht implementiert)                                                                                                                                                                                                            |
