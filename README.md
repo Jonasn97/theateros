@@ -58,10 +58,12 @@ Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
 
 | Technologie | Zweck                                                                                                            |
 | ---------- |------------------------------------------------------------------------------------------------------------------|
-| [Resteasy](https://quarkus.io/guides/rest-json) | Annotation based Rest controllers with JSON serialization / desearialization                                     |
+| [Resteasy](https://quarkus.io/guides/rest-json) | Annotationsbasierte Rest Controller mit JSON Serialisierung / Deserialisierung                                   |
 | [rest-assured](https://rest-assured.io/) | Testen und validieren der REST services                                                                          |
 | [smallrye-openapi](https://github.com/smallrye/smallrye-open-api) | Fügt dem Projekt Openapi Spezifikationen hinzu und unterstützt bei der Implementierung des Schema und Swagger UI |
 | [OpenAPI](https://github.com/OAI/OpenAPI-Specification) | Die OpenAPI Spezifikation                                                                                        |
+| [Swagger UI](https://swagger.io/tools/swagger-ui/) | Swagger UI ist ein Tool, welches die OpenAPI Spezifikation visualisiert.                                         |
+| [json:api](https://jsonapi.org/) | JSON:API ist ein Format für die Kommunikation zwischen Client und Server.                                        |
 
 ### Web
 
