@@ -66,7 +66,7 @@ public class EventResourceMobile {
     @GET
     @Retry
     @Timeout(5000)
-    //@Fallback(fallbackMethod = "getEventsFallback")
+    @Fallback(fallbackMethod = "getEventsFallback")
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000)
     @Operation(summary = "Get filtered Events", description = "Get filtered and paged Events")
     @APIResponses(value = {
