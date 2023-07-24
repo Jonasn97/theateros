@@ -9,18 +9,18 @@ Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
 Auch lassen sich Veranstaltungen als Admin bearbeiten und entfernen, falls sie durch das Crawlen nicht korrekt importiert wurden. 
 
 
-## Clone
-### mit https
+## 🌀 Clone
+### 🔒 mit https
 ```shell script
 git clone https://gitlab.hs-osnabrueck.de/swa_mi_sose23/projekt29/theateros.git
 ```
-### mit ssh
+### 🔐 mit ssh
 ```shell script
 git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 ```
 
 ## 🚀 Ausführen der Anwendung
-Vor dem Ausführen der Tests und dem Bearbeiten der Daten sollte zunächst die Datenbank mit einer der folgenden Rest-Anfragen befüllt werden. \
+Vor dem Ausführen der Tests und dem Bearbeiten der Daten sollte zunächst die Datenbank mit einem der folgenden Rest-Anfragen befüllt werden. \
 [http://localhost:8080/crawler/web](http://localhost:8080/crawler/web)\
 oder\
 [http://localhost:8080/crawler/local](http://localhost:8080/crawler/local)\
@@ -50,42 +50,42 @@ Testen der EventResourceAPI, ob die Events korrekt zurückgegeben werden.
 | [mobile/deins](http://localhost:8080/mobile/deins)                                       | persönliche Startseite (noch nicht implementiert)                                                                                                                                                                                                            |
 | [mobile/login](http://localhost:8080/mobile/login)                                              | Login-Seite                                                                                                                                                                                                                                                  |
 | [mobile/register](http://localhost:8080/mobile/register)                                        | Erstellen eines Accounts                                                                                                                                                                                                                                     |
-| [mobile/events](http://localhost:8080/mobile/events)                                            | Veranstaltungen anzeigen, ein Klick auf eine Veranstaltung öffnet die Detailseite, über die Buttons im header kann man filtern und suchen.                                                                                                                   |
+| [mobile/events](http://localhost:8080/mobile/events)                                            | Veranstaltungen anzeigen, klick auf Veranstaltung öffnet die Detailseite, über die Buttons im header kann man filtern und suchen.                                                                                                                            |
 | [mobile/events/{id}](http://localhost:8080/mobile/events/{id})                                  | Veranstaltungsdetails anzeigen, mit Klick auf den Chip kann man einen Status setzen, mit Klick auf das Herz ein Stück favorisieren. Mit Klick auf zum Shop gelangt man zur Website vom Theater. Mit Klick auf zum Kalender wird eine Kalenderdatei erstellt. |
 | [mobile/veranstaltungen/{id}/kalender](http://localhost:8080/mobile/performances/{id}/kalender) | Performance als Kalenderdatei exportieren                                                                                                                                                                                                                    |
-| [mobile/performances](http://localhost:8080/mobile/performances)                                | Spielzeiten anzeigen und über die Buttons im header filtern und suchen. Ein Klick auf eine Spielzeit öffnet die die Detailseite der Veranstaltung.                                                                                                           |
+| [mobile/performances](http://localhost:8080/mobile/performances)                                | Spielzeiten anzeigen und über die Buttons im header filtern und suchen.                                                                                                                                                                                      |
 
 ## 📱 Angebotene Dev-Pages:
-| Pfad                                                                             | Zweck      |
-|----------------------------------------------------------------------------------|------------|
-| [Dev UI](http://localhost:8080/theateros/api/dev/)                               | Dev UI     |
-| [Swagger UI](http://localhost:8080/theateros/api/swagger-ui/)                    | Swagger UI |
-| [OpenAPI](http://localhost:8080/swagger)                                         | OpenAPI    |
+| Pfad                                                                                     | Zweck                                                                                                                                                                                                                                                        |
+|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Dev UI](http://localhost:8080/theateros/api/dev/)                                       | Dev UI                                                                                                                                                                                                                                                       |
+| [Swagger UI](http://localhost:8080/theateros/api/swagger-ui/)                                       | Swagger UI                                                                                                                                                                                                                                                       |
+| [OpenAPI](http://localhost:8080/swagger)                                       | OpenAPI                                                                                                                                                                                                                                                       |
 
 ## 📞 Angebotene REST-Endpunkte:
-| Pfad                                                                                     | Methode | Zweck                                                                         |
-|------------------------------------------------------------------------------------------|---------|-------------------------------------------------------------------------------|
-| [http://localhost:8080/api/admin/events/{eventId}](http://localhost:8080/api/admin/events/{eventId}) | PUT     | Veranstaltung per ID aktualisieren                                            |
-| [http://localhost:8080/api/admin/events/{eventId}](http://localhost:8080/api/admin/events/{eventId}) | DELETE  | Veranstaltung per ID löschen                                                  |
-| [http://localhost:8080/api/events](http://localhost:8080/api/events)                      | GET     | Gefilterte Veranstaltungen abrufen                                            |
-| [http://localhost:8080/api/events/{eventId}](http://localhost:8080/api/events/{eventId})   | GET     | Veranstaltung per ID abrufen                                                  |
-| [http://localhost:8080/api/events/{eventId}/performances](http://localhost:8080/api/events/{eventId}/performances) | GET     | Aufführungen für eine Veranstaltung per Id abrufen                            |
-| [http://localhost:8080/api/performances](http://localhost:8080/api/performances)            | GET     | Gefilterte Aufführungen abrufen                                               |
-| [http://localhost:8080/api/performances/{performanceId}](http://localhost:8080/api/performances/{performanceId}) | GET     | Aufführung per ID abrufen                                                     |
-| [http://localhost:8080/api/performances/{performanceId}/calendar](http://localhost:8080/api/performances/{performanceId}/calendar) | GET     | Kalendereintrag für eine Aufführung abrufen                                   |
-| [http://localhost:8080/api/user/userevents](http://localhost:8080/api/user/userevents)    | GET     | Alle UserEvents für einen angemeldeten Benutzer abrufen                       |
-| [http://localhost:8080/api/user/userevents](http://localhost:8080/api/user/userevents)    | POST    | Neues UserEvent für den angemeldeten Benutzer erstellen                       |
-| [http://localhost:8080/api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | GET     | UserEvent für den angemeldeten Benutzer per ID abrufen                        |
-| [http://localhost:8080/api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | PUT     | UserEvent für den angemeldeten Benutzer aktualisieren                         |
-| [http://localhost:8080/api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | DELETE  | UserEvent für den angemeldeten Benutzer löschen                               |
-| [http://localhost:8080/api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | PATCH   | isFavorite oder EventState eines UserEvents für den angemeldeten Benutzer ändern |
-| [http://localhost:8080/api/user/userperformance](http://localhost:8080/api/user/userperformance) | GET     | Alle UserPerformances für den angemeldeten Benutzer abrufen                   |
-| [http://localhost:8080/api/user/userperformance](http://localhost:8080/api/user/userperformance) | POST    | Neue UserPerformance für angemeldeten User erstellen                          |
-| [http://localhost:8080/api/user/userperformance/{id}](http://localhost:8080/api/user/userperformance/{id}) | GET     | UserPerformance für angemeldeten User nach ID abrufen                         |
-| [http://localhost:8080/api/user/userperformance/{id}](http://localhost:8080/api/user/userperformance/{id}) | PUT     | UserPerformance für angemeldeten User aktualisieren                           |
-| [http://localhost:8080/api/user/userperformance/{id}](http://localhost:8080/api/user/userperformance/{id}) | DELETE  | UserPerformance für angemeldeten User löschen                                 |
-| [http://localhost:8080/crawler/local](http://localhost:8080/crawler/local)                | GET     | Veranstaltungen der gespeicherten Websites lokal crawlen und Datenbank aktualisieren |
-| [http://localhost:8080/crawler/web](http://localhost:8080/crawler/web)                      | GET     | Veranstaltungen von der Website crawlen und Datenbank aktualisieren           |
+| Pfad                                                                                     | Methode | Zweck                                                                                                                                                                                                                                                        |
+|------------------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [api/admin/events/{eventId}](http://localhost:8080/api/admin/events/{eventId}) | PUT     | Veranstaltung nach ID aktualisieren                                                                                                                                                                                                                         |
+| [api/admin/events/{eventId}](http://localhost:8080/api/admin/events/{eventId}) | DELETE  | Veranstaltung nach ID löschen                                                                                                                                                                                                                                |
+| [api/events](http://localhost:8080/api/events)                      | GET     | Gefilterte Veranstaltungen abrufen                                                                                                                                                                                                                           |
+| [api/events/{eventId}](http://localhost:8080/api/events/{eventId})   | GET     | Veranstaltung nach ID abrufen                                                                                                                                                                                                                                |
+| [api/events/{eventId}/performances](http://localhost:8080/api/events/{eventId}/performances) | GET     | Aufführungen für eine Veranstaltung abrufen                                                                                                                                                                                                                  |
+| [api/performances](http://localhost:8080/api/performances)            | GET     | Gefilterte Aufführungen abrufen                                                                                                                                                                                                                              |
+| [api/performances/{performanceId}](http://localhost:8080/api/performances/{performanceId}) | GET     | Aufführung nach ID abrufen                                                                                                                                                                                                                                   |
+| [api/performances/{performanceId}/calendar](http://localhost:8080/api/performances/{performanceId}/calendar) | GET     | Kalendereintrag für eine Aufführung abrufen                                                                                                                                                                                                                  |
+| [api/user/userevents](http://localhost:8080/api/user/userevents)    | GET     | Alle UserEvents für einen Benutzer abrufen                                                                                                                                                                                                                   |
+| [api/user/userevents](http://localhost:8080/api/user/userevents)    | POST    | Neues UserEvent erstellen                                                                                                                                                                                                                                    |
+| [api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | GET     | UserEvent nach ID abrufen                                                                                                                                                                                                                                    |
+| [api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | PUT     | UserEvent aktualisieren                                                                                                                                                                                                                                      |
+| [api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | DELETE  | UserEvent löschen                                                                                                                                                                                                                                            |
+| [api/user/userevents/{userEventId}](http://localhost:8080/api/user/userevents/{userEventId}) | PATCH   | isFavorite oder EventState eines UserEvents ändern                                                                                                                                                                                                           |
+| [api/user/userperformance](http://localhost:8080/api/user/userperformance) | GET     | Alle UserPerformances für einen Benutzer abrufen                                                                                                                                                                                                             |
+| [api/user/userperformance](http://localhost:8080/api/user/userperformance) | POST    | Neue UserPerformance erstellen                                                                                                                                                                                                                               |
+| [api/user/userperformance/{id}](http://localhost:8080/api/user/userperformance/{id}) | GET     | UserPerformance nach ID abrufen                                                                                                                                                                                                                              |
+| [api/user/userperformance/{id}](http://localhost:8080/api/user/userperformance/{id}) | PUT     | UserPerformance aktualisieren                                                                                                                                                                                                                                |
+| [api/user/userperformance/{id}](http://localhost:8080/api/user/userperformance/{id}) | DELETE  | UserPerformance löschen                                                                                                                                                                                                                                      |
+| [crawler/local](http://localhost:8080/crawler/local)                | GET     | Veranstaltungen von der Website crawlen und Datenbank aktualisieren                                                                                                                                                                                          |
+| [crawler/web](http://localhost:8080/crawler/web)                      | GET     | Veranstaltungen von der Website crawlen und Datenbank aktualisieren                                                                                                                                                                                          |
 
 ## ⚙️ verwendete Technologien
 
@@ -95,8 +95,9 @@ Testen der EventResourceAPI, ob die Events korrekt zurückgegeben werden.
 |--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [Quarkus](https://quarkus.io/)                               | Quarkus, welches in der Version 2.17 verwendet wird, ist ein leichgewichtiges Framework, mit dem Java speziell für Containerplattformen optimiert wird. |
 | [JUnit 5](https://quarkus.io/guides/getting-started-testing) | Unit tests creation                                                                                                                                     |
+| [Mockito](https://quarkus.io/blog/mocking/)                  | Adds mockito framework for testing purposes                                                                                                             |
 | [CDI](https://quarkus.io/guides/cdi-reference)               | Contexts and Dependency Injection                                                                                                                       |
-| [Security](https://quarkus.io/guides/security-authentication-mechanisms#form-auth)           | Authentifizierung                                                                                                       |
+| [Security](https://quarkus.io/guides/security-authentication-mechanisms#form-auth)           | Authentifizierung                                                                                                                                       |
 
 ### Datenbank
 
