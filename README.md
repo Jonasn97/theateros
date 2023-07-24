@@ -23,6 +23,7 @@ git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 ./mvnw compile
 ```
 ### 🧪 Testen:
+Testen der EventResourceAPI, ob die Events korrekt zurückgegeben werden.
 ```shell script
 ./mvnw test
 ```
@@ -50,8 +51,8 @@ git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 | [Dev UI](http://localhost:8080/theateros/api/dev/)                                       | Dev UI                                                                                                                                                                                                                                                       |
 | [Swagger UI](http://localhost:8080/theateros/api/swagger-ui/)                                       | Swagger UI                                                                                                                                                                                                                                                       |
 | [OpenAPI](http://localhost:8080/swagger)                                       | OpenAPI                                                                                                                                                                                                                                                       |
-                                                                                                                               |
-## 📱 Angebotene REST-Schnittstellen:
+
+## 📞 Angebotene REST-Endpunkte:
 | Pfad                                                                                     | Methode | Zweck                                                                                                                                                                                                                                                        |
 |------------------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [http://localhost:8080/api/admin/events/{eventId}](http://localhost:8080/api/admin/events/{eventId}) | PUT     | Veranstaltung nach ID aktualisieren                                                                                                                                                                                                                         |
