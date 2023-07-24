@@ -95,7 +95,6 @@ Testen der EventResourceAPI, ob die Events korrekt zurückgegeben werden.
 |--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [Quarkus](https://quarkus.io/)                               | Quarkus, welches in der Version 2.17 verwendet wird, ist ein leichgewichtiges Framework, mit dem Java speziell für Containerplattformen optimiert wird. |
 | [JUnit 5](https://quarkus.io/guides/getting-started-testing) | Unit tests creation                                                                                                                                     |
-| [Mockito](https://quarkus.io/blog/mocking/)                  | Adds mockito framework for testing purposes                                                                                                             |
 | [CDI](https://quarkus.io/guides/cdi-reference)               | Contexts and Dependency Injection                                                                                                                       |
 | [Security](https://quarkus.io/guides/security-authentication-mechanisms#form-auth)           | Authentifizierung                                                                                                       |
 
