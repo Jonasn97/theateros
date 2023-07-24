@@ -81,8 +81,6 @@ public class UserEventResourceMobile {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("{eventId}")
     public Response updateEventStatebyEventIdOfUser(@PathParam("eventId") long eventId, @FormParam("isFavorite") boolean isFavorite, @FormParam("eventState") EventState eventState, @Context SecurityContext securityContext){
-        Log.info(eventState);
-        Log.info(eventId);
         String username;
         int active=3;
         if(securityContext== null || securityContext.getUserPrincipal() == null){
