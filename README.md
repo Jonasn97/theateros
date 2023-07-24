@@ -9,12 +9,12 @@ Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
 Auch lassen sich Veranstaltungen als Admin bearbeiten und entfernen, falls sie durch das Crawlen nicht korrekt importiert wurden. 
 
 
-## Clone
-### mit https
+## 🌀 Clone
+### 🔒 mit https
 ```shell script
 git clone https://gitlab.hs-osnabrueck.de/swa_mi_sose23/projekt29/theateros.git
 ```
-### mit ssh
+### 🔐 mit ssh
 ```shell script
 git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 ```
