@@ -1,11 +1,8 @@
 package de.hsos.swa.jonas.theater;
 
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.QueryParametersDTO;
 import de.hsos.swa.jonas.theater.eventmanagement.boundary.dto.api.OutgoingEventDTOApi;
-import de.hsos.swa.jonas.theater.eventmanagement.boundary.resources.api.EventResourceApi;
-import de.hsos.swa.jonas.theater.eventmanagement.entity.Event;
+
 import de.hsos.swa.jonas.theater.shared.dto.jsonapi.ResponseWrapperDTO;
-import io.quarkus.logging.Log;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
