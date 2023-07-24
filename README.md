@@ -6,7 +6,7 @@ Dieses Projekt ist das Ergebnis der Projektarbeit Entwicklung eines Theaterplane
 Bietet eine Übersicht über die Veranstaltungen des Theaters Osnabrück und ermöglicht es, diese zu filtern, zu suchen und zu favorisieren.\
 Weiterhin kann man für die einzelnen Veranstaltungen einen Status setzen.\
 Außerdem können die Aufführungen als Kalenderdatei exportiert werden.\
-Auch lassen sich Veranstaltungen als Admin bearbeiten und entfernen, falls sie durch das Crawlen nicht korrekt importiert wurden. \
+Auch lassen sich Veranstaltungen als Admin bearbeiten und entfernen, falls sie durch das Crawlen nicht korrekt importiert wurden. 
 
 
 ## Clone
