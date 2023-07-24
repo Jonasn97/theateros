@@ -20,6 +20,14 @@ git clone git@gitlab.hs-osnabrueck.de:swa_mi_sose23/projekt29/theateros.git
 ```
 
 ## 🚀 Ausführen der Anwendung
+Vor dem Ausführen der Tests und dem Bearbeiten der Daten sollte zunächst die Datenbank mit einem der folgenden Rest-Anfragen befüllt werden. \
+[http://localhost:8080/crawler/web](http://localhost:8080/crawler/web)\
+oder\
+[http://localhost:8080/crawler/local](http://localhost:8080/crawler/local)\
+Beim localen crawlen ist darauf zu achten, dass die Testdaten vorhanden sind.\
+Diese sind aus dem Branch testdata herunterzuladen. Und entsprechend der Readme in die Ordner einzufügen.\
+
+
 ### 🏗 Bauen:
 ```shell script
 ./mvnw compile
