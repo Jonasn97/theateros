@@ -1,0 +1,38 @@
+table {
+    color: #888;
+    border-collapse: collapse;
+}
+caption {
+    caption-side: top;
+    text-align: left;
+    font-size: 14px;
+}
+td {
+    font-size: 14px;
+    padding-right: 10px;
+}
+span.blockspam {
+    display: none;
+  }
+
+.basic-info > p {
+    font-size: 14px;
+    color: #888;
+}
+.card .logo {
+    border-radius: 20px 5px 5px 20px;
+    background-size: contain;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 25%;
+    overflow: clip;
+}
+.card a {
+    font-size: 14px;
+    color: #888;
+    text-decoration: underline dotted;
+}
+.card a > svg {
+    padding-right: 16px;
+}

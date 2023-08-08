@@ -32,7 +32,7 @@ main {
   }
   /*Normal-Title*/
   h2 {
-    font-size: 17px;
+    font-size: 19px;
   }
   /*Subtitle*/
   h3 {
@@ -112,7 +112,6 @@ header.standard {
     background-position: center;
     min-width: 25%;
     overflow: clip;
-    
 }
 .basic-info {
     display: flex;
